@@ -38,7 +38,7 @@ export const initialAssignment: Assignment = {
   intervention: '보통', situations: ['오류·장애', '자원 제한', '사용자 피드백'],
   guidance: { '교수자 직접': ['확인 질문', '탐색 방향 안내'], 'AI 자동': ['확인 질문', '탐색 방향 안내', '개념 힌트'], '교수자 승인형': ['확인 질문', '탐색 방향 안내', '개념 힌트'] },
 }
-// Demo curriculum matching; replace this function with an AI endpoint for real summarization.
+// 데모 교육과정 연결. 실제 요약 구현 시 AI 호출로 교체.
 export function suggestGoals(title: string) {
   if (/보안|방화벽/.test(title)) return ['접근 제어 정책을 분석하고 보안 취약점을 식별한다.', '방화벽 규칙을 설정하고 차단 결과를 검증한다.', '네트워크 보안 개선 방안을 근거와 함께 설명한다.']
   if (/라우팅|라우터/.test(title)) return ['라우팅 테이블을 해석하고 패킷 전달 경로를 설명한다.', '정적 라우팅을 구성하고 네트워크 간 통신을 검증한다.', '경로 오류의 원인을 분석하고 대안을 비교한다.']

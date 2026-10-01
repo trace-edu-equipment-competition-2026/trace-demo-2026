@@ -1,67 +1,117 @@
-# TRACE Demo 2026
+# TRACE 교육장비 데모
 
-교육장비 시스템의 교수자·학생 사용 흐름을 보여주는 한국어 UI 데모.
+교수자 과제 설계 → 학생 수행·검증 → 학습 증거 공유 → 교수자 검토 흐름 시연.
+네트워크 실습 / 융합 팀 프로젝트. 한국어 화면. 브라우저 로컬 저장.
 
-## 개발
+## 처음 실행
 
-Node.js 22.18.0 (`nvm use`), npm 사용.
+사전 준비: Git, Node.js 22.18.0, npm. 브라우저 검증에는 Google Chrome 필요.
+송우님은 GitHub Organization의 Owner 초대 수락 후 참여.
 
 ```sh
+git clone https://github.com/trace-edu-equipment-competition-2026/trace-demo-2026.git
+cd trace-demo-2026
+git switch dev
+# nvm 설치 환경
+nvm install
+nvm use
 npm ci
 npm run dev
 ```
 
-http://localhost:5173 에서 확인. 교수자 과제 생성·모니터링·평가와 학생 프로젝트 작업실·학습 지원을 연결한 데모다.
+nvm 미사용 환경: Node.js 22.18.0 직접 설치 후 `npm ci`부터 실행.
+터미널에 표시된 주소로 접속. 기본 주소: http://localhost:5173.
+종료: 터미널에서 `Ctrl+C`.
+
+## 시연
+
+1. 시작 화면: 교수자 수업 대시보드.
+2. 사이드바 수업 선택: 네트워크 실습 / 융합 팀 프로젝트 전환.
+3. 「과목 설정」에서 목표·평가 기준·AI 기본 정책 확인 및 저장.
+4. 「프로젝트 · 과제 생성」에서 과제 설계 → AI 운영 방식 → 학생 미리보기.
+5. 「과제 생성」 또는 「과제 다시 저장」으로 학생 정책 적용. 「임시 저장」은 초안만 보관.
+6. 하단 프로필에서 유송민 학생으로 전환. 「프로젝트 작업실」에서 기획 → 수행 → 실행 및 검증.
+7. 검증 결과와 판단 설명 공유 후 교수자로 전환. 「팀별 모니터링」의 1팀과 「학생별 평가 지원」에서 확인.
+
+정확한 명령·추가 문제 상황 시연: [학습 순환 안내](docs/paper-learning-cycle.md).
+
+## 실행·검증 명령
+
+| 명령 | 용도 |
+| --- | --- |
+| `npm run dev` | 개발 서버 |
+| `npm run dev:tablet` | 같은 Wi-Fi의 태블릿 접속. 컴퓨터 LAN IP와 표시된 포트 사용 |
+| `npm run check` | 타입·린트·빌드 검증 |
+| `npm test` | Chrome으로 기능·화면 검증. 개발 서버 자동 시작 |
+| `npm run build` | `dist/` 생성 |
+| `npm run preview` | 빌드 결과 확인. 터미널 주소 사용 |
+
+태블릿: 컴퓨터의 로컬 네트워크·방화벽 허용 필요.
+화면 캡처: `.impeccable/review/`. 테스트 보고서·빌드 결과는 커밋 제외.
+
+## 코드 찾기
+
+| 위치 | 역할 |
+| --- | --- |
+| [src/](src/README.md) | 화면·상태·시나리오·스타일 |
+| [tests/](tests/README.md) | 기능·화면 검증 |
+| [public/](public/README.md) | 아이콘·정적 파일 |
+| [docs/](docs/README.md) | 설계·시연 안내 |
+| [.agents/skills/](.agents/skills/README.md) | Ponytail·Impeccable 사용법 |
+| [.impeccable/](.impeccable/README.md) | 디자인 토큰·검토 기록 |
+| [AGENTS.md](AGENTS.md) | 에이전트 작업 규칙 |
+| [PRODUCT.md](PRODUCT.md) / [DESIGN.md](DESIGN.md) | 제품 범위 / 공통 시각 기준 |
+
+React + TypeScript + Vite. Tailwind CSS, shadcn/ui. `@/`는 `src/` 별칭.
+`PRODUCT.md` 영문 섹션명·스키마, `DESIGN.md` 토큰 키는 도구 인식용 유지.
+
+## Ponytail·Impeccable 사용
+
+앱 실행에 스킬 설치 불필요. 코드·디자인 수정 시 에이전트가 프로젝트 로컬 스킬 사용.
+
+- Ponytail: 기존 코드 재사용, 표준 기능 우선, 불필요한 의존성·추상화 방지.
+- Impeccable: 기존 디자인 기준 유지, 화면 검토·접근성·반응형 점검.
+- 요청 예: `Ponytail full 기준으로 이 기능 수정. 기존 화면과 기능 유지.`
+- 요청 예: `Impeccable audit로 src/StudentWorkspace.tsx 검토. 한국어로 결과 정리.`
+- 스킬 미인식 시 해당 `SKILL.md` 경로 직접 지정.
+- 상세 명령과 주의점: [스킬 안내](.agents/skills/README.md).
+
+## 함께 작업
+
+작업 브랜치: `dev`. 수정 전 최신 커밋 확인.
 
 ```sh
-npm run check        # 타입, lint, 배포 빌드
-npm run dev:tablet   # 같은 Wi-Fi 태블릿에서 Mac의 LAN IP:5173으로 접속
-npm run preview     # 빌드 결과 확인
+git switch dev
+git pull --ff-only
+# 수정 후 검증
+npm run check
+git add 수정한파일
+git commit -m "변경 내용"
+git push origin dev
 ```
 
-태블릿 접속은 로컬 네트워크/방화벽 허용이 필요하다. 기본 dev는 로컬 컴퓨터에만 공개한다.
-
-## 구성
-
-React + TypeScript + Vite, Tailwind CSS, shadcn/ui 기반 환경. 현재 아이콘은 사용자가 지정한 Figma coolicons에서 내보낸 SVG를 사용한다. 간단한 탭 전환은 CSS로 구현하며 Motion은 후속 사용을 위해 설치되어 있다.
-Motion Primitives는 필요한 컴포넌트를 선택해서 추가하는 방식이므로 아직 별도 복사하지 않았다.
-`@/`는 `src/` 경로. `components.json`은 shadcn 설정.
-
-- `src/`: 앱 코드
-- `docs/references/`: 사용자 제공 UI 이미지
-- `PRODUCT.md`, `docs/design-brief.md`: 범위와 시각 기준
-- `.agents/skills/`: 프로젝트 전용 Ponytail, Impeccable 원본 스킬
-
-UI는 데스크톱 및 태블릿을 대상으로 한다. 현대 브라우저 기준이며 Tailwind v4 사용으로 Safari 16.4+, Chrome 111+, Firefox 128+를 기준으로 한다.
-Ponytail은 구현 단순화, Impeccable은 디자인 판단·검토에 사용한다. 사용자 레퍼런스가 우선이다.
-스킬은 프로젝트를 여는 다음 에이전트 턴에서 발견할 수 있다. 로더 실행이 필요하면 `sh .agents/skills/impeccable/scripts/impeccable context`를 사용할 수 있다.
-
-## Git
-
-Remote: https://github.com/hazyala/trace-demo-2026.git
-작업 브랜치: dev
-
-실제 로그인·서버·AI API는 아직 연결하지 않았다. 민감한 키는 커밋하지 않는다.
-
-시작 및 새로고침 시 교수자의 「수업 대시보드」가 열립니다. 과제 작성은 사이드바의 「프로젝트 · 과제 생성」에서 시작합니다.
-
-## 시연 순서
-
-1. 미리 채운 네트워크 장애 진단 과제를 수정한다.
-2. 과목 설정에서 목표를 불러와 선택하고, Chip을 눌러 수정하거나 삭제한다.
-3. 요구사항·산출물·평가 요소를 추가한다. 산출물마다 지정 양식을 별도로 첨부할 수 있다. 평가 비율 합계는 100%여야 다음 단계로 넘어간다.
-4. AI 운영 방식 세 탭을 전환하고, 상황·개입·가이던스 설정을 조정한다.
-5. 학생 화면 미리보기에서 과제·양식 다운로드·학습 지원 대화 예시를 확인한다.
-6. 임시 저장 또는 과제 생성. 데이터와 첨부 양식은 현재 브라우저 localStorage에 저장된다. 양식은 파일당 2MB까지이며 저장 공간 부족 시 오류를 표시한다.
-
-데모 제한: AI 목표 추천과 학습 지원은 작성된 예시·상태 규칙이며 외부 AI 호출은 없다. 과제 생성은 같은 브라우저의 학생 안내·지원 정책에 적용된다. 학생이 명시적으로 공유한 모의 실행·판단·외부 수행자료를 Learning Evidence로 저장하며 서버 배포·실제 장비 실행·자동 채점을 뜻하지 않는다.
-
-논문의 핵심 흐름을 시연하려면 [정책 → 즉시 가이던스 → 학생 판단 → 검증 → 추가 문제 상황 승인 → 재검증](docs/paper-learning-cycle.md)를 따른다. 네트워크·융합의 정확한 명령과 한국어 버튼, 유송민 · 1팀 찾기, 대안 자료 검토, 한 번의 추가 상황 및 개인정보 경계를 포함한다. 「임시 저장」은 초안이며 학생 정책은 「과제 생성」/「과제 다시 저장」 시 적용된다.
-
-## 브라우저 검증
+기존 복제본의 원격 주소 변경:
 
 ```sh
-npm test
+git remote set-url origin https://github.com/trace-edu-equipment-competition-2026/trace-demo-2026.git
 ```
 
-Playwright가 설치된 Google Chrome을 사용한다. 타입·린트·빌드는 `npm run check`. 기능 검증과 1440/1180/820/390px 화면 캡처를 수행한다. 캡처는 `.impeccable/review/`에 저장되며 커밋하지 않는다.
+충돌 시 덮어쓰기·강제 푸시 금지. 변경 내용 비교 후 병합.
+
+## 저장·데모 범위
+
+- 같은 브라우저의 `localStorage` 사용. 네트워크·융합 데이터 분리.
+- 기기·브라우저 간 동기화 없음. 개인 AI 대화는 교수자 화면에서 제외.
+- 실제 로그인·서버·AI API·장비 연결·자동 채점: 구현 예정.
+- AI 가이던스·평가 추정·콘솔 출력: 고정 예시와 시연 규칙.
+- 과제·팀 자료 첨부: 파일당 2MB 제한. 과목 가져오기: 파일당 10MB, 내용 분석 없는 예시 흐름.
+- 새로고침: 기본 교수자 화면. 미저장 입력 소실 가능.
+- 초기화: 개발자 도구의 로컬 저장소에서 `trace-` / `fusion-trace-` 관련 키만 삭제. 저장 자료 삭제 전 별도 보관.
+- 인증 정보·API 키·실제 학생 개인정보 커밋 금지.
+
+## 실행 문제
+
+- Node.js 오류: `.nvmrc` 버전 확인 후 `npm ci` 재실행.
+- 포트 사용 중: Vite가 표시한 실제 주소 확인.
+- 브라우저 테스트 실패: Google Chrome 설치와 기존 개발 서버 상태 확인.
+- 첨부·저장 실패: 파일 크기와 브라우저 저장 공간 확인.

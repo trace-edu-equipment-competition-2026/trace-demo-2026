@@ -1,62 +1,53 @@
-# Fusion scenario within the shared workspace
+# 네트워크·융합 공통 시나리오
 
-Network and fusion are data variants of the same per-role interface. A workspace choice changes course, assignment, team, task, knowledge, and simulation data; it does not select a different sidebar, navigation hierarchy, screen, card family, or form. `src/scenarios.ts` owns the scenario selection. The former `FusionWorkspace.tsx` is removed.
+같은 역할·화면에 다른 데이터 적용. `src/scenarios.ts`에서 과목·과제·팀·수행·모의 실행 선택.
+별도 `FusionWorkspace.tsx` 미사용. 과목 출처별 지식 연결 카드 미사용.
 
-## Direction and visual authority
+## 공통 구조
 
-**THESIS:** Operate. Connect prior knowledge to a new learning need, a small experiment, applied evidence, and professor judgment.
+- 교수자: 대시보드 / 과제 생성 / 평가 지원 / 팀 모니터링 / 과목 설정.
+- 학생: 팀 대시보드 / 작업실 / 팀 자료 / 팀 채팅 / 개인 AI 지원 / 학습 기록.
+- 과제 생성: 과제 설계 → AI 운영 방식 → 학생 미리보기.
+- 작업실: 기획·기술 선택 → 수행 보드 → 실행 및 검증.
+- 공통 사이드바·입력폼·카드·차트 사용. `DESIGN.md`의 녹색·민트·흰 패널 기준 유지.
+- 수업 전환 시 역할·경로·과제 단계·설정 분류·작업실 탭 유지. 미저장 폼 보존은 보장하지 않음.
 
-**OWN-WORLD:** Preserve TRACE's existing green navigation, charcoal active states, warm gray canvas, white rounded panels, mint actions, Korean typography, and labeled categorical colors.
+## 융합 팀 예시
 
-**STORY:** Students explain what they know, what they need, what they tried, and what the results support. Teachers compare shared evidence before recording a judgment.
+사용자 문제를 해결할 AI 프로그램 기획. 주제·언어·프레임워크·도구 선택과 판단 근거 기록.
+도구 수·AI 사용량은 성취도 아님. 24명·6팀 가상 자료, 실제 프로그램 6개 구현 아님.
 
-**FIRST VIEWPORT / FORM:** Use the same composition for each corresponding role and route in both scenarios. The existing rich teacher dashboard, monitoring, evidence review, settings, and three-step assignment form are shared. The student dashboard and three-tab studio also share one implementation.
-
-This is a common-contract correction, not a new visual system. `DESIGN.md` and `.impeccable/design.json` remain authoritative and unchanged. No new raster asset is introduced. Test execution and the finish review are separate validation deliverables; this document does not claim to perform them.
-
-## Shared routes and components
-
-`WorkspaceSidebar` uses the same `navigation.ts` definitions for both scenarios. Teacher routes are 수업 대시보드, 프로젝트 · 과제 생성, 학생별 평가 지원, 팀별 모니터링, and 과목 설정. `CourseDashboard`, `TeachingWorkspace`, `EvidenceReview`, and `CourseSettings` retain their complete chart, evidence, guidance, and editing surfaces. The shared assignment sequence is 과제 설계 → AI 운영 방식 → 학생 미리보기.
-
-`StudentWorkspace` provides 팀 대시보드, 프로젝트 작업실, 팀 자료, 팀 채팅, 개인 AI 지원, and 나의 학습 기록. Its studio always contains 기획·기술 선택, 수행 보드, and 실행 및 검증. `ProjectSimulation` changes bounded commands and conditions from scenario data while keeping the same execution/checking form. See [the student contract](student-workspace.md) for detailed behavior.
-
-Switching workspaces retains the active role, teacher/student route, assignment step, settings category, and studio tab during the current session. Saved records load from the selected scenario. Uncommitted form drafts and transient simulation results are not promised across workspace switching or reload.
-
-## Open brief and data examples
-
-Teams plan and build an AI-assisted program for a real user problem, choose topic/language/framework/tools, connect previous or other coursework, and explain how new learning was applied. Tool count is not achievement.
-
-The shared teacher scenario has 24 illustrative students across six teams. Fusion supplies these program contexts:
-
-| Team | Program | Connected knowledge |
+| 팀 | 프로그램 | 관련 개념 |
 | --- | --- | --- |
-| 1 | 캠퍼스 길잡이 | Database, web, information ethics |
-| 2 | 공유물품 연결소 | Mathematics, database, user research |
-| 3 | 학습 회고 노트 | Education, statistics, web |
-| 4 | 급식 수요 예측 | Probability/statistics, data analysis |
-| 5 | 접근성 안내 도우미 | UX, accessibility, programming |
-| 6 | 에너지 사용 리포트 | Physics, statistics, visualization |
+| 1 | 캠퍼스 길잡이 | 데이터베이스·웹·정보 윤리 |
+| 2 | 공유물품 연결소 | 수학·데이터베이스·사용자 조사 |
+| 3 | 학습 회고 노트 | 교육·통계·웹 |
+| 4 | 급식 수요 예측 | 확률·통계·데이터 분석 |
+| 5 | 접근성 안내 도우미 | 사용자 경험·접근성·프로그래밍 |
+| 6 | 에너지 사용 리포트 | 물리·통계·시각화 |
 
-The interactive student profile is 유송민 in team 1. Other students and teams use authored examples; they are not concurrent participants or six implemented programs. Teacher approval examples follow the common monitoring flow, including team 3's pending situation under approval mode.
+직접 조작 학생: 유송민·1팀. 다른 팀은 작성된 시연 자료.
 
-`KnowledgeConnections` serves both scenarios. Each row includes learning source, existing knowledge, new learning need, application/checking action, and status. The shared assignment design, student plan, and learning record can add connections. Teacher team detail and evidence review show the same component with the relevant team context. Adding a row is local record keeping, not automatic curriculum analysis.
+## 실행·평가
 
-## Simulation, guidance, and assessment
+융합 콘솔: 스키마·상태·등록 질문·근거 없음·개인정보 검사.
+답변 보류·개인정보 가림 규칙 설정 → 세 검사 → 판단 설명 → 공유.
+규칙 변경 시 현재 검사 초기화. 실제 AI·API·보안 검증 없음.
 
-Fusion's common execution panel recognizes schema/status requests and tests for registered questions, missing evidence, and personal information. Students enable abstention and masking rules, run all three checks, and explain their judgment before sharing. Changing a rule clears current checks. These are authored response rules with fictional data; no program, model, API, or security guarantee is executed or verified.
+초기 평가 비중: 문제 이해 20 / 지식 연결·해결 과정 30 / 검증 20 / 산출물 20 / 협업 10.
+수정 시 양수 배점·합계 100 검증. 같은 배점 눈금·연결 증거·교수자 판단 사용.
+근거 없음은 산정 대기. AI 지원 빈도·기술 선택을 성적화하지 않음.
+교수자에게 개인 대화 원문 제외. 지원 요약·명시적 요청·공유 증거만 표시.
 
-Private AI dialogue stays in the student interface. Teachers see guidance level/topic/time summaries, explicit shared requests, saved performance evidence, and subsequent behavior. They do not see private message text. This is a local UI/state boundary, not authenticated access control. AI guidance and provisional criterion estimates are clearly simulation examples; missing evidence remains pending and teachers make the assessment judgment.
+## 저장
 
-The common fusion assignment defaults allocate 20/30/20/20/10 across problem understanding, knowledge connection/problem-solving process, verification, output, and collaboration. The shared three-step form can edit criteria and validates positive weights totaling 100. Assessment uses a common point axis and cap markers, with linked evidence and professor review; technology choice and support frequency are not grades.
+`workspaceKey(id, key)`: 네트워크는 기존 키, 융합은 `fusion-` 접두사.
+과목 `trace-course-v1`, 과제 초안 `trace-assignment-v1`, 진행 중 과제 `trace-teaching-assignment`,
+평가 `trace-reviews`, 증거 확인 `trace-evidence-checks` 분리.
+프로젝트: `trace-project-network-v2` / `trace-project-fusion-v2`.
+기존 `trace-student-yusongmin-v1`, `trace-fusion-workspace-v1`은 초기 이전에만 사용.
 
-## Isolated persistence
-
-`workspaceKey(id, key)` preserves the network key and prefixes fusion keys with `fusion-`. This isolates course settings (`trace-course-v1`), assignment drafts (`trace-assignment-v1`), ongoing teaching snapshots (`trace-teaching-assignment`), student reviews (`trace-reviews`), and evidence checks (`trace-evidence-checks`). Project records use `trace-project-network-v2` and `trace-project-fusion-v2`.
-
-Project records contain the saved plan, knowledge connections, completed tasks, evidence, materials, separate team/private conversations, guidance summaries, explicit requests, and shared teacher feedback. `readProject` can import legacy `trace-student-yusongmin-v1` and `trace-fusion-workspace-v1` data when the current record is absent. Legacy keys are migration inputs, not the current write targets.
-
-Team-1 teacher guidance and saved feedback for 유송민 appear in that scenario's student views. Approval decisions remain session state. There is no institutional delivery, server synchronization, real authentication, actual AI service, or deployed student program. Failed browser persistence produces a visible warning and may leave changes available only in the current screen.
-
-## Documentation evidence
-
-The common contract was compared against `App.tsx`, `WorkspaceContext.tsx`, `WorkspaceSidebar.tsx`, `navigation.ts`, `scenarios.ts`, `StudentWorkspace.tsx`, `ProjectSimulation.tsx`, `KnowledgeConnections.tsx`, and the existing teacher/course components. Existing CSS and token documents remain the visual authority; reused `fusion-*` class names describe composition, not a separate product identity. No palette or typography token change was made for this correction.
+계획·작업·증거·자료·대화·지원·요청·피드백·상황 상태 로컬 저장.
+1팀 지도와 유송민 피드백은 같은 시나리오 학생 화면에 연결.
+동기화·기관 연동·실제 인증 없음. 저장 실패 시 화면 경고.
+세부 조건: [학생 작업실](student-workspace.md), [학습 순환](paper-learning-cycle.md).

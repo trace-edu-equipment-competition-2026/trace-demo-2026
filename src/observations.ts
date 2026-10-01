@@ -1,6 +1,6 @@
 import { isPerformedEvidence, type Evidence } from './evidence'
 
-// Coverage of inspectable records, not an inferred ability score.
+// 확인 가능한 기록의 관찰 비율. 추정 능력 점수 아님.
 export const observationRules: Record<string,{condition:string; matches:(e:Evidence)=>boolean}> = {
   '문제 이해': {condition:'문제 범위 또는 최초 판단을 남긴 수행 기록',matches:e=>isPerformedEvidence(e)&&e.stage===0},
   '원인 분석': {condition:'자료를 비교하거나 원인 가설을 대조한 수행 기록',matches:e=>isPerformedEvidence(e)&&e.stage===1},

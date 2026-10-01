@@ -1,5 +1,5 @@
 import type { TeamResource } from './student'
-// Authored demo originals; these are not real student uploads or live execution logs.
+// 작성된 데모 원자료. 실제 학생 업로드·실행 로그 아님.
 export const demoSources:Record<'network'|'fusion',TeamResource[]> = {
   "network": [
     {

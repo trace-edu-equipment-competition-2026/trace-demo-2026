@@ -12,7 +12,7 @@ studentInitial.resources.push(
 studentInitial.resources.push(...structuredClone(demoSources.network))
 studentInitial.resourceSchema=3
 
-export function readStudent():StudentState {try{const s=JSON.parse(localStorage.getItem('trace-student-yusongmin-v1')||'null');if(s&&Array.isArray(s.teamMessages)&&Array.isArray(s.privateMessages)&&Array.isArray(s.resources)&&Array.isArray(s.checks))return {...structuredClone(studentInitial),...s,resourceSchema:2,resources:s.resourceSchema===2?s.resources:[...s.resources,...studentInitial.resources.filter(r=>!s.resources.some((existing:TeamResource)=>existing.name===r.name))]}}catch{/* Local demo fallback. */}return structuredClone(studentInitial)}
+export function readStudent():StudentState {try{const s=JSON.parse(localStorage.getItem('trace-student-yusongmin-v1')||'null');if(s&&Array.isArray(s.teamMessages)&&Array.isArray(s.privateMessages)&&Array.isArray(s.resources)&&Array.isArray(s.checks))return {...structuredClone(studentInitial),...s,resourceSchema:2,resources:s.resourceSchema===2?s.resources:[...s.resources,...studentInitial.resources.filter(r=>!s.resources.some((existing:TeamResource)=>existing.name===r.name))]}}catch{/* 로컬 데모 기본값 사용. */}return structuredClone(studentInitial)}
 export const guidanceLevels=['확인 질문','탐색 방향 안내','개념 힌트','도구 활용 힌트']
 export function guidanceReply(level:number,verified:boolean){return verified?'양방향 검증 결과가 모였네요. 수정 전 실패와 수정 후 성공을 비교하면, 원인 가설을 어떻게 설명할 수 있을까요? 성공하지 않을 수 있는 다른 조건도 하나 남겨 보세요.':[
 '지금까지 직접 확인한 사실은 무엇인가요? 응답이 있는 구간과 없는 구간을 구분하고, 다음 확인으로 무엇을 알아내고 싶은지 적어 보세요.',
@@ -21,7 +21,7 @@ export function guidanceReply(level:number,verified:boolean){return verified?'�
 'R1과 R2에서 show ip route를 실행해 목적지와 다음 홉을 비교해 보세요. 변경 뒤에는 PC-A와 PC-B 각각에서 ping을 실행하고 수정 전 결과와 비교해 보세요.'
 ][level-1]}
 
-// ponytail: deterministic demo classification; replace with contextual AI policy evaluation for production.
+// ponytail: 고정 규칙 기반 데모 분류. 서비스 전환 시 맥락 기반 AI 정책 판단으로 교체.
 export function selectGuidanceLevel(question:string,verified:boolean):number {
   if(verified)return 1
   if(/명령|도구|어떻게 실행|ping|show ip/i.test(question))return 4

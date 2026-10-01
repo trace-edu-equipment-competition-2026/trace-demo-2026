@@ -35,7 +35,7 @@ export function readProject(id:WorkspaceId):ProjectData{
  const base=structuredClone(scenarios[id].project)
  try{const current=JSON.parse(localStorage.getItem(`trace-project-${id}-v2`)||'null');if(current?.plan&&current.student&&Array.isArray(current.evidence))return withDemoSources({...base,...current},base)
  const legacy=JSON.parse(localStorage.getItem(id==='network'?'trace-student-yusongmin-v1':'trace-fusion-workspace-v1')||'null');if(legacy)return withDemoSources(id==='network'?{...base,student:{...base.student,...legacy}}:{...base,...legacy},base)
- }catch{/* Local scenario fallback. */}return base
+ }catch{/* 로컬 시나리오 기본값 사용. */}return base
 }
 export function scenarioEvidence(s:Scenario,name:string,role:string,team:number,alternate:boolean,project?:ProjectData){
  const data=studentEvidence(name,role,team,alternate)

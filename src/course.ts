@@ -18,7 +18,7 @@ export const defaultCourse:Course = {
   documents:[{name:'네트워크실습 수업계획서.pdf',type:'수업계획',area:'목표 · 일정',updated:'2026-09-01'},{name:'네트워크실습 평가계획.pdf',type:'평가',area:'평가 기준',updated:'2026-09-01'}],
 }
 export function readCourse(key='trace-course-v1', initial=defaultCourse):Course {
-  try { const c=JSON.parse(localStorage.getItem(key)||'null'); if(c && typeof c.name==='string' && ['goals','standards','ncs','curriculum','criteria','documents','guidance'].every(k=>Array.isArray(c[k]))) return {...structuredClone(initial),...c} } catch { /* Use the demo course when storage is unavailable. */ }
+  try { const c=JSON.parse(localStorage.getItem(key)||'null'); if(c && typeof c.name==='string' && ['goals','standards','ncs','curriculum','criteria','documents','guidance'].every(k=>Array.isArray(c[k]))) return {...structuredClone(initial),...c} } catch { /* 저장소 사용 불가 시 데모 과목 사용. */ }
   return structuredClone(initial)
 }
 export type TeachingTarget = {task?:string;team?:number;student?:string}

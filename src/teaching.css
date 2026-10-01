@@ -47,7 +47,7 @@
 @media(max-width:900px) { .monitor-layout { grid-template-columns:1fr; }.team-table th:nth-child(4),.team-table td:nth-child(4) { display:table-cell; }.learning-states { grid-template-columns:repeat(3,1fr); }.evaluation-table td,.evaluation-table th { padding-left:3px; padding-right:3px; }.evaluation-table td:nth-child(2) { font-size:11px; }.metric-swatch { width:25px; height:25px; right:16px; }.metric { padding:18px!important; } }
 @media(max-width:600px) { .teaching-toolbar { flex-direction:column; align-items:stretch; gap:12px; }.task-selector,.student-search { width:100%; }.monitor-metrics { grid-template-columns:1fr 1fr; gap:12px; }.learning-states { grid-template-columns:repeat(3,1fr); }.team-table { min-width:440px; }.team-table-scroll { margin:0 -6px; }.evidence-flow { gap:12px; }.evaluation-table select { padding:8px; min-width:85px; }.review-save { align-items:end; }.evaluation-table td:nth-child(2) { max-width:100px; }.teaching-demo { line-height:1.7; }.snapshot-label { display:none; } }
 
-/* Full-width evidence review and record-based visual statistics. */
+/* 전체 너비 증거 검토와 기록 기반 통계. */
 .teaching-toolbar { gap:20px; flex-wrap:wrap; }
 .teaching-toolbar .task-selector { flex:1 1 260px; width:auto; min-width:0; }
 .student-picker { display:grid; grid-template-columns:minmax(140px,.8fr) minmax(210px,1.2fr); gap:12px; flex:1.3 1 390px; min-width:0; }
@@ -78,7 +78,7 @@
 @media(max-width:900px) { .student-picker { flex-basis:100%; }.ring-stat-body { flex-wrap:nowrap; flex-direction:column; align-items:start; }.guidance-visual { grid-template-columns:minmax(0,1.45fr) minmax(200px,1fr); gap:20px; }.insight-pair { grid-template-columns:1fr 1fr; } }
 @media(max-width:600px) { .teaching-toolbar .task-selector,.student-picker { flex:auto; width:100%; }.student-picker { grid-template-columns:1fr; }.review-statistics { grid-template-columns:1fr 1fr; gap:20px 16px; }.review-stat+ .review-stat { padding-left:0; border:0; }.evidence-stat { grid-column:1/-1; grid-row:2; padding-top:18px; border-top:1px solid #e6e8e5!important; }.ring-stat-body { gap:12px; }.review-stat h3 { font-size:12px; }.coverage-grid { grid-template-columns:1fr 1fr; }.guidance-visual { grid-template-columns:1fr; }.insight-pair { grid-template-columns:1fr; }.average-progress { gap:5px; }.criterion-weight .weight-track { width:60px; } }
 
-/* Reference: solid color shortcuts and compact editorial tables. */
+/* 레퍼런스: 단색 바로가기와 간결한 표. */
 .coverage-grid { gap:14px; }
 .coverage-link { display:flex; align-items:center; gap:14px; min-height:126px; padding:22px 18px; border:0; border-radius:20px; text-align:left; color:#3b3d3b; }
 .coverage-tone-0 { background:#484b47; color:white; }.coverage-tone-1 { background:#54b3a6; color:#183e35; }.coverage-tone-2 { background:#e4e1f6; }.coverage-tone-3 { background:#d9807a; color:#38221f; }

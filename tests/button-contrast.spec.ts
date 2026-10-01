@@ -1,6 +1,6 @@
 import { test, expect, type Locator, type Page } from '@playwright/test'
 
-// Measure rendered text (including nested captions) against composited backgrounds.
+// 중첩 설명을 포함한 실제 글자와 합성 배경의 대비 측정.
 async function readable(button: Locator, minimum = 4.5) {
  const rows = await button.evaluate(el => {
   const rgba = (value: string) => { const c = value.match(/[\d.]+/g)!.map(Number); return c.length === 3 ? [...c, 1] : c }

@@ -12,7 +12,7 @@ export const cycleOf=(data:FusionData)=>data.situation?.cycle ?? 0
 export function makeEvidence(data:FusionData,s:Scenario,e:FusionEvidence):FusionEvidence {
  return {...e,id:`R${Date.now().toString(36).slice(-5)}-${data.evidence.length+1}`,time:stamp(),goal:e.goal || policyFor(data,s).goals.join(' · '),cycle:cycleOf(data)}
 }
-// ponytail: transparent authored state rules; no model inference or ability diagnosis.
+// ponytail: 명시적 시연 상태 규칙. 모델 추론·능력 진단 없음.
 export function supportFor(question:string,data:FusionData,s:Scenario,channel:'private'|'team'='private'):SupportProposal|null {
  const policy=policyFor(data,s)
  const levels=['확인 질문','탐색 방향 안내','개념 힌트','도구 활용 힌트']
@@ -66,7 +66,7 @@ export function deliverSupport(data:FusionData,p:SupportProposal):FusionData {
  const key=p.channel==='team'?'teamMessages':'privateMessages'
  return {...data,student:{...data.student,[key]:[...data.student[key],{author:data.assignment?.mode==='교수자 직접'?'교수자 설정 안내':'AI',text:p.text,time:p.time,level:p.level}]},guidance:[...data.guidance,{id:p.id,level:p.level,topic:p.reason,text:p.text,time:p.time}]}
 }
-// ponytail: bounded demo assessment of new activity; no live AI or ability diagnosis.
+// ponytail: 새 활동의 제한된 시연 판단. 실제 AI·능력 진단 없음.
 export function nextSituation(data:FusionData,s:Scenario,previous:FusionData=s.project):Situation|null {
  const policy=policyFor(data,s)
  if(policy.mode==='교수자 직접'||data.situation)return null

@@ -3,7 +3,7 @@ export const evidenceKinds = { record:'수행 기록', plan:'계획', reflection
 export const evidenceKind = (e: Evidence) => e.kind || 'record'
 export const isPerformedEvidence = (e: Evidence) => evidenceKind(e)==='record'
 export const guidanceLevels = ['확인 질문', '탐색 범위', '개념 힌트', '도구 활용 힌트']
-// Scripted demo estimates, not an AI call or validated grading model.
+// 시연 규칙 기반 추정. 실제 AI 호출·검증된 채점 모델 아님.
 export function criterionEstimate(criterion: string, weight: number, records: Evidence[]) {
   if(records.some(e=>e.live)){const stage=/문제 이해/.test(criterion)?0:/검증/.test(criterion)?3:/해결/.test(criterion)?2:-1;const ids=records.filter(e=>e.live&&(e.stage===stage||(/협업/.test(criterion)&&e.source.includes('합의')))).map(e=>e.id);return {remaining:'원자료·학생 판단·검증 조건을 대조한 교수자 확인',score:null,ratio:null,ids,reason:'학생이 새로 공유한 자료입니다. 내용 검토 전에는 점수를 추정하지 않습니다.'}}
   const has = (id: string) => records.some(e => e.id === id)
@@ -37,7 +37,7 @@ export const teachingTeams = [
   { id:6, progress:61, stage:'수정 단계', status:'정상' as const, minutesAgo:7, summary:'설정을 수정하고 검증 대상을 정했습니다. 계획한 양방향 검증의 후속 결과를 기다리고 있습니다.', reasons:['수정 이유와 설정 변경 기록 있음','팀 내 검증 계획 공유'] },
 ].map(t=>({...t,recent:`${t.minutesAgo}분 전`}))
 
-// Synthetic records: timestamps, authors and missing evidence are explicit, never an ability score.
+// 가상 기록. 시간·작성자·누락 증거 명시. 능력 점수 아님.
 export function studentEvidence(name: string, role: string, team: number, vlan: boolean) {
   const incomplete = [2,4,6].includes(team)
   const hasModification = team !== 4

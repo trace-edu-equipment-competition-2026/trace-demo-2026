@@ -1,53 +1,53 @@
-# Course dashboard and settings surface contract
+# 수업 대시보드·과목 설정
 
-This ordinary extension keeps the TRACE visual system in `DESIGN.md` authoritative. It adds surface-specific composition and behavior without changing that system or `.impeccable/design.json`. Sources checked: `PRODUCT.md`, `DESIGN.md`, `src/CourseDashboard.tsx`, `src/CourseSettings.tsx`, `src/course.ts`, `src/course.css`, and the course integration in `src/App.tsx`.
+시각 기준: `DESIGN.md`. 구현: `CourseDashboard.tsx`, `CourseSettings.tsx`, `course.ts`, `scenarios.ts`, `course.css`, `App.tsx`.
 
-## One surface contract, two datasets
+## 공통 화면
 
-Network and fusion use the same `WorkspaceSidebar`, `CourseDashboard`, and `CourseSettings`, with identical navigation, chart/card composition, settings categories, and import forms. `scenarios.ts` supplies course names, goals, assignment examples, project titles, and subject-specific context. Workspace switching retains the active role, route, and settings category while loading the selected scenario records. `FusionWorkspace.tsx` is removed; fusion does not have a reduced or separately composed dashboard/settings page.
+네트워크·융합 모두 동일 사이드바·대시보드·설정 폼 사용. 시나리오별 과목·목표·과제 데이터만 교체.
+수업 전환 시 역할·메뉴·설정 분류 유지. 저장 데이터는 시나리오별 분리.
 
-## Shared visual language
+## 대시보드
 
-Keep the existing deep green navigation and primary actions, charcoal active navigation, warm gray canvas, white rounded panels, and mint selected/supporting states. Charts reuse mint, lavender, yellow, rose, and charcoal with visible legends and values. The inherited Korean sans typography, thin borders, focus treatment, and flat panels remain in place. Course-specific layouts use 24px panel padding and 22px primary grid gaps; these are local composition choices, not replacement global tokens.
+요약 지표 → 확인 필요 목록 → 차트·활동 기록.
 
-The dashboard uses five compact summary panels above a two-column chart grid, followed by a confirmation table and activity timeline. At 900px the chart and bottom grids stack; summaries become three columns, then two at 600px with the progress summary spanning both. Settings begin with three entry choices and a labeled import sequence, followed by six category buttons and one editable panel. At 600px entry choices, form fields, and review-dialog columns stack. Keep labels and numeric values available alongside color; SVG summaries have accessible descriptions.
+| 영역 | 내용 |
+| --- | --- |
+| 과제별 진행 | 누적 진행률. 팀 모니터링 연결 |
+| 주차별 진행 | 실제 예시와 계획 비교. 전체 7주 / 최근 4주 |
+| AI 지원 | 과제별 건수·전체 분포. 최근 기간은 예시 부분 집계 |
+| 역량 관찰 | 전체·팀·학생별 기록 관찰. 미연결 항목은 미집계 |
 
-## Dashboard: four main chart areas
+24명·6팀·2과제·7주차 기준 가상 자료. 지원량은 성취도 아님. 역량 관찰은 최종 성적 아님.
+과제 필터: 차트 범위. 기간 필터: 주차·AI 지원. 팀·학생 필터: 역량 영역.
+활동 기록은 예시 타임라인. 실시간 분석·기관 감사 로그 아님.
+차트에는 색상과 함께 이름·값 표시. 좁은 화면은 세로 배치.
 
-1. **과제별 진행 현황:** current cumulative progress bars for the selected projects, with a direct route to that project's team monitoring.
-2. **주차별 학습 진행률:** actual average progress against a dashed planned progression. The period selector shows all seven demo weeks or the most recent four.
-3. **과제별 AI 지원:** per-project stacked counts plus a combined donut and labeled support-type percentages. Recent-period counts are an illustrative subset. Support usage does not imply learning achievement.
-4. **핵심 역량 관찰 현황:** labeled horizontal bars with overall, team, and student scopes. These are illustrative observed-evidence rates, not final grades. Custom course competencies without mapped demo evidence display `미집계`.
+## 설정·가져오기
 
-The summary panels show project count, the demo roster, teams requiring attention, pending AI approval, and average progress. The attention table routes to the selected project's team or student, with an explicit current-project approval target. Approval status derives from the ongoing assignment mode and in-session decisions.
+시작 방법: 학교 시스템 / 문서 / 직접 입력.
+분류: 기본 정보, 교육과정·목표, 평가, AI 정책, 주차 계획, 참고 자료.
 
-### Scope of the data
+1. 시스템·문서 선택 후 분석 예시 열기.
+2. 과목명·목표·성취 기준·NCS·평가 기준·주차 계획 검토 및 수정.
+3. 적용 영역 선택 후 **설정 초안**에 반영.
+4. 「과목 설정 저장」으로 검증·저장.
 
-Both data variants use two illustrative projects, 24 students, six teams, and week-seven chart data. Network shows diagnosis/VLAN contexts; fusion shows AI-program planning and user-requirement/technology-selection contexts. These charts remain authored examples rather than analytics computed from the interactive student record. Project selection scopes the charts; period selection affects the weekly trend and AI support statistics only. Team/student selection affects the competency area only. Do not imply that course metadata edits rebuild the roster, fabricate evidence for new competencies, or turn these examples into live analytics. The recent activity panel is a current-class illustrative timeline, not a queried audit log.
+학교 시스템: 대학정보시스템·LMS·학사행정·NEIS 예시. 실제 인증·연동 없음.
+문서: PDF/HWP/HWPX/DOCX/XLSX, 파일당 10MB. 이름·확장자·크기 확인만 수행.
+내용 전송·파싱·AI 추출·공식 NCS 코드 조회 없음. 문서 교체 시 기존 값과 예시 값 비교.
+문서 원본은 보관하지 않고 이름·유형·적용 영역·날짜만 기록.
 
-## Settings and reviewed import
+저장 검증: 과목명·날짜 순서·목표·주차 내용·양수 배점 합계 100%·허용 가이던스 1개 이상.
+빈 가져오기 영역 적용 금지. 오류·성공 상태 표시.
 
-The three entry methods are school-system import, document setup, and direct editing. Six categories cover basic course information, curriculum and objectives, assessment rules, AI defaults, the weekly schedule, and reference documents.
+## 저장 경계
 
-School-system choices (university information system, LMS, academic administration, NEIS) open prepared examples. Document selection accepts PDF, HWP, HWPX, DOCX, and XLSX up to 10MB per file, including multiple files for a new import. A separate example-document action supports the demo. File validation inspects filenames/extensions and size; file contents are neither transmitted nor parsed. There is no institution authentication, live connector, real AI extraction, or verified official NCS-code lookup.
+`workspaceKey(id, 'trace-course-v1')` 사용. 융합은 `fusion-` 접두사.
+저장 불가·잘못된 값은 기본 예시로 복구. 초안은 같은 세션의 메뉴 이동 시 유지.
+새로고침·시나리오 전환 시 미저장 초안 소실 가능. 가져오기 대화상자의 입력·파일 선택은 임시 상태.
+미저장 설정이 있으면 새 과제 생성 비활성화.
 
-Both routes use the same explicit sequence:
-
-1. Select a source and open its analysis example.
-2. Review six editable extraction areas: course name, objectives, achievement standards, NCS units, evaluation criteria, and weekly curriculum. Show labeled example source evidence beside them.
-3. Select or exclude areas, edit their contents, and apply selected items to the **settings draft**. Applying is not final saving.
-4. Review the draft and choose **과목 설정 저장** to validate and persist the course defaults.
-
-Document replacement shows current settings next to new example evidence before application. The document list retains only names, type, applied areas, and update dates; it does not store original documents. Empty selected import areas are rejected. Imported evaluation criteria require valid positive weights totaling 100%. The final save also checks course name and date order, objectives and schedule entries, evaluation criteria, and at least one allowed guidance type. Errors and successful actions receive visible alert/status messages.
-
-## State, persistence, and reuse
-
-Saved course defaults use browser `localStorage` key `workspaceKey(id, 'trace-course-v1')`: `trace-course-v1` for network and `fusion-trace-course-v1` for fusion; unavailable or unsuitable stored data falls back to the seeded course. The App owns a separate `courseDraft`, so edited settings and applied import results survive navigation away from settings and back within the same app session. Unsaved settings do not survive a full reload or workspace switch. The selected category survives workspace switching in the current session; it is not a saved course field. Import-dialog edits, selected file names, and import method are transient component state; do not claim session retention for those intermediate controls.
-
-The new-project action is disabled while settings have unsaved changes. It starts a blank title/description and copies saved objectives, evaluation criteria, AI mode, intervention level, guidance choices for each mode, and the direct-answer policy into a new editable assignment draft. Other course metadata and preferences remain course-level settings; direct-answer permission is a saved demo policy, not an implemented answer-generation service. Existing assignment editing can explicitly import saved goals or criteria as needed.
-
-Before starting that new draft, App snapshots the current teaching assignment separately under `workspaceKey(id, 'trace-teaching-assignment')` (with an in-session fallback if persistence fails). Dashboard and teaching views use that ongoing snapshot. Thus creating or editing the next assignment does not replace the ongoing classroom's demonstration data or evidence. Course settings, next-assignment drafting, and ongoing teaching context remain distinct.
-
-## Incumbent comparison
-
-This extension preserves the incumbent palette, Korean text hierarchy, sidebar, action styles, rounded white panels, labeled categorical chart colors, and browser-only demonstration model. The added dashboard grid, settings entry cards, review dialog, and explicit apply/save boundary are local surface patterns. They do not impose a new page composition on other TRACE screens. Neither the global design specification nor its sidecar is refreshed for this ordinary extension.
+새 과제: 저장 목표·평가·AI 운영 방식·개입 수준·가이던스·직접 답변 정책 복사.
+진행 중 과제는 `trace-teaching-assignment` 스냅샷으로 분리. 다음 과제 초안이 현재 수업을 덮어쓰지 않도록 유지.
+직접 답변 정책 저장은 실제 답변 생성 서비스 구현과 별개.

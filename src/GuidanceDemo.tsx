@@ -3,7 +3,7 @@ import { demoSources } from './demoSources'
 import type {WorkspaceId} from './scenarios'
 import './guidance-demo.css'
 
-// Scripted examples demonstrate support changes, not live model inference.
+// 지원 변화 시연용 고정 예시. 실제 모델 추론 아님.
 const guidanceScenes = {
  fusion: [
   {title:'확인 질문',support:'확인 질문',reason:'확인된 사실과 아직 검증하지 않은 조건의 구분',student:'안내문에 있는 질문에는 출처가 나옵니다. 자료에 없는 질문에도 답이 나오는데, 무엇부터 확인해야 할까요?',ai:'답변에 실제 출처가 연결되어 있나요? 자료가 있는 질문과 없는 질문의 결과를 비교하고, 아직 확인하지 못한 조건을 정리해 보세요.'},

@@ -36,7 +36,7 @@ function TeacherApp({studentRole,onRole,view,setView,studentView,setStudentView}
   const [teachingKey, setTeachingKey] = useState(0)
   const [decisions, setDecisions] = useState<Record<string,string>>({})
   function openTeaching(next:TeachingView,target:TeachingTarget) { setTeachingTarget(target);setTeachingKey(k=>k+1);setView(next);window.scrollTo(0,0) }
-  function newProject() { if(!teachingAssignment){setTeachingAssignment(structuredClone(a));try{localStorage.setItem(key('trace-teaching-assignment'),JSON.stringify(a))}catch{/* Keep the in-session snapshot. */}} setA({...structuredClone(initialAssignment),title:'',description:'',goals:[...course.goals],criteria:structuredClone(course.criteria),mode:course.mode,intervention:course.intervention,guidance:Object.fromEntries(modes.map(m=>[m,[...course.guidance]])) as AssignmentType['guidance'],directAnswers:course.directAnswers});setView('assignment');setStep(1);setSaved(false);setCreated(false);setError('');window.scrollTo(0,0);setMessage('저장된 과목 기준으로 새 프로젝트 초안을 시작합니다.') }
+  function newProject() { if(!teachingAssignment){setTeachingAssignment(structuredClone(a));try{localStorage.setItem(key('trace-teaching-assignment'),JSON.stringify(a))}catch{/* 현재 세션의 스냅샷 유지. */}} setA({...structuredClone(initialAssignment),title:'',description:'',goals:[...course.goals],criteria:structuredClone(course.criteria),mode:course.mode,intervention:course.intervention,guidance:Object.fromEntries(modes.map(m=>[m,[...course.guidance]])) as AssignmentType['guidance'],directAnswers:course.directAnswers});setView('assignment');setStep(1);setSaved(false);setCreated(false);setError('');window.scrollTo(0,0);setMessage('저장된 과목 기준으로 새 프로젝트 초안을 시작합니다.') }
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [message, setMessage] = useState('')
@@ -90,7 +90,7 @@ function TeacherApp({studentRole,onRole,view,setView,studentView,setStudentView}
   function toggleGuidance(value: string) { const current = a.guidance[a.mode]; update('guidance', { ...a.guidance, [a.mode]: current.includes(value) ? current.filter(x => x !== value) : [...current, value] }) }
   async function uploadTemplate(file: File | undefined, index: number) {
     if (!file) return
-    // ponytail: local demo attachments; move blobs to server storage for production.
+    // ponytail: 데모 첨부는 로컬 저장. 서비스 전환 시 서버 파일 저장소 사용.
     if (file.size > 2 * 1024 * 1024) { setError('데모 양식은 파일당 2MB 이하로 첨부해 주세요.'); return }
     const reader = new FileReader()
     reader.onerror = () => setError('양식을 읽지 못했습니다. 파일을 다시 선택해 주세요.')
