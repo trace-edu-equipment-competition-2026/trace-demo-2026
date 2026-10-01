@@ -42,8 +42,10 @@ test('교수자 운영 화면의 데스크톱과 태블릿 레이아웃', async 
     await page.screenshot({path:`.impeccable/review/evaluation-${width}.png`, fullPage:true})
     await page.screenshot({path:`.impeccable/review/evaluation-first-${width}.png`})
     await page.evaluate(() => (document.activeElement as HTMLElement)?.blur())
+    await page.getByRole('button',{name:'개념 이해와 수행',exact:true}).click()
     await page.locator('.competency-panel').screenshot({path:`.impeccable/review/competency-${width}.png`})
     await page.locator('#teacher-review').screenshot({path:`.impeccable/review/attainment-${width}.png`})
+    await page.getByRole('button',{name:/가이던스 이력/}).click()
     await page.locator('#guidance-history').screenshot({path:`.impeccable/review/guidance-${width}.png`})
   }
 })

@@ -88,6 +88,7 @@ test('수업 대시보드와 과목 설정의 데스크톱·태블릿 화면',as
 
 test('설정 초안을 보존하고 새 프로젝트가 기존 수업 기록을 덮어쓰지 않는다',async({page})=>{
   await page.goto('/')
+  await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   const original=await page.getByLabel('과제명').inputValue()
   await page.getByRole('button',{name:'과목 설정',exact:true}).click()
   await page.getByLabel('과목명',{exact:true}).fill('보존할 설정 초안')

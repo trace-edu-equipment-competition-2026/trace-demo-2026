@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test('과제 편집, 목표 가져오기, 검증, 운영 방식과 저장', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', e => errors.push(e.message))
-  await page.goto('/')
+  await page.goto('/');if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   await expect(page.getByRole('heading', { name: '프로젝트 · 과제 생성' })).toBeVisible()
   await expect(page.getByRole('button', { name: '팀 프로젝트', exact: true })).toHaveAttribute('aria-pressed','true')
   await expect(page.getByRole('button', { name: /학생 자율 구성/ })).toHaveAttribute('aria-pressed','true')
@@ -52,7 +52,7 @@ test('과제 편집, 목표 가져오기, 검증, 운영 방식과 저장', asyn
   await expect(page.getByText('판단 근거 점검 → 재검증 → 다른 조건에 적용', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: '과제 생성', exact: true }).click()
   await expect(page.getByText('생성 완료', { exact: true })).toBeVisible()
-  await page.reload()
+  await page.reload();if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   await expect(page.getByLabel('과제명', { exact: false })).toHaveValue('라우팅 경로 복구 실습')
   await expect(page.getByLabel('요구사항 4', { exact: true })).toHaveValue('복구 경로를 검증한다.')
   await expect(page.getByLabel('팀당 인원', { exact: true })).toHaveValue('5')
@@ -60,7 +60,7 @@ test('과제 편집, 목표 가져오기, 검증, 운영 방식과 저장', asyn
 })
 
 test('시작일과 필수 항목 검증', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/');if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   await page.getByLabel('종료일', { exact: true }).fill('2026-10-01')
   await page.getByRole('button', { name: 'AI 운영 방식 설정' }).click()
   await expect(page.getByRole('alert')).toContainText('수행 기간')
@@ -71,7 +71,7 @@ test('시작일과 필수 항목 검증', async ({ page }) => {
 })
 
 test('평가 요구사항 AI 추천', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/');if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   await page.getByRole('button', { name: 'AI로 요구사항 추천', exact: true }).click()
   await expect(page.getByLabel('요구사항 4', { exact: true })).toHaveValue('장애 증상을 재현하고 영향 범위를 확인한 결과를 기록한다.')
   await expect(page.getByLabel('요구사항 5', { exact: true })).toHaveValue('두 가지 이상의 진단 도구를 활용하여 원인 후보를 비교한다.')
@@ -79,7 +79,7 @@ test('평가 요구사항 AI 추천', async ({ page }) => {
 })
 
 test('교수자 지정과 자동 추천 팀 구성', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/');if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   await page.getByRole('button', { name: /교수자 지정/ }).click()
   await expect(page.getByText('교수자 최종 승인', { exact: true })).toBeHidden()
   await expect(page.getByText('팀별 학생 지정', { exact: true })).toBeVisible()
@@ -102,7 +102,7 @@ test('화면 크기별 레이아웃과 데모 캡처', async ({ page }) => {
   for (const [name, width, height] of [['desktop',1440,1080],['tablet-landscape',1180,820],['tablet-portrait',820,1180],['mobile',390,844]] as const) {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.setViewportSize({width,height})
-    await page.goto('/')
+    await page.goto('/');if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     await page.screenshot({path:`.impeccable/review/${name}.png`,fullPage:true})
     await page.getByRole('button', { name: 'AI 운영 방식 설정' }).click()
@@ -124,7 +124,7 @@ test('화면 크기별 레이아웃과 데모 캡처', async ({ page }) => {
 
 
 test('양식 업로드, 옵션 편집과 사이드바', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/');if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   await page.getByLabel('산출물 1 양식 업로드', {exact:true}).setInputFiles({ name:'진단 보고서.txt', mimeType:'text/plain', buffer:Buffer.from('진단 근거 / 검증 결과') })
   await expect(page.getByRole('link', {name:'진단 보고서.txt', exact:true})).toBeVisible()
   await page.getByRole('button', {name:'산출물 추가', exact:true}).click()
@@ -141,7 +141,7 @@ test('양식 업로드, 옵션 편집과 사이드바', async ({ page }) => {
   await expect(page.getByRole('link', {name:'양식 다운로드 · 진단 보고서.txt'})).toHaveAttribute('download','진단 보고서.txt')
   await expect(page.getByText('발표 자료', {exact:true})).toBeVisible()
   await page.getByRole('button', {name:'임시 저장', exact:true}).click()
-  await page.reload()
+  await page.reload();if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name:'프로젝트 · 과제 생성',exact:true}).click()
   await expect(page.getByRole('link', {name:'진단 보고서.txt', exact:true})).toBeVisible()
   await page.getByRole('button', {name:'AI 운영 방식 설정'}).click()
   await expect(page.getByRole('button', {name:'장비 교체', exact:true})).toHaveAttribute('aria-pressed','true')

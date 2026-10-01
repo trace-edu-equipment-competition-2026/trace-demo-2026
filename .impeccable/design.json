@@ -1,110 +1,420 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-25T12:01:55.443827+00:00",
+  "generatedAt": "2026-09-27T07:52:03.997021+00:00",
   "title": "Design System: TRACE",
   "extensions": {
     "colorMeta": {
       "primary": {
         "role": "primary",
-        "displayName": "Primary"
+        "displayName": "Primary",
+        "tonalRamp": [
+          "oklch(15% 0.0728 176.19)",
+          "oklch(26% 0.0728 176.19)",
+          "oklch(38% 0.0728 176.19)",
+          "oklch(49% 0.0728 176.19)",
+          "oklch(61% 0.0728 176.19)",
+          "oklch(72% 0.0728 176.19)",
+          "oklch(84% 0.0728 176.19)",
+          "oklch(95% 0.0728 176.19)"
+        ]
       },
       "primary-hover": {
         "role": "primary",
-        "displayName": "Primary Hover"
+        "displayName": "Primary Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0643 175.94)",
+          "oklch(26% 0.0643 175.94)",
+          "oklch(38% 0.0643 175.94)",
+          "oklch(49% 0.0643 175.94)",
+          "oklch(61% 0.0643 175.94)",
+          "oklch(72% 0.0643 175.94)",
+          "oklch(84% 0.0643 175.94)",
+          "oklch(95% 0.0643 175.94)"
+        ]
       },
       "mint": {
         "role": "primary",
-        "displayName": "Mint"
+        "displayName": "Mint",
+        "tonalRamp": [
+          "oklch(15% 0.0923 183.52)",
+          "oklch(26% 0.0923 183.52)",
+          "oklch(38% 0.0923 183.52)",
+          "oklch(49% 0.0923 183.52)",
+          "oklch(61% 0.0923 183.52)",
+          "oklch(72% 0.0923 183.52)",
+          "oklch(84% 0.0923 183.52)",
+          "oklch(95% 0.0923 183.52)"
+        ]
       },
       "mint-soft": {
         "role": "primary",
-        "displayName": "Mint Soft"
-      },
-      "rose": {
-        "role": "secondary",
-        "displayName": "Rose"
-      },
-      "yellow": {
-        "role": "secondary",
-        "displayName": "Yellow"
-      },
-      "lavender": {
-        "role": "secondary",
-        "displayName": "Lavender"
-      },
-      "chart-charcoal": {
-        "role": "secondary",
-        "displayName": "Chart Charcoal"
-      },
-      "background": {
-        "role": "neutral",
-        "displayName": "Background"
-      },
-      "surface": {
-        "role": "neutral",
-        "displayName": "Surface"
-      },
-      "foreground": {
-        "role": "neutral",
-        "displayName": "Foreground"
-      },
-      "supporting-text": {
-        "role": "neutral",
-        "displayName": "Supporting Text"
-      },
-      "sidebar-foreground": {
-        "role": "neutral",
-        "displayName": "Sidebar Foreground"
-      },
-      "border": {
-        "role": "neutral",
-        "displayName": "Border"
-      },
-      "field-border": {
-        "role": "neutral",
-        "displayName": "Field Border"
-      },
-      "panel-border": {
-        "role": "neutral",
-        "displayName": "Panel Border"
+        "displayName": "Mint Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0341 185.20)",
+          "oklch(26% 0.0341 185.20)",
+          "oklch(38% 0.0341 185.20)",
+          "oklch(49% 0.0341 185.20)",
+          "oklch(61% 0.0341 185.20)",
+          "oklch(72% 0.0341 185.20)",
+          "oklch(84% 0.0341 185.20)",
+          "oklch(95% 0.0341 185.20)"
+        ]
       },
       "rose-soft": {
         "role": "secondary",
-        "displayName": "Rose Soft"
+        "displayName": "Rose Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0210 17.54)",
+          "oklch(26% 0.0210 17.54)",
+          "oklch(38% 0.0210 17.54)",
+          "oklch(49% 0.0210 17.54)",
+          "oklch(61% 0.0210 17.54)",
+          "oklch(72% 0.0210 17.54)",
+          "oklch(84% 0.0210 17.54)",
+          "oklch(95% 0.0210 17.54)"
+        ]
       },
       "yellow-soft": {
         "role": "secondary",
-        "displayName": "Yellow Soft"
+        "displayName": "Yellow Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0447 91.74)",
+          "oklch(26% 0.0447 91.74)",
+          "oklch(38% 0.0447 91.74)",
+          "oklch(49% 0.0447 91.74)",
+          "oklch(61% 0.0447 91.74)",
+          "oklch(72% 0.0447 91.74)",
+          "oklch(84% 0.0447 91.74)",
+          "oklch(95% 0.0447 91.74)"
+        ]
       },
       "lavender-soft": {
         "role": "secondary",
-        "displayName": "Lavender Soft"
+        "displayName": "Lavender Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0285 292.39)",
+          "oklch(26% 0.0285 292.39)",
+          "oklch(38% 0.0285 292.39)",
+          "oklch(49% 0.0285 292.39)",
+          "oklch(61% 0.0285 292.39)",
+          "oklch(72% 0.0285 292.39)",
+          "oklch(84% 0.0285 292.39)",
+          "oklch(95% 0.0285 292.39)"
+        ]
+      },
+      "rose": {
+        "role": "secondary",
+        "displayName": "Rose",
+        "tonalRamp": [
+          "oklch(15% 0.1112 24.44)",
+          "oklch(26% 0.1112 24.44)",
+          "oklch(38% 0.1112 24.44)",
+          "oklch(49% 0.1112 24.44)",
+          "oklch(61% 0.1112 24.44)",
+          "oklch(72% 0.1112 24.44)",
+          "oklch(84% 0.1112 24.44)",
+          "oklch(95% 0.1112 24.44)"
+        ]
+      },
+      "yellow": {
+        "role": "secondary",
+        "displayName": "Yellow",
+        "tonalRamp": [
+          "oklch(15% 0.1091 90.74)",
+          "oklch(26% 0.1091 90.74)",
+          "oklch(38% 0.1091 90.74)",
+          "oklch(49% 0.1091 90.74)",
+          "oklch(61% 0.1091 90.74)",
+          "oklch(72% 0.1091 90.74)",
+          "oklch(84% 0.1091 90.74)",
+          "oklch(95% 0.1091 90.74)"
+        ]
+      },
+      "lavender": {
+        "role": "secondary",
+        "displayName": "Lavender",
+        "tonalRamp": [
+          "oklch(15% 0.1002 289.26)",
+          "oklch(26% 0.1002 289.26)",
+          "oklch(38% 0.1002 289.26)",
+          "oklch(49% 0.1002 289.26)",
+          "oklch(61% 0.1002 289.26)",
+          "oklch(72% 0.1002 289.26)",
+          "oklch(84% 0.1002 289.26)",
+          "oklch(95% 0.1002 289.26)"
+        ]
+      },
+      "chart-charcoal": {
+        "role": "secondary",
+        "displayName": "Chart Charcoal",
+        "tonalRamp": [
+          "oklch(15% 0.0076 137.79)",
+          "oklch(26% 0.0076 137.79)",
+          "oklch(38% 0.0076 137.79)",
+          "oklch(49% 0.0076 137.79)",
+          "oklch(61% 0.0076 137.79)",
+          "oklch(72% 0.0076 137.79)",
+          "oklch(84% 0.0076 137.79)",
+          "oklch(95% 0.0076 137.79)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Background",
+        "tonalRamp": [
+          "oklch(15% 0.0067 115.71)",
+          "oklch(26% 0.0067 115.71)",
+          "oklch(38% 0.0067 115.71)",
+          "oklch(49% 0.0067 115.71)",
+          "oklch(61% 0.0067 115.71)",
+          "oklch(72% 0.0067 115.71)",
+          "oklch(84% 0.0067 115.71)",
+          "oklch(95% 0.0067 115.71)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Foreground",
+        "tonalRamp": [
+          "oklch(15% 0.0043 145.48)",
+          "oklch(26% 0.0043 145.48)",
+          "oklch(38% 0.0043 145.48)",
+          "oklch(49% 0.0043 145.48)",
+          "oklch(61% 0.0043 145.48)",
+          "oklch(72% 0.0043 145.48)",
+          "oklch(84% 0.0043 145.48)",
+          "oklch(95% 0.0043 145.48)"
+        ]
+      },
+      "supporting-text": {
+        "role": "neutral",
+        "displayName": "Supporting Text",
+        "tonalRamp": [
+          "oklch(15% 0.0211 155.38)",
+          "oklch(26% 0.0211 155.38)",
+          "oklch(38% 0.0211 155.38)",
+          "oklch(49% 0.0211 155.38)",
+          "oklch(61% 0.0211 155.38)",
+          "oklch(72% 0.0211 155.38)",
+          "oklch(84% 0.0211 155.38)",
+          "oklch(95% 0.0211 155.38)"
+        ]
+      },
+      "placeholder-text": {
+        "role": "neutral",
+        "displayName": "Placeholder Text",
+        "tonalRamp": [
+          "oklch(15% 0.0208 142.73)",
+          "oklch(26% 0.0208 142.73)",
+          "oklch(38% 0.0208 142.73)",
+          "oklch(49% 0.0208 142.73)",
+          "oklch(61% 0.0208 142.73)",
+          "oklch(72% 0.0208 142.73)",
+          "oklch(84% 0.0208 142.73)",
+          "oklch(95% 0.0208 142.73)"
+        ]
+      },
+      "heading-text": {
+        "role": "neutral",
+        "displayName": "Heading Text",
+        "tonalRamp": [
+          "oklch(15% 0.0498 177.78)",
+          "oklch(26% 0.0498 177.78)",
+          "oklch(38% 0.0498 177.78)",
+          "oklch(49% 0.0498 177.78)",
+          "oklch(61% 0.0498 177.78)",
+          "oklch(72% 0.0498 177.78)",
+          "oklch(84% 0.0498 177.78)",
+          "oklch(95% 0.0498 177.78)"
+        ]
+      },
+      "context-surface": {
+        "role": "secondary",
+        "displayName": "Context Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0100 164.87)",
+          "oklch(26% 0.0100 164.87)",
+          "oklch(38% 0.0100 164.87)",
+          "oklch(49% 0.0100 164.87)",
+          "oklch(61% 0.0100 164.87)",
+          "oklch(72% 0.0100 164.87)",
+          "oklch(84% 0.0100 164.87)",
+          "oklch(95% 0.0100 164.87)"
+        ]
+      },
+      "ai-surface": {
+        "role": "secondary",
+        "displayName": "Ai Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0135 295.32)",
+          "oklch(26% 0.0135 295.32)",
+          "oklch(38% 0.0135 295.32)",
+          "oklch(49% 0.0135 295.32)",
+          "oklch(61% 0.0135 295.32)",
+          "oklch(72% 0.0135 295.32)",
+          "oklch(84% 0.0135 295.32)",
+          "oklch(95% 0.0135 295.32)"
+        ]
+      },
+      "attention-surface": {
+        "role": "secondary",
+        "displayName": "Attention Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0298 92.32)",
+          "oklch(26% 0.0298 92.32)",
+          "oklch(38% 0.0298 92.32)",
+          "oklch(49% 0.0298 92.32)",
+          "oklch(61% 0.0298 92.32)",
+          "oklch(72% 0.0298 92.32)",
+          "oklch(84% 0.0298 92.32)",
+          "oklch(95% 0.0298 92.32)"
+        ]
+      },
+      "execution-surface": {
+        "role": "neutral",
+        "displayName": "Execution Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0278 173.93)",
+          "oklch(26% 0.0278 173.93)",
+          "oklch(38% 0.0278 173.93)",
+          "oklch(49% 0.0278 173.93)",
+          "oklch(61% 0.0278 173.93)",
+          "oklch(72% 0.0278 173.93)",
+          "oklch(84% 0.0278 173.93)",
+          "oklch(95% 0.0278 173.93)"
+        ]
+      },
+      "navigation-selected": {
+        "role": "primary",
+        "displayName": "Navigation Selected",
+        "tonalRamp": [
+          "oklch(15% 0.0230 161.76)",
+          "oklch(26% 0.0230 161.76)",
+          "oklch(38% 0.0230 161.76)",
+          "oklch(49% 0.0230 161.76)",
+          "oklch(61% 0.0230 161.76)",
+          "oklch(72% 0.0230 161.76)",
+          "oklch(84% 0.0230 161.76)",
+          "oklch(95% 0.0230 161.76)"
+        ]
+      },
+      "sidebar-foreground": {
+        "role": "neutral",
+        "displayName": "Sidebar Foreground",
+        "tonalRamp": [
+          "oklch(15% 0.0230 161.76)",
+          "oklch(26% 0.0230 161.76)",
+          "oklch(38% 0.0230 161.76)",
+          "oklch(49% 0.0230 161.76)",
+          "oklch(61% 0.0230 161.76)",
+          "oklch(72% 0.0230 161.76)",
+          "oklch(84% 0.0230 161.76)",
+          "oklch(95% 0.0230 161.76)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "tonalRamp": [
+          "oklch(15% 0.0045 134.85)",
+          "oklch(26% 0.0045 134.85)",
+          "oklch(38% 0.0045 134.85)",
+          "oklch(49% 0.0045 134.85)",
+          "oklch(61% 0.0045 134.85)",
+          "oklch(72% 0.0045 134.85)",
+          "oklch(84% 0.0045 134.85)",
+          "oklch(95% 0.0045 134.85)"
+        ]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Field Border",
+        "tonalRamp": [
+          "oklch(15% 0.0091 134.88)",
+          "oklch(26% 0.0091 134.88)",
+          "oklch(38% 0.0091 134.88)",
+          "oklch(49% 0.0091 134.88)",
+          "oklch(61% 0.0091 134.88)",
+          "oklch(72% 0.0091 134.88)",
+          "oklch(84% 0.0091 134.88)",
+          "oklch(95% 0.0091 134.88)"
+        ]
+      },
+      "panel-border": {
+        "role": "neutral",
+        "displayName": "Panel Border",
+        "tonalRamp": [
+          "oklch(15% 0.0057 128.53)",
+          "oklch(26% 0.0057 128.53)",
+          "oklch(38% 0.0057 128.53)",
+          "oklch(49% 0.0057 128.53)",
+          "oklch(61% 0.0057 128.53)",
+          "oklch(72% 0.0057 128.53)",
+          "oklch(84% 0.0057 128.53)",
+          "oklch(95% 0.0057 128.53)"
+        ]
+      },
+      "input-surface": {
+        "role": "neutral",
+        "displayName": "Neutral Teacher Input",
+        "tonalRamp": [
+          "oklch(15% 0.0041 121.56)",
+          "oklch(26% 0.0041 121.56)",
+          "oklch(38% 0.0041 121.56)",
+          "oklch(49% 0.0041 121.56)",
+          "oklch(61% 0.0041 121.56)",
+          "oklch(72% 0.0041 121.56)",
+          "oklch(84% 0.0041 121.56)",
+          "oklch(95% 0.0041 121.56)"
+        ]
       }
     },
     "typographyMeta": {
       "headline": {
-        "displayName": "Headline",
-        "purpose": "Page title"
+        "displayName": "Page heading",
+        "purpose": "Shared workspace page titles"
       },
       "title": {
-        "displayName": "Title",
-        "purpose": "Section titles"
+        "displayName": "Section heading",
+        "purpose": "Icon-led section titles"
       },
       "body": {
-        "displayName": "Body",
-        "purpose": "Form fields"
+        "displayName": "Reading",
+        "purpose": "Body reading and messages"
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Workspace fields and actions"
       },
       "label": {
-        "displayName": "Label",
+        "displayName": "Field label",
         "purpose": "Field labels"
       },
       "supporting": {
         "displayName": "Supporting",
-        "purpose": "Supporting annotations"
+        "purpose": "Counts, provenance, timestamps, and notes"
       },
       "metric": {
-        "displayName": "Metric",
-        "purpose": "Evaluation percentage"
+        "displayName": "Review metric",
+        "purpose": "Evaluation points and review-strip counts"
+      },
+      "code": {
+        "displayName": "Source log",
+        "purpose": "Raw execution evidence uses the intentional system monospace stack"
       }
     },
     "shadows": [
@@ -151,12 +461,28 @@
         "value": "1250px"
       },
       {
+        "name": "workbench-stack-max",
+        "value": "1100px"
+      },
+      {
         "name": "drawer-max",
         "value": "1050px"
       },
       {
-        "name": "stack-max",
+        "name": "detail-stack-max",
+        "value": "900px"
+      },
+      {
+        "name": "assignment-stack-max",
         "value": "760px"
+      },
+      {
+        "name": "current-work-stack-max",
+        "value": "650px"
+      },
+      {
+        "name": "small-max",
+        "value": "600px"
       },
       {
         "name": "narrow-max",
@@ -171,7 +497,7 @@
       "refersTo": "button-primary",
       "description": "Primary button extracted from the implemented TRACE surface.",
       "html": "<button class=\"ds-button-primary\">임시 저장</button>",
-      "css": ".ds-button-primary { font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 20px;min-height:46px;border:1px solid transparent;border-radius:11px;font-size:13px;font-weight:600;background:var(--primary,#2b6f60);color:white;cursor:pointer;transition:background .16s; } .ds-button-primary:hover {background:#235d50;} .ds-button-primary:focus-visible { outline:3px solid var(--primary,#2b6f60); outline-offset:3px; }.ds-button-primary:disabled {opacity:.48;cursor:not-allowed;} @media(prefers-reduced-motion:reduce) {.ds-button-primary {transition:none;}}"
+      "css": ".ds-button-primary { font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 20px;min-height:46px;border:1px solid transparent;border-radius:11px;font-size:14px;font-weight:600;background:var(--primary,#2b6f60);color:white;cursor:pointer;transition:background .16s; } .ds-button-primary:hover {background:#235d50;} .ds-button-primary:focus-visible { outline:3px solid var(--primary,#2b6f60); outline-offset:3px; }.ds-button-primary:disabled {opacity:.48;cursor:not-allowed;} @media(prefers-reduced-motion:reduce) {.ds-button-primary {transition:none;}}"
     },
     {
       "name": "Secondary button",
@@ -179,7 +505,7 @@
       "refersTo": "button-secondary",
       "description": "Secondary button extracted from the implemented TRACE surface.",
       "html": "<button class=\"ds-button-secondary\">임시 저장</button>",
-      "css": ".ds-button-secondary { font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 20px;min-height:46px;border:1px solid #dce2d8;border-radius:11px;font-size:13px;font-weight:600;background:white;color:#525d50;cursor:pointer;transition:background .16s; } .ds-button-secondary:hover {background:#e7ece4;} .ds-button-secondary:focus-visible { outline:3px solid var(--primary,#2b6f60); outline-offset:3px; }.ds-button-secondary:disabled {opacity:.48;cursor:not-allowed;} @media(prefers-reduced-motion:reduce) {.ds-button-secondary {transition:none;}}"
+      "css": ".ds-button-secondary { font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 20px;min-height:46px;border:1px solid #dce2d8;border-radius:11px;font-size:14px;font-weight:600;background:white;color:#525d50;cursor:pointer;transition:background .16s; } .ds-button-secondary:hover {background:#e7ece4;} .ds-button-secondary:focus-visible { outline:3px solid var(--primary,#2b6f60); outline-offset:3px; }.ds-button-secondary:disabled {opacity:.48;cursor:not-allowed;} @media(prefers-reduced-motion:reduce) {.ds-button-secondary {transition:none;}}"
     },
     {
       "name": "Text field",
@@ -187,7 +513,7 @@
       "refersTo": "field",
       "description": "Text field extracted from the implemented TRACE surface.",
       "html": "<input class=\"ds-field\" aria-label=\"과제명\" placeholder=\"과제명을 입력하세요\" />",
-      "css": ".ds-field {font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; width:100%;min-height:44px;border:1px solid #e1e5df;border-radius:10px;background:white;color:#3b423c;font-size:13px;padding:11px 13px;line-height:1.45;transition:border-color .16s,background .16s;} .ds-field::placeholder {color:#667065;} .ds-field:hover {border-color:#a8beb2;} .ds-field:focus {border-color:var(--mint,#54b3a6);} .ds-field:focus-visible { outline:3px solid var(--primary,#2b6f60); outline-offset:3px; }@media(prefers-reduced-motion:reduce){.ds-field{transition:none;}}"
+      "css": ".ds-field {font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; width:100%;min-height:44px;border:1px solid #e1e5df;border-radius:10px;background:white;color:#3b423c;font-size:14px;padding:11px 13px;line-height:1.45;transition:border-color .16s,background .16s;} .ds-field::placeholder {color:#667065;} .ds-field:hover {border-color:#a8beb2;} .ds-field:focus {border-color:var(--mint,#54b3a6);} .ds-field:focus-visible { outline:3px solid var(--primary,#2b6f60); outline-offset:3px; }@media(prefers-reduced-motion:reduce){.ds-field{transition:none;}}"
     },
     {
       "name": "Panel",
@@ -195,15 +521,15 @@
       "refersTo": "panel",
       "description": "Panel extracted from the implemented TRACE surface.",
       "html": "<section class=\"ds-panel\"><h2>기본 정보</h2></section>",
-      "css": ".ds-panel {font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; border:1px solid #e7e9e5;border-radius:24px;padding:26px;background:white;color:var(--foreground,#3b3d3b);} .ds-panel h2 {font-size:18px;font-weight:700;letter-spacing:-.025em;margin:0;}"
+      "css": ".ds-panel {font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; border:1px solid #e7e9e5;border-radius:var(--panel-radius,18px);padding:24px;background:white;color:var(--foreground,#3b3d3b);} .ds-panel h2 {font-size:20px;line-height:1.4;font-weight:750;letter-spacing:-.025em;margin:0;} @media(min-width:1600px){.ds-panel{padding:28px}}@media(max-width:900px){.ds-panel{padding:22px}}@media(max-width:600px){.ds-panel{padding:18px}.ds-panel h2{font-size:18px}}"
     },
     {
       "name": "Active navigation",
       "kind": "nav",
       "refersTo": "navigation-active",
       "description": "Active navigation extracted from the implemented TRACE surface.",
-      "html": "<nav class=\"ds-nav\"><button aria-current=\"page\">프로젝트 과제 생성</button></nav>",
-      "css": ".ds-nav {font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; background:var(--sidebar,#2b6f60);padding:12px;} .ds-nav button {font:inherit;font-size:15px;min-height:58px;width:100%;padding:9px 13px;border:0;border-radius:16px;background:#3b3d3b;color:white;text-align:left;cursor:pointer;} .ds-nav button:focus-visible {outline:3px solid #cfefea;outline-offset:3px;}"
+      "html": "<nav class=\"ds-nav\"><button aria-current=\"page\"><span class=\"ds-nav-icon\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg></span>수업 대시보드</button></nav>",
+      "css": ".ds-nav {font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif; background:var(--sidebar,#2b6f60);padding:12px;} .ds-nav button {font:inherit;font-size:15px;min-height:52px;width:100%;padding:8px 10px;border:0;border-radius:12px;background:#edfff5;color:var(--primary,#2b6f60);text-align:left;cursor:pointer;} .ds-nav button:focus-visible {outline:3px solid #cfefea;outline-offset:3px;} .ds-nav button{display:flex;align-items:center;gap:10px}.ds-nav-icon{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:var(--mint-soft,#cfefea)}"
     },
     {
       "name": "Editable goal chip",
@@ -219,25 +545,56 @@
       "description": "Soft categorical section marker; mint, rose, yellow, lavender, then mint. Separate from circular workflow steps.",
       "html": "<span class=\"ds-section-number\">02</span>",
       "css": ".ds-section-number {display:grid;place-items:center;width:38px;height:38px;border-radius:12px;font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:#3b423c;background:#f0dddd;} @media(max-width:760px){.ds-section-number{width:34px;height:34px;}}"
+    },
+    {
+      "name": "Section title",
+      "kind": "custom",
+      "refersTo": "section-symbol",
+      "description": "Text-led heading with a decorative outline icon in a semantic tile.",
+      "html": "<h2 class=\"ds-section-title\"><span class=\"ds-section-symbol\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" aria-hidden=\"true\"><path d=\"M9 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4\"/><rect x=\"9\" y=\"3\" width=\"6\" height=\"4\" rx=\"1\"/><path d=\"m9 14 2 2 4-4\"/></svg></span><span>교수자 평가와 피드백</span></h2>",
+      "css": ".ds-section-title{font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif;display:flex;align-items:center;gap:12px;font-size:20px;font-weight:750;line-height:1.4;margin:0;color:#3b3d3b}.ds-section-symbol{display:grid;place-items:center;flex-shrink:0;width:38px;height:38px;border-radius:12px;background:var(--mint-soft,#cfefea);color:var(--primary,#2b6f60)}@media(max-width:600px){.ds-section-title{font-size:18px;gap:10px}.ds-section-symbol{width:32px;height:32px;border-radius:10px}}"
+    },
+    {
+      "name": "Evaluation detail controls",
+      "kind": "custom",
+      "refersTo": "review-tab-selected",
+      "description": "Three compact workbench toggles expose evidence, guidance history, or learning activity beneath the selected criterion context; selected state is underlined.",
+      "html": "<div class=\"ds-review-tabs\" role=\"group\" aria-label=\"평가 상세 보기\"><button aria-pressed=\"true\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M15 2H6a2 2 0 0 0-2 2v12\"/><path d=\"M18 8h-7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2Z\"/></svg>과정증거 <span>5</span></button><button aria-pressed=\"false\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z\"/></svg>가이던스 이력 <span>4</span></button><button aria-pressed=\"false\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M22 12h-4l-3 9L9 3l-3 9H2\"/></svg>개념 이해와 수행</button></div>",
+      "css": ".ds-review-tabs{font-family:\"Apple SD Gothic Neo\",\"Noto Sans KR\",\"Malgun Gothic\",sans-serif;display:flex;gap:4px;border-bottom:1px solid #cbd5cf;padding-top:8px;margin-bottom:16px}.ds-review-tabs button{font:inherit;display:flex;align-items:center;gap:8px;border:0;border-bottom:3px solid transparent;background:transparent;padding:12px 10px;font-size:14px;color:var(--ink-muted,#606d64);min-height:48px;cursor:pointer}.ds-review-tabs button[aria-pressed=true]{border-color:var(--primary,#2b6f60);color:var(--primary,#2b6f60);font-weight:700}.ds-review-tabs button:hover{background:var(--surface-context,#eef6f2)}.ds-review-tabs button:focus-visible{outline:3px solid var(--primary,#2b6f60);outline-offset:3px}.ds-review-tabs button>span{background:var(--background,#f2f3ee);border-radius:6px;padding:0 6px;font-size:12px}@media(max-width:600px){.ds-review-tabs{gap:0}.ds-review-tabs button{padding:10px 6px;flex:1;font-size:13px;gap:5px;justify-content:center}.ds-review-tabs button>span{display:none}} .ds-review-tabs svg{flex-shrink:0}@media(max-width:600px){.ds-review-tabs svg{width:16px}}"
     }
   ],
   "narrative": {
     "northStar": "Reference-led TRACE workspace",
-    "overview": "TRACE carries the supplied dashboard and sidebar references into a Korean teaching workspace: a deep green navigation rail, warm gray page, white rounded panels, and mint selected states. The system favors clear labels and compact operational controls over decorative imagery.\n\nThis document records the implemented reusable visual vocabulary in src/index.css and src/app.css. The specific three-step assignment composition remains in docs/surface-brief.md; it is not a required composition for every future screen.",
+    "overview": "TRACE carries the supplied dashboard and sidebar references into a Korean teaching workspace: a deep green navigation rail, warm gray page, white rounded panels, and pale mint selected destinations. Larger headings, readable controls, and section icons establish a clear working hierarchy without decorative imagery.\n\nThe shared presentation in src/workspace.css builds on src/index.css and src/app.css. Network practice and fusion projects share the same visual system and role-specific screen structure; their scenario data does not introduce separate navigation or card families. Surface-specific composition remains in the design brief.",
     "keyCharacteristics": [
-      "Deep green navigation with a charcoal active item.",
-      "Warm gray canvas, white panels, and restrained mint selection.",
-      "Compact Korean labels and visible keyboard focus."
+      "Deep green navigation with a pale mint active destination and green text.",
+      "Warm gray canvas, flat white working panels, and semantic context, interpretation, and attention surfaces.",
+      "Clear Korean type hierarchy, labeled section icons, and visible keyboard focus."
     ],
     "rules": [
       {
         "name": "The Selection Rule",
-        "body": "Use deep green for primary actions and mint for selected or completed supporting controls. Keep the active navigation item charcoal.",
+        "body": "Use deep green for primary actions and pale mint with green text for the active sidebar destination. Criterion and evidence selection retain white surfaces with green outlines or borders; detail tabs use a green underline. Filled option controls retain their established local states.",
         "section": "colors"
       },
       {
+        "name": "The Surface Meaning Rule",
+        "body": "Keep task context, neutral teacher input, AI interpretation, attention, and raw execution output visually distinct; do not use their fills as arbitrary decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Category Color Rule",
+        "body": "Evaluation and observation bars use the shared mint, lavender, yellow, rose, and charcoal sequence to distinguish categories. Keep project colors stable when filters change, preserve labels and values beside color, and retain each chart’s numeric scale. Color does not turn support usage or evidence coverage into an ability score.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading Hierarchy Rule",
+        "body": "Keep page and section titles visibly above body content; reserve the smallest text for counts, provenance, timestamps, and supporting notes.",
+        "section": "typography"
+      },
+      {
         "name": "The Reading Order Rule",
-        "body": "Keep actions after the form in document flow; the final footer override is relative, not sticky.",
+        "body": "Put the current task and judgment controls before supporting detail, and keep final actions in document flow rather than a sticky footer.",
         "section": "layout"
       },
       {
@@ -247,14 +604,17 @@
       }
     ],
     "dos": [
-      "Do preserve the supplied reference palette and rounded panel language.",
+      "Do preserve the supplied green and mint identity and the shared structure across both scenarios.",
+      "Do distinguish raw evidence, AI interpretation, and teacher judgment with labeled semantic surfaces.",
       "Do keep keyboard focus visible and honor reduced-motion preferences.",
-      "Do retain text labels alongside evaluation colors."
+      "Do retain diverse category colors, text labels, and numeric meaning in evaluation and observation charts.",
+      "Do expose count definitions, missing evidence, and source links beside observation percentages."
     ],
     "donts": [
-      "Don't invent a new palette or component family beyond the supplied references.",
-      "Don't promote the current three-step form composition into a requirement for unrelated screens.",
-      "Don't reuse the superseded low-contrast supporting text values."
+      "Don't restore the superseded charcoal active navigation treatment.",
+      "Don't use semantic surfaces as interchangeable decoration or add ambient panel shadows.",
+      "Don't reduce body content to supporting-note sizes to fit a crowded panel.",
+      "Don't restore prior-course knowledge-connection cards or course-origin labels in guidance."
     ]
   }
 }
