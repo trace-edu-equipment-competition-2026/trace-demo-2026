@@ -6,7 +6,6 @@
 ## 처음 실행
 
 사전 준비: Git, Node.js 22.18.0, npm. 브라우저 검증에는 Google Chrome 필요.
-송우님은 GitHub Organization의 Owner 초대 수락 후 참여.
 
 ```sh
 git clone https://github.com/trace-edu-equipment-competition-2026/trace-demo-2026.git
