@@ -11,7 +11,8 @@
     "typecheck": "tsc -b",
     "check": "npm run typecheck && npm run lint && npm run build",
     "dev:tablet": "vite --host 0.0.0.0",
-    "test": "playwright test"
+    "test": "playwright test",
+    "deploy": "npm run check && ssh rocky@161.33.15.136 'mkdir -p /var/www/trace-demo/current' && rsync -az --delete dist/ rocky@161.33.15.136:/var/www/trace-demo/current/"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
