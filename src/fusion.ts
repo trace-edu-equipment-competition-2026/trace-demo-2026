@@ -14,6 +14,9 @@ export const fusionConnections=[
 export type FusionEvidence={resourceId?:string;id?:string;raw?:string;goal?:string;stage?:number;kind?:'record'|'plan'|'reflection';cycle?:number;supportId?:string;resultId?:string;title:string;detail:string;owner:string;source:string;criterion:string;time:string}
 export type FusionData={
  assignment?:Assignment;supports?:SupportProposal[];situation?:Situation;alternative?:{evidenceId:string;status:'pending'|'accepted'|'needs-evidence'};
+ alternativeDraft?:{method:string;raw:string;explanation:string};
+ chatRecords?:{taskId:string;drafts:Record<string,{values:string[];decision?:string;resultId?:string;evidenceId?:string}>};
+ guidanceDemo?:{scene:number;taskId:string;drafts:Record<string,{values:string[];evidenceId?:string}>};
 
  simulation?:{extensionFixed?:boolean;target:string;rules:boolean[];checks:Record<string,boolean>;lines:string[];note:string};
  brief:string;rubric:typeof fusionRubric;plan:{name:string;problem:string;audience:string;scope:string;language:string;frontend:string;backend:string;tools:string;reason:string};connections:typeof fusionConnections;completed:string[];experiment:boolean;experimentNote:string;evidence:FusionEvidence[];student:StudentState;guidance:{text?:string;id?:string;level:number;topic:string;time:string}[];request:string;teacherFeedback:string;feedbackSent:boolean;decisions:Record<string,string>;reviews:Record<string,{judgments:Record<string,string>;feedback:string}>;

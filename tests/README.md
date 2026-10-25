@@ -8,6 +8,8 @@
 | `assignment.spec.ts` | 과제 생성·미리보기 |
 | `course.spec.ts` | 과목 설정·가져오기·대시보드 |
 | `student.spec.ts`, `fusion.spec.ts` | 학생·융합 흐름 |
+| `guidance-record.spec.ts` | 실제 답변별 기록 폼·초안·저장·새 대화·접는 시연·패널 정렬 |
+| `navigation.spec.ts` | 탭·메뉴 왕복 시 이전 화면 제거·콘솔 오류·초안 보존·이동 포커스·태블릿 역할 전환 |
 | `teaching.spec.ts`, `evidence.spec.ts` | 교수자 검토·증거 |
 | `learning-loop.spec.ts`, `loop-rules.spec.ts` | 학습 순환·규칙 |
 | `situation-guidance.spec.ts`, `team-guidance.spec.ts` | 상황 판단·팀 지원 |

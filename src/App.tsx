@@ -99,11 +99,12 @@ function TeacherApp({studentRole,onRole,view,setView,studentView,setStudentView}
   }
   const total = a.criteria.reduce((s, c) => s + c.weight, 0)
   const expectedTeams = Math.ceil(24 / Math.max(2, a.teamSize))
-  if(studentRole)return <StudentWorkspace onInstructor={onRole} view={studentView} onView={setStudentView}/>
+  function switchRole(){setSidebarOpen(false);setSidebarCollapsed(false);onRole();window.scrollTo(0,0)}
+  if(studentRole)return <StudentWorkspace onInstructor={switchRole} view={studentView} onView={setStudentView}/>
   return <div className={`app-shell student-shell unified-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
     <a className="skip-link" href="#main">본문으로 이동</a>
     {sidebarOpen && <button className="sidebar-backdrop" aria-label="메뉴 닫기" onClick={() => setSidebarOpen(false)} />}
-    <WorkspaceSidebar student={false} view={view} courseName={course.name} open={sidebarOpen} onClose={()=>{setSidebarOpen(false);setSidebarCollapsed(true)}} onRole={onRole} onNavigate={id=>{setSidebarOpen(false);setView(id as typeof view);window.scrollTo(0,0);if(id==='assignment')changeStep(1)}}/>
+    <WorkspaceSidebar student={false} view={view} courseName={course.name} open={sidebarOpen} onClose={()=>{setSidebarOpen(false);setSidebarCollapsed(true)}} onRole={switchRole} onNavigate={id=>{setSidebarOpen(false);setView(id as typeof view);window.scrollTo(0,0);if(id==='assignment')changeStep(1)}}/>
     <main id="main" className="main">
       {view !== 'assignment' ? <><header className="page-header"><div className="title-row"><button className="mobile-menu icon-button" aria-label="수업 메뉴 열기" onClick={()=>{setSidebarOpen(true);setSidebarCollapsed(false)}}><Icon name="menu"/></button><h1>{view==='dashboard'?'수업 대시보드':view==='settings'?'과목 설정':view==='monitoring'?'팀별 모니터링':'학생별 평가 지원'}</h1></div><p>{view==='dashboard'?'수업의 흐름을 보고, 필요한 지원을 연결하세요.':view==='settings'?'교육과정과 평가 기준을 확인하고 다음 과제에 재사용하세요.':view==='monitoring'?'팀의 진행 흐름을 살피고, 지금 필요한 개입을 결정하세요.':'학생의 수행과 이해를 과정증거로 확인하고 평가를 기록하세요.'}</p></header>{view==='dashboard'?<CourseDashboard course={course} assignment={teachingAssignment??a} decisions={decisions} onOpen={openTeaching}/>:view==='settings'?<CourseSettings course={course} initialDraft={courseDraft} onDraftChange={setCourseDraft} onSave={setCourse} onCreate={newProject}/>:<TeachingWorkspace key={teachingKey} initialTarget={teachingTarget} decisions={decisions} onDecisions={setDecisions} view={view} assignment={teachingAssignment??a} onNavigate={setView}/>}</> : <>
       <header className="page-header"><div className="title-row"><button className="mobile-menu icon-button" aria-label="수업 메뉴 열기" aria-expanded={sidebarOpen} onClick={() => { setSidebarOpen(true); setSidebarCollapsed(false) }}><Icon name="menu" /></button><h1 ref={pageTitle} tabIndex={-1}>프로젝트 · 과제 생성</h1><span className="draft-badge">{created ? '생성 완료' : '작성 중'}</span></div><p>과제를 설계하고, 학생의 수행을 지원할 AI 운영 방식을 정하세요.</p></header>

@@ -64,7 +64,7 @@ export function supportFor(question:string,data:FusionData,s:Scenario,channel:'p
 }
 export function deliverSupport(data:FusionData,p:SupportProposal):FusionData {
  const key=p.channel==='team'?'teamMessages':'privateMessages'
- return {...data,student:{...data.student,[key]:[...data.student[key],{author:data.assignment?.mode==='교수자 직접'?'교수자 설정 안내':'AI',text:p.text,time:p.time,level:p.level}]},guidance:[...data.guidance,{id:p.id,level:p.level,topic:p.reason,text:p.text,time:p.time}]}
+ return {...data,student:{...data.student,[key]:[...data.student[key],{author:data.assignment?.mode==='교수자 직접'?'교수자 설정 안내':'AI',text:p.text,time:p.time,level:p.level,supportId:p.id,recordStage:data.experiment?2:p.level>=3?1:0}]},guidance:[...data.guidance,{id:p.id,level:p.level,topic:p.reason,text:p.text,time:p.time}]}
 }
 // ponytail: 새 활동의 제한된 시연 판단. 실제 AI·능력 진단 없음.
 export function nextSituation(data:FusionData,s:Scenario,previous:FusionData=s.project):Situation|null {
@@ -108,7 +108,7 @@ export function assessSituation(data:FusionData,s:Scenario,previous:FusionData):
  return proposal.status==='active'?applySituation(data,proposal):{...data,situation:proposal}
 }
 export function applySituation(data:FusionData,situation:Situation):FusionData {
- return {...data,situation:{...situation,status:'active'},alternative:undefined,experiment:false,completed:data.completed.filter(id=>id!=='test'&&id!=='reflect'),simulation:undefined,experimentNote:'',student:{...data.student,submitted:false},teacherFeedback:data.teacherFeedback}
+ return {...data,situation:{...situation,status:'active'},alternative:undefined,alternativeDraft:undefined,experiment:false,completed:data.completed.filter(id=>id!=='test'&&id!=='reflect'),simulation:undefined,experimentNote:'',student:{...data.student,submitted:false},teacherFeedback:data.teacherFeedback}
 }
 export function applyPolicy(data:FusionData,a:Assignment):FusionData {
  return {...data,assignment:structuredClone(a),brief:a.description,supports:(data.supports??[]).map(p=>p.status==='pending'?{...p,status:'rejected'}:p),situation:data.situation?.status==='pending'?{...data.situation,status:'rejected'}:data.situation}
