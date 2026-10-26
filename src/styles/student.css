@@ -23,6 +23,6 @@
 .fault-lab-banner>div { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .fault-lab-banner strong { font-size:13px; color:#243b34; }
 .fault-lab-banner small { font-size:11px; color:#667065; line-height:1.5; }
-.network-topology>div { cursor:pointer; transition:border-color .15s, background-color .15s; }
-.network-topology>div.selected-node { outline:2px solid #2b6f60; background:#e7f6f2; }
+.network-topology>div,.network-topology>button { cursor:pointer; transition:border-color .15s, background-color .15s; border:0; background:#f2f3ee; border-radius:12px; padding:12px 14px; text-align:left; color:inherit; display:grid; gap:4px; }
+.network-topology>div.selected-node,.network-topology>button.selected-node { outline:2px solid #2b6f60; background:#e7f6f2; }
 @media(max-width:600px) { .student-prompts .text-button { white-space:normal; text-align:left; max-width:100%; } }

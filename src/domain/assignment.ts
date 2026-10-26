@@ -4,6 +4,7 @@ export type TeamFormation = '학생 자율 구성' | '교수자 지정' | '자�
 export const demoStudents = ['김민준','이서연','박도윤','최하은','정우진','한지민','윤서준','강채원','조현우','임수아','신도현','오유나','장시우','권예린','황준서','송다은','안지호','류서현','유송민','홍유진','문태윤','배지안','백승민','노하린']
 export type Assignment = {
   directAnswers?: boolean;
+  ncsLinked?: boolean;
   environment: { kind: 'workspace' | 'network' | 'external'; template: string; url: string; instructions: string };
   title: string; description: string; start: string; end: string; difficulty: string;
   projectType: ProjectType; teamFormation: TeamFormation; teamSize: number; teamDeadline: string; approvalRequired: boolean; teamAssignments: Record<string, number>;
@@ -22,6 +23,7 @@ export const courseCriteria = [
   { name: '검증', weight: 20 }, { name: '산출물', weight: 20 }, { name: '협업', weight: 10 },
 ]
 export const initialAssignment: Assignment = {
+  ncsLinked: true,
   environment: { kind: 'workspace', template: '정적 라우팅 장애 진단', url: '', instructions: '' },
   projectType: '팀 프로젝트', teamFormation: '학생 자율 구성', teamSize: 4, teamDeadline: '2026-10-03', approvalRequired: true,
   teamAssignments: Object.fromEntries(demoStudents.map((student, index) => [student, (index % 6) + 1])),
@@ -78,6 +80,7 @@ export function readDraft(key=storageKey, initial=initialAssignment): Assignment
     if (a) {
       if (!a.environment || !['workspace','network','external'].includes(a.environment.kind) || !['template','url','instructions'].every(k => typeof a.environment[k] === 'string')) a.environment = { ...initial.environment }
       a.projectType ??= initial.projectType
+      a.ncsLinked ??= initial.ncsLinked ?? true
       a.teamFormation ??= initial.teamFormation
       a.teamSize ??= initial.teamSize
       a.teamDeadline ??= initial.teamDeadline

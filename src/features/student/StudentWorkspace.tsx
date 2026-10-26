@@ -1,55 +1,618 @@
-import {useState,useRef,type ReactNode} from 'react'
-import {Menu,ArrowRight,Check,Files,UsersRound,MessageCircle,ClipboardCheck,Lightbulb,FolderOpen,Circle,Activity} from 'lucide-react'
-import {WorkspaceSidebar} from '@/components/layout/WorkspaceSidebar'
-import {studentNavigation} from '@/domain/navigation'
-import {useWorkspace,useWorkspaceUi} from '@/components/layout/WorkspaceContext'
-import {ProgressRing} from '@/features/teacher/TeachingCharts'
-import {TeamDocuments} from './TeamDocuments'
-import {ProjectSimulation} from './ProjectSimulation'
-import {SituationPanel,AlternativeEvidence} from '@/components/layout/LearningCycle'
-import {makeEvidence,stamp} from '@/domain/learningLoop'
-import type {FusionEvidence} from '@/domain/fusion'
-import {SectionTitle} from '@/components/layout/SectionTitle'
-import {StudentChat} from './StudentChat'
+import { useState, useRef, type ReactNode } from 'react'
+import {
+  Menu,
+  ArrowRight,
+  Check,
+  Files,
+  UsersRound,
+  MessageCircle,
+  ClipboardCheck,
+  Lightbulb,
+  FolderOpen,
+  Circle,
+  Activity,
+} from 'lucide-react'
+import { WorkspaceSidebar } from '@/components/layout/WorkspaceSidebar'
+import { studentNavigation } from '@/domain/navigation'
+import { useWorkspace, useWorkspaceUi } from '@/components/layout/WorkspaceContext'
+import { ProgressRing } from '@/features/teacher/TeachingCharts'
+import { TeamDocuments } from './TeamDocuments'
+import { ProjectSimulation } from './ProjectSimulation'
+import { SituationPanel, AlternativeEvidence } from '@/features/learning/LearningCycle'
+import { makeEvidence, stamp } from '@/domain/learningLoop'
+import type { FusionEvidence } from '@/domain/fusion'
+import { SectionTitle } from '@/components/layout/SectionTitle'
+import { StudentChat } from './StudentChat'
 import '@/styles/student.css'
 import '@/styles/fusion.css'
-function Panel({title,children,action,hint}:{title:string;children:ReactNode;action?:ReactNode;hint?:string}){return <section className="panel"><div className="section-heading"><div className="form-heading-copy"><SectionTitle icon={title.includes("팀원")?UsersRound:title.includes("자료")||title.includes("Evidence")?FolderOpen:title.includes("지도")||title.includes("대화")||title.includes("지원")?MessageCircle:title.includes("배움")?Lightbulb:ClipboardCheck}>{title}</SectionTitle>{hint&&<small className="form-heading-note">{hint}</small>}</div>{action}</div>{children}</section>}
-const phases=['문제 이해','계획·설계','실행·수정','결과 검증','근거 공유']
-export function StudentWorkspace({onInstructor,view,onView}:{onInstructor:()=>void;view:string;onView:(v:string)=>void}){
- const {scenario:s,data,setData}=useWorkspace()
- const {tab,setTab}=useWorkspaceUi()
- const [drawer,setDrawer]=useState(false),[collapsed,setCollapsed]=useState(false),[plan,setPlan]=useState(data.plan),[notice,setNotice]=useState(''),[resource,setResource]=useState<number|null>(null),[detail,setDetail]=useState<FusionEvidence|null>(null),[task,setTask]=useState(data.chatRecords?.taskId ?? data.guidanceDemo?.taskId ?? 'contract')
- const dialog=useRef<HTMLDialogElement>(null),pageTitle=useRef<HTMLHeadingElement>(null)
- const progress=Math.round(data.completed.length/s.tasks.length*100),phase=data.completed.includes('reflect')?4:data.experiment?3:2
- const currentTask=s.tasks.find(t=>t.owner==='유송민'&&!data.completed.includes(t.id)) || s.tasks.find(t=>!data.completed.includes(t.id))
- const isNetwork=s.id==='network'
- const executionKey=data.situation&&['active','complete'].includes(data.situation.status)?data.situation.id:'initial'
- const submitted=data.alternative?.evidenceId?data.evidence.find(e=>e.id===data.alternative?.evidenceId):undefined
- const latestResult=isNetwork?data.simulation?.lines.slice(-2).join('\n'):submitted?.detail
- const nextTasks=s.tasks.filter(t=>!data.completed.includes(t.id)).slice(0,3)
- const members=[['유송민',s.studentRole,'작업과 판단 근거 정리'],['김민준',s.roles[1],'문제와 요구 조건 비교'],['윤서준',s.roles[2],'실행 결과 교차 확인'],['장시우',s.roles[3],'팀 자료와 산출물 정리']]
- function go(v:string,targetId?:string){
-  setNotice('');setDrawer(false);onView(v)
-  requestAnimationFrame(()=>{
-   const target=targetId?document.getElementById(targetId):pageTitle.current
-   target?.focus({preventScroll:true})
-   if(targetId)target?.scrollIntoView({block:'center'});else window.scrollTo(0,0)
-  })
- }
- function evidence(e:FusionEvidence){setDetail(e);dialog.current?.showModal()}
- function savePlan(){if(Object.values(plan).some(v=>!v.trim())){setNotice('기획 항목과 선택 이유를 모두 입력해 주세요.');return}setData({...data,plan,evidence:[...data.evidence,makeEvidence(data,s,{title:'계획과 도구 선택 근거',detail:plan.reason,raw:Object.entries(plan).map(([k,v])=>`${k}: ${v}`).join('\n'),owner:'유송민',criterion:'해결 과정',source:'기획·기술 선택',stage:2,kind:'plan',time:stamp()})]});setNotice('팀 기획과 선택 이유를 저장했습니다.')}
- function shareDoc(i:number){setData({...data,student:{...data.student,teamMessages:[...data.student.teamMessages,{author:'유송민',text:'팀 자료를 공유했습니다.',resourceIndex:i,time:'방금'}]}});go('chat')}
- return <div className={`app-shell student-shell fusion-shell unified-shell ${collapsed?'sidebar-collapsed':''}`}><a className="skip-link" href="#student-main">본문으로 이동</a>{drawer&&<button className="sidebar-backdrop" aria-label="메뉴 닫기" onClick={()=>setDrawer(false)}/>}<WorkspaceSidebar student view={view} open={drawer} onNavigate={go} onClose={()=>{setDrawer(false);setCollapsed(true)}} onRole={()=>{setDrawer(false);onInstructor()}}/>
- <main id="student-main" className="main"><header className="page-header"><div className="title-row"><button className="mobile-menu icon-button" aria-label="수업 메뉴 열기" aria-expanded={drawer} onClick={()=>{setDrawer(true);setCollapsed(false)}}><Menu size={20}/></button><h1 ref={pageTitle} tabIndex={-1}>{studentNavigation.find(n=>n[0]===view)?.[1]}</h1><span className="teach-badge mint">유송민 · 1팀</span></div><p>{view==='ai'?'대화에서 도움을 받고, 바로 아래에 수행과 판단을 기록하세요.':'팀의 현재 수행을 확인하고, 다음 작업과 필요한 도움을 찾아보세요.'}</p></header><div className="student-context"><span>{s.course.semester} · {s.course.name}</span><span>가상 수업 · AI와 실습은 시연용입니다.</span></div>{notice&&<p className="settings-notice" role="status">{notice}</p>}
- {view==='team'&&<>
- <section className="panel fusion-overview"><div><h2>{data.plan.name}</h2><p>{data.plan.scope}</p><div className="fusion-phase">{phases.map((p,i)=><span key={p} className={i<phase?'done':i===phase?'current':''}><b>{i<phase?<Check size={14}/>:i+1}</b>{p}</span>)}</div><details className="team-brief"><summary>과제 안내와 팀 계획</summary><p>{data.brief}</p><p>{data.plan.reason}</p><button className="text-button" onClick={()=>{setTab('기획·기술 선택');go('studio')}}>기획 수정 <ArrowRight size={16}/></button></details></div><div className="fusion-overview-action"><ProgressRing value={progress} label="팀 과제 진행률"/><span className="count-label">전체 {s.tasks.length}개 중 {data.completed.length}개 완료</span></div></section>
- <section className="panel team-current-work"><div className="section-heading"><SectionTitle icon={Activity}>지금 이어갈 작업</SectionTitle><span className="teach-badge mint">{data.experiment?'검증 근거 공유됨':'수행 중'}</span></div><div className="current-work-grid"><div className="current-work-task"><span>유송민 · {s.studentRole}</span><h3>{currentTask?.title || '수행 결과를 돌아보고 팀과 공유하기'}</h3><p>{currentTask?.detail || '완료한 작업의 근거와 최종 산출물을 확인해 주세요.'}</p><button className="button primary" onClick={()=>{setTab((isNetwork?data.simulation:submitted)?'실행 및 검증':'수행 보드');if(currentTask)setTask(currentTask.id);go('studio')}}>작업실 이어가기 <ArrowRight size={16}/></button></div><div className="current-work-result"><div><strong>{isNetwork?'최근 실행 결과':'최근 수행자료'}</strong><span>{isNetwork?(data.simulation?.target || '아직 실행 전'):(submitted?data.alternative?.status==='accepted'?'교수자 확인 완료':'교수자 확인 필요':'아직 제출 전')}</span></div>{latestResult?<pre>{latestResult}</pre>:<p className="execution-empty">{isNetwork?'작업실에서 실행하면 마지막 요청과 결과가 여기에 표시됩니다.':'사용한 도구의 산출물과 검증 결과를 작업실에 기록해 주세요.'}</p>}<div className="result-checks">{Object.entries(isNetwork?data.simulation?.checks || {}:{}).map(([label,ok])=><span key={label} className={ok?'confirmed':'needs-check'}>{ok?<Check size={14}/>:<Circle size={14}/>} {label}</span>)}</div><button className="text-button" onClick={()=>{setTab('실행 및 검증');go('studio')}}>{isNetwork?'실행 환경 열기':'수행자료 기록하기'} <ArrowRight size={16}/></button></div></div></section>
- <div className="student-team-bottom"><Panel title="팀원별 현재 수행"><div className="team-activity-list">{members.map(([name,role],i)=>{const work=s.tasks.find(t=>t.owner===name&&!data.completed.includes(t.id));const recent=[...data.evidence].reverse().find(e=>e.owner===name);return <div key={name}><span className="member-avatar">{name[0]}</span><div><strong>{name}{i===0?' · 나':''}</strong><small>{role}</small></div><div><strong>{work?.title || '담당 작업 완료'}</strong><small>{recent?`최근 기록 · ${recent.title}`:'아직 공유한 수행 기록 없음'}</small></div></div>})}</div></Panel><Panel title="팀 자료와 공유 기록" action={<button className="text-button" onClick={()=>go('documents')}>전체 {data.student.resources.length}개 <ArrowRight size={16}/></button>}><div className="student-resource-list">{data.student.resources.map((r,i)=>({r,i})).reverse().slice(0,4).map(({r,i})=><button key={i} onClick={()=>setResource(i)}><Files size={20}/><span><strong>{r.name}</strong><small>{r.kind} · {r.author || '팀 공유'} · v{r.version || 1}</small></span><ArrowRight size={16}/></button>)}</div></Panel></div>
- <div className="student-team-bottom"><Panel title="다음에 확인할 것"><p className="section-note">{data.experiment?'검증한 조건과 결과를 바탕으로 남은 작업을 정리하세요.':s.need}</p><div className="student-check-list">{nextTasks.length?nextTasks.map(t=><button className="text-button" key={t.id} onClick={()=>{setTask(t.id);setTab('수행 보드');go('studio')}}><Circle size={16}/>{t.title}<ArrowRight size={16}/></button>):<span><Check size={17}/>모든 수행 작업이 완료되었습니다.</span>}</div><button className="text-button" onClick={()=>go('ai','student-private-question')}>막힌 부분 질문하기 <ArrowRight size={16}/></button></Panel><Panel title="교수자에게 받은 지도"><p>{data.feedbackSent?data.teacherFeedback:'아직 받은 지도 내용이 없습니다. 시도한 내용과 질문을 정리해 지도를 요청할 수 있어요.'}</p><button className="text-button" onClick={()=>go('ai','student-guidance-request')}>지도 요청과 후속 수행 <ArrowRight size={16}/></button></Panel></div>
- </>}
- {view==='studio'&&<><SituationPanel/><div className="compact-tabs fusion-studio-tabs">{['기획·기술 선택','수행 보드','실행 및 검증'].map(t=><button key={t} aria-pressed={tab===t} onClick={()=>setTab(t)}>{t}</button>)}</div>{tab==='기획·기술 선택'?<><Panel title="문제에서 수행 계획까지" hint="과목·주제에 따라 입력 항목을 자동 생성합니다. (현재 예시 폼 시연)"><p className="section-note">해결할 문제와 최소 범위를 정하고, 접근 방법과 도구 선택 이유를 남기세요.</p><div className="fusion-plan-grid">{([['name','프로젝트 이름'],['audience','대상 사용자'],['problem','해결할 문제'],['scope','첫 수행에서 확인할 최소 범위'],['language','언어·명령 체계'],['frontend','화면·구성 도구'],['backend','처리·연결 방식'],['tools','자료·설계·협업 도구']] as const).map(([k,label])=><label className="field" key={k}>{label}<input value={plan[k]} placeholder={s.project.plan[k]} onChange={e=>setPlan({...plan,[k]:e.target.value})}/></label>)}</div><label className="field">접근 방법과 도구 선택 이유<textarea rows={4} value={plan.reason} placeholder={s.project.plan.reason} onChange={e=>setPlan({...plan,reason:e.target.value})}/></label><button className="button primary" onClick={savePlan}>선택 이유와 기획 저장</button></Panel></>:tab==='수행 보드'?<><Panel title="작은 작업으로 나누기"><div className="fusion-kanban">{['할 일','진행 중','완료'].map(col=><section key={col}><h3>{col}</h3>{s.tasks.filter(t=>(data.completed.includes(t.id)?'완료':t.stage==='완료'?'진행 중':t.stage)===col).map(t=><button key={t.id} aria-pressed={task===t.id} onClick={()=>setTask(t.id)}><strong>{t.title}</strong><small>{t.id==='schema'||t.id==='contract'||t.id==='reflect'?'유송민':'팀 공동 수행'}</small><p>{t.detail}</p></button>)}</section>)}</div></Panel><Panel title="수행과 판단 기록"><p className="section-note">선택한 작업의 수행·판단 기록을 개인 AI 대화 바로 아래에서 작성합니다. 답변의 안내에 따라 입력 항목이 바뀝니다.</p><p><strong>{s.tasks.find(t=>t.id===task)?.title}</strong></p><div className="document-actions"><button className="button primary" onClick={()=>go('ai')}>AI 대화에서 기록하기 <ArrowRight size={16}/></button><button className="button secondary" disabled={data.completed.includes(task)} onClick={()=>{setData(prev=>({...prev,completed:[...new Set([...prev.completed,task])]}));setNotice('선택한 작업을 완료로 표시했습니다.')}}>{data.completed.includes(task)?'완료한 작업':'선택 작업 완료로 표시'}</button></div></Panel></>:<>{isNetwork&&<ProjectSimulation key={`simulation-${executionKey}`}/>}<AlternativeEvidence key={`alternative-${executionKey}`}/></>}</>}
- {(view==='chat'||view==='ai')&&<StudentChat key={view} view={view} task={task} onTask={setTask} onRecords={()=>go('learning')} onResource={setResource} onNavigate={next=>{if(next==='studio')setTab('실행 및 검증');go(next)}}/>}
- {view==='learning'&&<><div className="fusion-split"><Panel title="나의 수행과 근거"><div className="fusion-personal-metrics"><ProgressRing value={progress} label="현재 과제 수행 진행률"/><div><strong>{data.evidence.filter(e=>e.owner==='유송민').length}개 수행 기록</strong><p>{data.experiment?'검증 결과 기록 있음':'실행 결과 확인 필요'}</p><small>수행 진행과 근거 수 · 성적이 아닙니다.</small></div></div></Panel><Panel title="지난 과제에서 이번 수행으로"><p className="section-note">{s.previousGap}</p><button className="text-button" onClick={()=>{setTab('실행 및 검증');go('studio')}}>이번 검증에서 확인하기 →</button></Panel></div><Panel title="내가 수행한 Learning Evidence"><div className="fusion-evidence-list">{data.evidence.filter(e=>e.owner==='유송민').map((e,i)=><button key={i} onClick={()=>evidence(e)}><Files size={20}/><span><strong>{e.title}</strong><small>{e.source} · {e.criterion}</small><p>{e.detail}</p></span><ArrowRight size={17}/></button>)}</div></Panel><Panel title="교수자 지도와 평가 피드백"><h3>수행 지도</h3><p>{data.feedbackSent?data.teacherFeedback:'아직 전달된 지도가 없습니다.'}</p><h3>저장된 평가 피드백</h3><p>{data.reviews['유송민']?.feedback||'교수자가 평가 검토 후 저장한 피드백이 표시됩니다.'}</p></Panel></>}
- <TeamDocuments data={data.student} onUpdate={student=>setData({...data,student})} openIndex={resource} onClose={()=>setResource(null)} onOpen={setResource} onShare={shareDoc} full={view==='documents'}/>
- </main><dialog ref={dialog} className="student-resource-dialog" aria-labelledby="project-evidence-title"><div className="section-heading"><h2 id="project-evidence-title">{detail?.title}</h2><button className="text-button" onClick={()=>dialog.current?.close()}>닫기</button></div><span className="teach-badge mint">{detail?.owner} · {detail?.criterion}</span><p className="section-note">{detail?.source}</p><h3>조사·수행 원자료</h3><pre>{detail?.raw||'연결된 원자료가 없습니다. 아래 내용은 학생 설명입니다.'}</pre><h3>학생 설명과 판단 근거</h3><p>{detail?.detail}</p></dialog></div>
+
+function Panel({
+  title,
+  children,
+  action,
+  hint,
+}: {
+  title: string
+  children: ReactNode
+  action?: ReactNode
+  hint?: string
+}) {
+  const icon = title.includes('팀원')
+    ? UsersRound
+    : title.includes('자료') || title.includes('Evidence')
+      ? FolderOpen
+      : title.includes('지도') || title.includes('대화') || title.includes('지원')
+        ? MessageCircle
+        : title.includes('배움')
+          ? Lightbulb
+          : ClipboardCheck
+
+  return (
+    <section className="panel">
+      <div className="section-heading">
+        <div className="form-heading-copy">
+          <SectionTitle icon={icon}>{title}</SectionTitle>
+          {hint && <small className="form-heading-note">{hint}</small>}
+        </div>
+        {action}
+      </div>
+      {children}
+    </section>
+  )
+}
+
+const phases = ['문제 이해', '계획·설계', '실행·수정', '결과 검증', '근거 공유']
+
+export function StudentWorkspace({
+  onInstructor,
+  view,
+  onView,
+}: {
+  onInstructor: () => void
+  view: string
+  onView: (v: string) => void
+}) {
+  const { scenario: s, data, setData } = useWorkspace()
+  const { tab, setTab } = useWorkspaceUi()
+  const [drawer, setDrawer] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
+  const [plan, setPlan] = useState(data.plan)
+  const [notice, setNotice] = useState('')
+  const [resource, setResource] = useState<number | null>(null)
+  const [detail, setDetail] = useState<FusionEvidence | null>(null)
+  const [task, setTask] = useState(data.chatRecords?.taskId ?? data.guidanceDemo?.taskId ?? 'contract')
+
+  const dialog = useRef<HTMLDialogElement>(null)
+  const pageTitle = useRef<HTMLHeadingElement>(null)
+
+  const progress = Math.round((data.completed.length / s.tasks.length) * 100)
+  const phase = data.completed.includes('reflect') ? 4 : data.experiment ? 3 : 2
+  const currentTask =
+    s.tasks.find(t => t.owner === '유송민' && !data.completed.includes(t.id)) ||
+    s.tasks.find(t => !data.completed.includes(t.id))
+  const isNetwork = s.id === 'network'
+  const executionKey =
+    data.situation && ['active', 'complete'].includes(data.situation.status) ? data.situation.id : 'initial'
+  const submitted = data.alternative?.evidenceId
+    ? data.evidence.find(e => e.id === data.alternative?.evidenceId)
+    : undefined
+  const latestResult = isNetwork ? data.simulation?.lines.slice(-2).join('\n') : submitted?.detail
+  const nextTasks = s.tasks.filter(t => !data.completed.includes(t.id)).slice(0, 3)
+  const members = [
+    ['유송민', s.studentRole, '작업과 판단 근거 정리'],
+    ['김민준', s.roles[1], '문제와 요구 조건 비교'],
+    ['윤서준', s.roles[2], '실행 결과 교차 확인'],
+    ['장시우', s.roles[3], '팀 자료와 산출물 정리'],
+  ]
+
+  function go(v: string, targetId?: string) {
+    setNotice('')
+    setDrawer(false)
+    onView(v)
+    requestAnimationFrame(() => {
+      const target = targetId ? document.getElementById(targetId) : pageTitle.current
+      target?.focus({ preventScroll: true })
+      if (targetId) target?.scrollIntoView({ block: 'center' })
+      else window.scrollTo(0, 0)
+    })
+  }
+
+  function evidence(e: FusionEvidence) {
+    setDetail(e)
+    dialog.current?.showModal()
+  }
+
+  function savePlan() {
+    if (Object.values(plan).some(v => !v.trim())) {
+      setNotice('기획 항목과 선택 이유를 모두 입력해 주세요.')
+      return
+    }
+    setData({
+      ...data,
+      plan,
+      evidence: [
+        ...data.evidence,
+        makeEvidence(data, s, {
+          title: '계획과 도구 선택 근거',
+          detail: plan.reason,
+          raw: Object.entries(plan)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join('\n'),
+          owner: '유송민',
+          criterion: '해결 과정',
+          source: '기획·기술 선택',
+          stage: 2,
+          kind: 'plan',
+          time: stamp(),
+        }),
+      ],
+    })
+    setNotice('팀 기획과 선택 이유를 저장했습니다.')
+  }
+
+  function shareDoc(i: number) {
+    setData({
+      ...data,
+      student: {
+        ...data.student,
+        teamMessages: [
+          ...data.student.teamMessages,
+          { author: '유송민', text: '팀 자료를 공유했습니다.', resourceIndex: i, time: '방금' },
+        ],
+      },
+    })
+    go('chat')
+  }
+
+  return (
+    <div className={`app-shell student-shell fusion-shell unified-shell ${collapsed ? 'sidebar-collapsed' : ''}`}>
+      <a className="skip-link" href="#student-main">
+        본문으로 이동
+      </a>
+      {drawer && <button className="sidebar-backdrop" aria-label="메뉴 닫기" onClick={() => setDrawer(false)} />}
+      <WorkspaceSidebar
+        student
+        view={view}
+        open={drawer}
+        onNavigate={go}
+        onClose={() => {
+          setDrawer(false)
+          setCollapsed(true)
+        }}
+        onRole={() => {
+          setDrawer(false)
+          onInstructor()
+        }}
+      />
+      <main id="student-main" className="main">
+        <header className="page-header">
+          <div className="title-row">
+            <button
+              className="mobile-menu icon-button"
+              aria-label="수업 메뉴 열기"
+              aria-expanded={drawer}
+              onClick={() => {
+                setDrawer(true)
+                setCollapsed(false)
+              }}
+            >
+              <Menu size={20} />
+            </button>
+            <h1 ref={pageTitle} tabIndex={-1}>
+              {studentNavigation.find(n => n[0] === view)?.[1]}
+            </h1>
+            <span className="teach-badge mint">유송민 · 1팀</span>
+          </div>
+          <p>
+            {view === 'ai'
+              ? '대화에서 도움을 받고, 바로 아래에 수행과 판단을 기록하세요.'
+              : '팀의 현재 수행을 확인하고, 다음 작업과 필요한 도움을 찾아보세요.'}
+          </p>
+        </header>
+        <div className="student-context">
+          <span>
+            {s.course.semester} · {s.course.name}
+          </span>
+          <span>가상 수업 · AI와 실습은 시연용입니다.</span>
+        </div>
+        {notice && (
+          <p className="settings-notice" role="status">
+            {notice}
+          </p>
+        )}
+        {view === 'team' && (
+          <>
+            <section className="panel fusion-overview">
+              <div>
+                <h2>{data.plan.name}</h2>
+                <p>{data.plan.scope}</p>
+                <div className="fusion-phase">
+                  {phases.map((p, i) => (
+                    <span key={p} className={i < phase ? 'done' : i === phase ? 'current' : ''}>
+                      <b>{i < phase ? <Check size={14} /> : i + 1}</b>
+                      {p}
+                    </span>
+                  ))}
+                </div>
+                <details className="team-brief">
+                  <summary>과제 안내와 팀 계획</summary>
+                  <p>{data.brief}</p>
+                  <p>{data.plan.reason}</p>
+                  <button
+                    className="text-button"
+                    onClick={() => {
+                      setTab('기획·기술 선택')
+                      go('studio')
+                    }}
+                  >
+                    기획 수정 <ArrowRight size={16} />
+                  </button>
+                </details>
+              </div>
+              <div className="fusion-overview-action">
+                <ProgressRing value={progress} label="팀 과제 진행률" />
+                <span className="count-label">
+                  전체 {s.tasks.length}개 중 {data.completed.length}개 완료
+                </span>
+              </div>
+            </section>
+            <section className="panel team-current-work">
+              <div className="section-heading">
+                <SectionTitle icon={Activity}>지금 이어갈 작업</SectionTitle>
+                <span className="teach-badge mint">{data.experiment ? '검증 근거 공유됨' : '수행 중'}</span>
+              </div>
+              <div className="current-work-grid">
+                <div className="current-work-task">
+                  <span>유송민 · {s.studentRole}</span>
+                  <h3>{currentTask?.title || '수행 결과를 돌아보고 팀과 공유하기'}</h3>
+                  <p>{currentTask?.detail || '완료한 작업의 근거와 최종 산출물을 확인해 주세요.'}</p>
+                  <button
+                    className="button primary"
+                    onClick={() => {
+                      setTab((isNetwork ? data.simulation : submitted) ? '실행 및 검증' : '수행 보드')
+                      if (currentTask) setTask(currentTask.id)
+                      go('studio')
+                    }}
+                  >
+                    작업실 이어가기 <ArrowRight size={16} />
+                  </button>
+                </div>
+                <div className="current-work-result">
+                  <div>
+                    <strong>{isNetwork ? '최근 실행 결과' : '최근 수행자료'}</strong>
+                    <span>
+                      {isNetwork
+                        ? data.simulation?.target || '아직 실행 전'
+                        : submitted
+                          ? data.alternative?.status === 'accepted'
+                            ? '교수자 확인 완료'
+                            : '교수자 확인 필요'
+                          : '아직 제출 전'}
+                    </span>
+                  </div>
+                  {latestResult ? (
+                    <pre>{latestResult}</pre>
+                  ) : (
+                    <p className="execution-empty">
+                      {isNetwork
+                        ? '작업실에서 실행하면 마지막 요청과 결과가 여기에 표시됩니다.'
+                        : '사용한 도구의 산출물과 검증 결과를 작업실에 기록해 주세요.'}
+                    </p>
+                  )}
+                  <div className="result-checks">
+                    {Object.entries(isNetwork ? data.simulation?.checks || {} : {}).map(([label, ok]) => (
+                      <span key={label} className={ok ? 'confirmed' : 'needs-check'}>
+                        {ok ? <Check size={14} /> : <Circle size={14} />} {label}
+                      </span>
+                    ))}
+                  </div>
+                  <button
+                    className="text-button"
+                    onClick={() => {
+                      setTab('실행 및 검증')
+                      go('studio')
+                    }}
+                  >
+                    {isNetwork ? '실행 환경 열기' : '수행자료 기록하기'} <ArrowRight size={16} />
+                  </button>
+                </div>
+              </div>
+            </section>
+            <div className="student-team-bottom">
+              <Panel title="팀원별 현재 수행">
+                <div className="team-activity-list">
+                  {members.map(([name, role], i) => {
+                    const work = s.tasks.find(t => t.owner === name && !data.completed.includes(t.id))
+                    const recent = [...data.evidence].reverse().find(e => e.owner === name)
+                    return (
+                      <div key={name}>
+                        <span className="member-avatar">{name[0]}</span>
+                        <div>
+                          <strong>
+                            {name}
+                            {i === 0 ? ' · 나' : ''}
+                          </strong>
+                          <small>{role}</small>
+                        </div>
+                        <div>
+                          <strong>{work?.title || '담당 작업 완료'}</strong>
+                          <small>{recent ? `최근 기록 · ${recent.title}` : '아직 공유한 수행 기록 없음'}</small>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </Panel>
+              <Panel
+                title="팀 자료와 공유 기록"
+                action={
+                  <button className="text-button" onClick={() => go('documents')}>
+                    전체 {data.student.resources.length}개 <ArrowRight size={16} />
+                  </button>
+                }
+              >
+                <div className="student-resource-list">
+                  {data.student.resources
+                    .map((r, i) => ({ r, i }))
+                    .reverse()
+                    .slice(0, 4)
+                    .map(({ r, i }) => (
+                      <button key={i} onClick={() => setResource(i)}>
+                        <Files size={20} />
+                        <span>
+                          <strong>{r.name}</strong>
+                          <small>
+                            {r.kind} · {r.author || '팀 공유'} · v{r.version || 1}
+                          </small>
+                        </span>
+                        <ArrowRight size={16} />
+                      </button>
+                    ))}
+                </div>
+              </Panel>
+            </div>
+            <div className="student-team-bottom">
+              <Panel title="다음에 확인할 것">
+                <p className="section-note">
+                  {data.experiment ? '검증한 조건과 결과를 바탕으로 남은 작업을 정리하세요.' : s.need}
+                </p>
+                <div className="student-check-list">
+                  {nextTasks.length ? (
+                    nextTasks.map(t => (
+                      <button
+                        className="text-button"
+                        key={t.id}
+                        onClick={() => {
+                          setTask(t.id)
+                          setTab('수행 보드')
+                          go('studio')
+                        }}
+                      >
+                        <Circle size={16} />
+                        {t.title}
+                        <ArrowRight size={16} />
+                      </button>
+                    ))
+                  ) : (
+                    <span>
+                      <Check size={17} />
+                      모든 수행 작업이 완료되었습니다.
+                    </span>
+                  )}
+                </div>
+                <button className="text-button" onClick={() => go('ai', 'student-private-question')}>
+                  막힌 부분 질문하기 <ArrowRight size={16} />
+                </button>
+              </Panel>
+              <Panel title="교수자에게 받은 지도">
+                <p>
+                  {data.feedbackSent
+                    ? data.teacherFeedback
+                    : '아직 받은 지도 내용이 없습니다. 시도한 내용과 질문을 정리해 지도를 요청할 수 있어요.'}
+                </p>
+                <button className="text-button" onClick={() => go('ai', 'student-guidance-request')}>
+                  지도 요청과 후속 수행 <ArrowRight size={16} />
+                </button>
+              </Panel>
+            </div>
+          </>
+        )}
+        {view === 'studio' && (
+          <>
+            <SituationPanel />
+            <div className="compact-tabs fusion-studio-tabs">
+              {['기획·기술 선택', '수행 보드', '실행 및 검증'].map(t => (
+                <button key={t} aria-pressed={tab === t} onClick={() => setTab(t)}>
+                  {t}
+                </button>
+              ))}
+            </div>
+            {tab === '기획·기술 선택' ? (
+              <Panel title="문제에서 수행 계획까지" hint="과목·주제에 따라 입력 항목을 자동 생성합니다. (현재 예시 폼 시연)">
+                <p className="section-note">해결할 문제와 최소 범위를 정하고, 접근 방법과 도구 선택 이유를 남기세요.</p>
+                <div className="fusion-plan-grid">
+                  {(
+                    [
+                      ['name', '프로젝트 이름'],
+                      ['audience', '대상 사용자'],
+                      ['problem', '해결할 문제'],
+                      ['scope', '첫 수행에서 확인할 최소 범위'],
+                      ['language', '언어·명령 체계'],
+                      ['frontend', '화면·구성 도구'],
+                      ['backend', '처리·연결 방식'],
+                      ['tools', '자료·설계·협업 도구'],
+                    ] as const
+                  ).map(([k, label]) => (
+                    <label className="field" key={k}>
+                      {label}
+                      <input
+                        value={plan[k]}
+                        placeholder={s.project.plan[k]}
+                        onChange={e => setPlan({ ...plan, [k]: e.target.value })}
+                      />
+                    </label>
+                  ))}
+                </div>
+                <label className="field">
+                  접근 방법과 도구 선택 이유
+                  <textarea
+                    rows={4}
+                    value={plan.reason}
+                    placeholder={s.project.plan.reason}
+                    onChange={e => setPlan({ ...plan, reason: e.target.value })}
+                  />
+                </label>
+                <button className="button primary" onClick={savePlan}>
+                  선택 이유와 기획 저장
+                </button>
+              </Panel>
+            ) : tab === '수행 보드' ? (
+              <>
+                <Panel title="작은 작업으로 나누기">
+                  <div className="fusion-kanban">
+                    {['할 일', '진행 중', '완료'].map(col => (
+                      <section key={col}>
+                        <h3>{col}</h3>
+                        {s.tasks
+                          .filter(t => (data.completed.includes(t.id) ? '완료' : t.stage === '완료' ? '진행 중' : t.stage) === col)
+                          .map(t => (
+                            <button key={t.id} aria-pressed={task === t.id} onClick={() => setTask(t.id)}>
+                              <strong>{t.title}</strong>
+                              <small>
+                                {t.id === 'schema' || t.id === 'contract' || t.id === 'reflect' ? '유송민' : '팀 공동 수행'}
+                              </small>
+                              <p>{t.detail}</p>
+                            </button>
+                          ))}
+                      </section>
+                    ))}
+                  </div>
+                </Panel>
+                <Panel title="수행과 판단 기록">
+                  <p className="section-note">
+                    선택한 작업의 수행·판단 기록을 개인 AI 대화 바로 아래에서 작성합니다. 답변의 안내에 따라 입력 항목이 바뀝니다.
+                  </p>
+                  <p>
+                    <strong>{s.tasks.find(t => t.id === task)?.title}</strong>
+                  </p>
+                  <div className="document-actions">
+                    <button className="button primary" onClick={() => go('ai')}>
+                      AI 대화에서 기록하기 <ArrowRight size={16} />
+                    </button>
+                    <button
+                      className="button secondary"
+                      disabled={data.completed.includes(task)}
+                      onClick={() => {
+                        setData(prev => ({ ...prev, completed: [...new Set([...prev.completed, task])] }))
+                        setNotice('선택한 작업을 완료로 표시했습니다.')
+                      }}
+                    >
+                      {data.completed.includes(task) ? '완료한 작업' : '선택 작업 완료로 표시'}
+                    </button>
+                  </div>
+                </Panel>
+              </>
+            ) : (
+              <>
+                {isNetwork && <ProjectSimulation key={`simulation-${executionKey}`} />}
+                <AlternativeEvidence key={`alternative-${executionKey}`} />
+              </>
+            )}
+          </>
+        )}
+        {(view === 'chat' || view === 'ai') && (
+          <StudentChat
+            key={view}
+            view={view}
+            task={task}
+            onTask={setTask}
+            onRecords={() => go('learning')}
+            onResource={setResource}
+            onNavigate={next => {
+              if (next === 'studio') setTab('실행 및 검증')
+              go(next)
+            }}
+          />
+        )}
+        {view === 'learning' && (
+          <>
+            <div className="fusion-split">
+              <Panel title="나의 수행과 근거">
+                <div className="fusion-personal-metrics">
+                  <ProgressRing value={progress} label="현재 과제 수행 진행률" />
+                  <div>
+                    <strong>{data.evidence.filter(e => e.owner === '유송민').length}개 수행 기록</strong>
+                    <p>{data.experiment ? '검증 결과 기록 있음' : '실행 결과 확인 필요'}</p>
+                    <small>수행 진행과 근거 수 · 성적이 아닙니다.</small>
+                  </div>
+                </div>
+              </Panel>
+              <Panel title="지난 과제에서 이번 수행으로">
+                <p className="section-note">{s.previousGap}</p>
+                <button
+                  className="text-button"
+                  onClick={() => {
+                    setTab('실행 및 검증')
+                    go('studio')
+                  }}
+                >
+                  이번 검증에서 확인하기 →
+                </button>
+              </Panel>
+            </div>
+            <Panel title="내가 수행한 Learning Evidence">
+              <div className="fusion-evidence-list">
+                {data.evidence
+                  .filter(e => e.owner === '유송민')
+                  .map((e, i) => (
+                    <button key={i} onClick={() => evidence(e)}>
+                      <Files size={20} />
+                      <span>
+                        <strong>{e.title}</strong>
+                        <small>
+                          {e.source} · {e.criterion}
+                        </small>
+                        <p>{e.detail}</p>
+                      </span>
+                      <ArrowRight size={17} />
+                    </button>
+                  ))}
+              </div>
+            </Panel>
+            <Panel title="교수자 지도와 평가 피드백">
+              <h3>수행 지도</h3>
+              <p>{data.feedbackSent ? data.teacherFeedback : '아직 전달된 지도가 없습니다.'}</p>
+              <h3>저장된 평가 피드백</h3>
+              <p>{data.reviews['유송민']?.feedback || '교수자가 평가 검토 후 저장한 피드백이 표시됩니다.'}</p>
+            </Panel>
+          </>
+        )}
+        <TeamDocuments
+          data={data.student}
+          onUpdate={student => setData({ ...data, student })}
+          openIndex={resource}
+          onClose={() => setResource(null)}
+          onOpen={setResource}
+          onShare={shareDoc}
+          full={view === 'documents'}
+        />
+      </main>
+      <dialog ref={dialog} className="student-resource-dialog" aria-labelledby="project-evidence-title">
+        <div className="section-heading">
+          <h2 id="project-evidence-title">{detail?.title}</h2>
+          <button className="text-button" onClick={() => dialog.current?.close()}>
+            닫기
+          </button>
+        </div>
+        <span className="teach-badge mint">
+          {detail?.owner} · {detail?.criterion}
+        </span>
+        <p className="section-note">{detail?.source}</p>
+        <h3>조사·수행 원자료</h3>
+        <pre>{detail?.raw || '연결된 원자료가 없습니다. 아래 내용은 학생 설명입니다.'}</pre>
+        <h3>학생 설명과 판단 근거</h3>
+        <p>{detail?.detail}</p>
+      </dialog>
+    </div>
+  )
 }

@@ -15,7 +15,8 @@ import {
 } from 'lucide-react'
 import { Fragment, useEffect, useRef, useState, type ReactNode, type Dispatch, type SetStateAction } from 'react'
 import { type Assignment as AssignmentType, modes, storageKey, suggestGoals, validateAssignment } from '@/domain/assignment'
-import { demoLessonOverview, type Course } from '@/domain/course'
+import { type Course } from '@/domain/course'
+import { AssignmentProposalPanel } from './AssignmentProposalPanel'
 import { StudentPreview } from './StudentPreview'
 import { OptionEditor } from './OptionEditor'
 import { TeamBuilder } from './TeamBuilder'
@@ -120,19 +121,18 @@ export function AssignmentBuilder({
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [selectedGoals, setSelectedGoals] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
-  const [ncsLinked, setNcsLinked] = useState(true)
-  const lessonOverview = demoLessonOverview[scenario.id]
 
-  function applyDemoProposal() {
+  function applyDemoProposal(proposal: { title: string; description: string; requirements: string[] }) {
     setA(prev => ({
       ...prev,
-      title: lessonOverview.proposalTitle,
-      description: lessonOverview.proposalSummary,
+      title: proposal.title,
+      description: proposal.description,
+      requirements: proposal.requirements,
     }))
     setSaved(false)
     setCreated(false)
     setError('')
-    onMessage('AI 과제 제안(본사–지사 네트워크 통신 장애 복구)을 과제 설계안에 반영했습니다.')
+    onMessage(`AI 과제 제안(${proposal.title})과 선택 기준을 과제 설계안에 반영했습니다.`)
   }
 
   const dialog = useRef<HTMLDialogElement>(null)
@@ -336,58 +336,13 @@ export function AssignmentBuilder({
       >
         {step === 1 ? (
           <>
-            <section className="panel design-triptych-panel" aria-label="차시 과제 설계 3단 요약">
-              <div className="triptych-card">
-                <span className="teach-badge mint">① 교육적 요구사항</span>
-                <h3>차시 목표와 필수 수행 행동</h3>
-                <ul className="triptych-list">
-                  <li>
-                    <strong>이번 목표:</strong> {lessonOverview.objective}
-                  </li>
-                  <li>
-                    <strong>선수학습:</strong> {lessonOverview.prerequisite}
-                  </li>
-                  <li>
-                    <strong>직접 수행 행동:</strong> 장비 상태 확인 → 라우팅 테이블 비교 → 설정 수정 → 양방향 검증 및 이유 기록
-                  </li>
-                  <li>
-                    <strong>AI 활용·평가:</strong> {a.mode} (개입 {a.intervention}) · 평가 기준 {a.criteria.length}개 항목
-                  </li>
-                </ul>
-              </div>
-              <div className="triptych-card">
-                <span className="teach-badge lavender">② 근거자료 연결</span>
-                <h3>교육과정 · 교안 · 선택적 NCS</h3>
-                <ul className="triptych-list">
-                  <li>
-                    <strong>국가 교육과정:</strong> {lessonOverview.curriculumBasis}
-                  </li>
-                  <li>
-                    <strong>교수자 자료:</strong> {course.documents.map(d => d.name).join(' · ') || '수업계획서 · 교안'}
-                  </li>
-                </ul>
-                <label className="ncs-optional-toggle">
-                  <input type="checkbox" checked={ncsLinked} onChange={e => setNcsLinked(e.target.checked)} />
-                  <span>{lessonOverview.optionalNcsBasis}</span>
-                </label>
-                <small className="micro-note">
-                  {ncsLinked
-                    ? `적용 중: ${course.ncs.join(' · ')}`
-                    : '미적용: 국가 교육과정 성취기준만 기본 근거로 사용합니다.'}
-                </small>
-              </div>
-              <div className="triptych-card proposal-card">
-                <span className="teach-badge yellow">③ AI의 과제 제안</span>
-                <h3>과제 제안: {lessonOverview.proposalTitle}</h3>
-                <p>{lessonOverview.proposalSummary}</p>
-                <small className="micro-note">{lessonOverview.briefingSummary}</small>
-                <div className="proposal-card-actions">
-                  <button type="button" className="button secondary" onClick={applyDemoProposal}>
-                    AI 제안 과제 적용
-                  </button>
-                </div>
-              </div>
-            </section>
+            <AssignmentProposalPanel
+              scenarioId={scenario.id}
+              assignment={a}
+              course={course}
+              onUpdate={update}
+              onApplyProposal={applyDemoProposal}
+            />
             <div className="design-grid">
             <Section
               number="01"

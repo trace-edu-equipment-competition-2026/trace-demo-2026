@@ -76,6 +76,11 @@ export type CommandResult = {
   resetProgress: boolean
 }
 
+// 검증 조건 변경 또는 실패 시 제출·실험 완료 상태를 일관되게 초기화.
+export function invalidateVerificationState(student: StudentState): StudentState {
+  return { ...student, submitted: false }
+}
+
 // 모의 콘솔 명령 처리 및 상태 전이 계산.
 export function executeSimulationCommand(rawInput: string, ctx: CommandContext): CommandResult | null {
   const input = rawInput.trim().replace(/\s+/g, ' ')
@@ -90,18 +95,24 @@ export function executeSimulationCommand(rawInput: string, ctx: CommandContext):
     if (input === 'show ip route') {
       output =
         ctx.target === 'R1'
-          ? `S 192.168.20.0/24 via 10.0.0.2${ctx.extended ? `\n192.168.30.0/24: ${extraFixed ? 'via 10.0.0.2' : '경로 없음 · PC-C는 R2 뒤 추가 대역'}` : ''}`
+          ? `C 192.168.10.0/24 is directly connected, GigabitEthernet0/0\nC 10.0.0.0/30 is directly connected, GigabitEthernet0/1\nS 192.168.20.0/24 [1/0] via 10.0.0.2${ctx.extended ? `\n192.168.30.0/24: ${extraFixed ? 'via 10.0.0.2' : '경로 없음 · PC-C는 R2 뒤 추가 대역'}` : ''}`
           : ctx.target === 'R2'
-            ? `S 192.168.10.0/24 via ${student.routeFixed ? '10.0.0.1' : '10.0.0.9'}${ctx.extended ? '\nC 192.168.30.0/24 directly connected' : ''}`
+            ? student.routeFixed
+              ? `C 192.168.20.0/24 is directly connected, GigabitEthernet0/0\nC 10.0.0.0/30 is directly connected, GigabitEthernet0/1\nS 192.168.10.0/24 [1/0] via 10.0.0.1${ctx.extended ? '\nC 192.168.30.0/24 directly connected' : ''}`
+              : `C 192.168.20.0/24 is directly connected, GigabitEthernet0/0\nC 10.0.0.0/30 is directly connected, GigabitEthernet0/1\n[RIB 미설치] 192.168.10.0/24 활성 경로 없음 (${student.badRouteRemoved ? '오설정 10.0.0.9 제거됨 · 정상 정적 경로 추가 필요' : 'running-config의 next-hop 10.0.0.9는 10.0.0.0/30 대역 밖 도달 불가로 미설치'})${ctx.extended ? '\nC 192.168.30.0/24 directly connected' : ''}`
             : '라우터를 선택해 경로를 확인하세요.'
     } else if (input === 'show ip interface brief') {
-      output = 'R1: 10.0.0.1 up/up\nR2: 10.0.0.2 up/up'
+      output = 'R1: Gi0/0 192.168.10.1 up/up · Gi0/1 10.0.0.1 up/up\nR2: Gi0/0 192.168.20.1 up/up · Gi0/1 10.0.0.2 up/up'
     } else if (input === 'show running-config' || input === 'show running-config | include ip route') {
+      const r2Routes = [
+        ...(!student.badRouteRemoved ? ['ip route 192.168.10.0 255.255.255.0 10.0.0.9'] : []),
+        ...(student.routeFixed ? ['ip route 192.168.10.0 255.255.255.0 10.0.0.1'] : []),
+      ]
       output =
         ctx.target === 'R1'
           ? `interface GigabitEthernet0/0\n ip address 192.168.10.1 255.255.255.0\ninterface GigabitEthernet0/1\n ip address 10.0.0.1 255.255.255.252\nip route 192.168.20.0 255.255.255.0 10.0.0.2${ctx.extended && extraFixed ? '\nip route 192.168.30.0 255.255.255.0 10.0.0.2' : ''}`
           : ctx.target === 'R2'
-            ? `interface GigabitEthernet0/0\n ip address 192.168.20.1 255.255.255.0\ninterface GigabitEthernet0/1\n ip address 10.0.0.2 255.255.255.252\nip route 192.168.10.0 255.255.255.0 ${student.routeFixed ? '10.0.0.1' : '10.0.0.9'}`
+            ? `interface GigabitEthernet0/0\n ip address 192.168.20.1 255.255.255.0\ninterface GigabitEthernet0/1\n ip address 10.0.0.2 255.255.255.252\n${r2Routes.length ? r2Routes.join('\n') : '! 정적 경로 없음 (192.168.10.0/24 경로 추가 필요)'}`
             : '라우터를 선택해 설정을 확인하세요.'
     } else if (input.startsWith('traceroute ') || input.startsWith('tracert ')) {
       const dest = input.split(' ')[1]
@@ -116,11 +127,21 @@ export function executeSimulationCommand(rawInput: string, ctx: CommandContext):
       } else {
         output = 'PC-A에서 192.168.20.10 또는 PC-B에서 192.168.10.10 경로를 추적하세요.'
       }
+    } else if (input.startsWith('no ip route ')) {
+      if (ctx.target === 'R2' && input === 'no ip route 192.168.10.0 255.255.255.0 10.0.0.9') {
+        student = { ...student, badRouteRemoved: true, forward: false, reverse: false }
+        output =
+          'R2(config)# 잘못된 정적 경로(192.168.10.0/24 via 10.0.0.9)를 running-config에서 제거했습니다. 이제 올바른 Next Hop(10.0.0.1) 정적 경로를 추가하세요.'
+      } else {
+        output = '제거할 정적 경로의 목적지·마스크·다음 홉과 실행 대상 라우터(R2)를 확인하세요.'
+      }
     } else if (input.startsWith('ip route ')) {
       if (ctx.target === 'R2' && input === 'ip route 192.168.10.0 255.255.255.0 10.0.0.1') {
         student = { ...student, routeFixed: true, forward: false, reverse: false }
         nextChecks = { '경로 수정': true }
-        output = 'R2 정적 경로 수정됨. 두 PC의 양방향 결과를 확인하세요.'
+        output = student.badRouteRemoved
+          ? 'R2 정적 경로 수정됨 (S 192.168.10.0/24 via 10.0.0.1 RIB 설치 완료). 두 PC의 양방향 결과를 확인하세요.'
+          : 'R2 정적 경로 수정됨 (S 192.168.10.0/24 via 10.0.0.1 RIB 설치 완료 · running-config의 기존 10.0.0.9 항목은 no ip route 192.168.10.0 255.255.255.0 10.0.0.9로 제거 가능). 두 PC의 양방향 결과를 확인하세요.'
       } else if (ctx.extended && ctx.target === 'R1' && input === 'ip route 192.168.30.0 255.255.255.0 10.0.0.2') {
         extraFixed = true
         nextChecks = {}
@@ -175,6 +196,9 @@ export function executeSimulationCommand(rawInput: string, ctx: CommandContext):
     }
   }
 
-  const resetProgress = input.startsWith('ip route ') || /100% loss|보완 필요/.test(output)
+  const resetProgress = input.startsWith('no ip route ') || input.startsWith('ip route ') || /100% loss|보완 필요/.test(output)
+  if (resetProgress) {
+    student = invalidateVerificationState(student)
+  }
   return { input, output, checks: nextChecks, student, extensionFixed: extraFixed, resetProgress }
 }

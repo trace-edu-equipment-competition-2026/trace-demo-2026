@@ -15,7 +15,12 @@ test('수행 실패·성공과 교수자 범위에 따라 지원을 조절하고
  const f=scenarios.fusion,fd=structuredClone(f.project);fd.experiment=true;fd.assignment={...structuredClone(f.assignment),situations:['사용자 피드백']};expect(nextSituation(fd,f)).toBeNull();d.assignment.situations=['사용자 피드백'];expect(nextSituation(d,s)).toBeNull();d.assignment.situations=['오류·장애'];d.situation={...next,status:'complete'};expect(nextSituation(d,s)).toBeNull();expect(supportFor('API?',fd,f)?.level).toBe(1)
  const cfg=getSimulationConfig(true,false),baseCtx={isNetwork:true,extended:false,target:'R2',rules:[true,true],checks:{},student:structuredClone(s.project.student),extensionFixed:false,conditions:cfg.conditions}
  expect(executeSimulationCommand('show ip route',baseCtx)?.output).toContain('10.0.0.9')
+ expect(executeSimulationCommand('show ip route',baseCtx)?.output).toContain('[RIB 미설치]')
  expect(executeSimulationCommand('show running-config',baseCtx)?.output).toContain('ip route 192.168.10.0 255.255.255.0 10.0.0.9')
+ const removed=executeSimulationCommand('no ip route 192.168.10.0 255.255.255.0 10.0.0.9',{...baseCtx,student:{...baseCtx.student,submitted:true}})!
+ expect(removed.student.badRouteRemoved).toBe(true)
+ expect(removed.student.submitted).toBe(false)
+ expect(executeSimulationCommand('show running-config',{...baseCtx,student:removed.student})?.output).not.toContain('10.0.0.9')
  expect(executeSimulationCommand('ping 192.168.10.1',{...baseCtx,target:'PC-A'})?.output).toContain('4/4')
  expect(executeSimulationCommand('traceroute 192.168.20.10',{...baseCtx,target:'PC-A'})?.output).toContain('Request timed out')
  const fixed=executeSimulationCommand('ip route 192.168.10.0 255.255.255.0 10.0.0.1',baseCtx)!

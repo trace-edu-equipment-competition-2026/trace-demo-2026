@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { ClipboardCheck, MessageCircle, RefreshCw } from 'lucide-react'
 import { applySituation, makeEvidence, policyFor, stamp } from '@/domain/learningLoop'
-import { useWorkspace } from './WorkspaceContext'
-import { SectionTitle } from './SectionTitle'
+import { invalidateVerificationState } from '@/domain/simulationEngine'
+import { useWorkspace } from '@/components/layout/WorkspaceContext'
+import { SectionTitle } from '@/components/layout/SectionTitle'
 
 export function SituationPanel({ teacher = false }: { teacher?: boolean }) {
   const { data, setData, scenario: s } = useWorkspace()
@@ -238,6 +239,7 @@ export function AlternativeEvidence() {
       kind: 'record',
       time: stamp(),
     })
+    const resetStudent = invalidateVerificationState(data.student)
     setData({
       ...data,
       experiment: false,
@@ -247,9 +249,9 @@ export function AlternativeEvidence() {
       evidence: [...data.evidence, e],
       alternative: { evidenceId: e.id!, status: 'pending' },
       student: {
-        ...data.student,
+        ...resetStudent,
         resources: [
-          ...data.student.resources,
+          ...resetStudent.resources,
           {
             id: `project-verification-${e.id}`,
             name: e.title,

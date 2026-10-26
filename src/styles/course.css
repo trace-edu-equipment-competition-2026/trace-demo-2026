@@ -27,6 +27,7 @@
 .ncs-optional-toggle { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#2b6f60; margin-top:4px; }
 .ncs-optional-toggle input { width:16px; height:16px; accent-color:#2b6f60; }
 .proposal-card { background:#f3faf7; border-color:#b7d9cf; }
+.proposal-condition-tag { display:block; font-size:11px; color:#2b6f60; font-weight:600; margin-top:-2px; }
 .proposal-card-actions { margin-top:auto; padding-top:6px; display:flex; justify-content:flex-end; }
 @media(max-width:900px) { .lesson-metrics-grid,.lesson-sequence-grid,.design-triptych-panel { grid-template-columns:1fr; } }
 .course-dashboard h2,.course-settings h2 { font-size:18px; margin:0; }.course-dashboard h3,.course-settings h3 { font-size:13px; margin:0 0 14px; }.course-demo-note { color:#667065; font-size:11px; line-height:1.8; margin:14px 0 22px; }.course-dashboard .panel,.course-settings .panel { padding:24px; min-width:0; }

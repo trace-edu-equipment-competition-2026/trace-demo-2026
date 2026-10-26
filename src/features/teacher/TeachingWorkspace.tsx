@@ -1,6 +1,6 @@
 import { UsersRound, Activity } from 'lucide-react'
 import {SectionTitle} from '@/components/layout/SectionTitle'
-import {TeacherSupportQueue,SituationPanel,AlternativeReview} from '@/components/layout/LearningCycle'
+import { TeacherSupportQueue, SituationPanel, AlternativeReview } from '@/features/learning/LearningCycle'
 import { useWorkspace } from '@/components/layout/WorkspaceContext'
 import { scenarioEvidence, workspaceKey } from '@/domain/scenarios'
 import { useRef, useState, type Dispatch, type SetStateAction } from 'react'

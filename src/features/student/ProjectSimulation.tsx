@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { useWorkspace } from '@/components/layout/WorkspaceContext'
 import { cycleOf, makeEvidence, stamp } from '@/domain/learningLoop'
-import { executeSimulationCommand, getSimulationConfig, networkTopologySpecs } from '@/domain/simulationEngine'
+import {
+  executeSimulationCommand,
+  getSimulationConfig,
+  invalidateVerificationState,
+  networkTopologySpecs,
+} from '@/domain/simulationEngine'
 
 export function ProjectSimulation() {
   const { scenario: s, data, setData } = useWorkspace()
@@ -27,7 +32,7 @@ export function ProjectSimulation() {
       ...(next.checks
         ? {
             experiment: false,
-            student: { ...data.student, submitted: false },
+            student: invalidateVerificationState(data.student),
             situation: data.situation?.status === 'complete' ? { ...data.situation, status: 'active' as const } : data.situation,
           }
         : {}),
@@ -141,9 +146,11 @@ export function ProjectSimulation() {
         <div className="network-topology" aria-label="프로젝트 구성도">
           {network
             ? networkTopologySpecs.map(node => (
-                <div
+                <button
+                  type="button"
                   key={node.id}
                   className={target === node.id ? 'selected-node' : ''}
+                  aria-pressed={target === node.id}
                   onClick={() => {
                     setTarget(node.id)
                     persist({ target: node.id })
@@ -154,7 +161,7 @@ export function ProjectSimulation() {
                   </span>
                   <small>{node.ip}</small>
                   <small>{node.detail}</small>
-                </div>
+                </button>
               ))
             : s.nodes.map(([name, info]) => (
                 <div key={name}>
@@ -200,9 +207,10 @@ export function ProjectSimulation() {
             <p className="course-demo-note">{s.moduleEvidence} · 시연용으로 정의된 요청만 처리합니다.</p>
             {network && (
               <details>
-                <summary>설정 명령 형식</summary>
-                <p>ip route 목적지대역 서브넷마스크 다음홉</p>
-                <p>조회한 경로와 실제 연결을 비교해 각 값을 직접 선택하세요.</p>
+                <summary>설정 명령 형식 (Cisco IOS)</summary>
+                <p>1) 잘못된 경로 제거: no ip route 목적지대역 서브넷마스크 잘못된다음홉</p>
+                <p>2) 정상 경로 추가: ip route 목적지대역 서브넷마스크 다음홉</p>
+                <p>show running-config의 설정과 show ip route의 실제 설치(RIB) 경로를 비교하세요.</p>
               </details>
             )}
           </div>
