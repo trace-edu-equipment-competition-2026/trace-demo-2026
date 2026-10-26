@@ -71,6 +71,7 @@ export function TeachingWorkspace({ view, assignment, onNavigate, initialTarget 
               <tr>
                 <th>학생</th>
                 <th>현재 상태</th>
+                <th>확인할 사항</th>
                 <th>AI 지원</th>
                 <th>교수자 판단</th>
                 <th>이동</th>
@@ -80,6 +81,7 @@ export function TeachingWorkspace({ view, assignment, onNavigate, initialTarget 
               <tr>
                 <th scope="row">학생 A · 유송민</th>
                 <td>{data.experiment ? '검증 완료' : '진단·수정 진행'}</td>
+                <td>수정 이유와 양방향 검증 근거 확인</td>
                 <td>확인 질문 {Math.max(1, data.student.privateMessages.filter(m => m.author === 'AI').length)}회</td>
                 <td><Badge value="정상" /> 정상 진행</td>
                 <td><button type="button" className="text-button" onClick={() => showStudent('유송민')}>학습 증거 확인 →</button></td>
@@ -87,20 +89,23 @@ export function TeachingWorkspace({ view, assignment, onNavigate, initialTarget 
               <tr>
                 <th scope="row">학생 B · 김민준</th>
                 <td>원인 탐색 중</td>
+                <td>서로 다른 가설을 어떻게 비교했는지 확인</td>
                 <td>탐색 범위 안내</td>
                 <td><Badge value="진행 중" /> 관찰 유지</td>
                 <td><button type="button" className="text-button" onClick={() => showStudent('김민준')}>학습 증거 확인 →</button></td>
               </tr>
               <tr>
                 <th scope="row">학생 C · 윤서준</th>
-                <td>설정 수정 중</td>
                 <td>AI 힌트 이용 후 수행</td>
+                <td>AI 제안과 실제 수행을 구분하여 확인</td>
+                <td>개념·도구 힌트</td>
                 <td><Badge value="확인 필요" /> 설명 확인 필요</td>
                 <td><button type="button" className="text-button" onClick={() => showStudent('윤서준')}>학습 증거 확인 →</button></td>
               </tr>
               <tr>
                 <th scope="row">학생 D · 이서연</th>
                 <td>수정 후 검증 누락</td>
+                <td>최종 검증에 관한 지도 필요</td>
                 <td>반복 질문</td>
                 <td><Badge value="지연" /> 교수자 개입 권장</td>
                 <td><button type="button" className="text-button" onClick={() => showStudent('이서연')}>학습 증거 확인 →</button></td>

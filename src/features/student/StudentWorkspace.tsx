@@ -18,6 +18,7 @@ import { useWorkspace, useWorkspaceUi } from '@/components/layout/WorkspaceConte
 import { ProgressRing } from '@/features/teacher/TeachingCharts'
 import { TeamDocuments } from './TeamDocuments'
 import { ProjectSimulation } from './ProjectSimulation'
+import { LabAiAssistant } from './LabAiAssistant'
 import { SituationPanel, AlternativeEvidence } from '@/features/learning/LearningCycle'
 import { makeEvidence, stamp } from '@/domain/learningLoop'
 import type { FusionEvidence } from '@/domain/fusion'
@@ -597,6 +598,7 @@ export function StudentWorkspace({
           full={view === 'documents'}
         />
       </main>
+      <LabAiAssistant onOpenFullAi={() => go('ai')} />
       <dialog ref={dialog} className="student-resource-dialog" aria-labelledby="project-evidence-title">
         <div className="section-heading">
           <h2 id="project-evidence-title">{detail?.title}</h2>

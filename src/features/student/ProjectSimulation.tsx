@@ -5,8 +5,8 @@ import {
   executeSimulationCommand,
   getSimulationConfig,
   invalidateVerificationState,
-  networkTopologySpecs,
 } from '@/domain/simulationEngine'
+import { PacketTracerTopology } from './PacketTracerTopology'
 
 export function ProjectSimulation() {
   const { scenario: s, data, setData } = useWorkspace()
@@ -143,33 +143,27 @@ export function ProjectSimulation() {
             </small>
           </div>
         )}
-        <div className="network-topology" aria-label="프로젝트 구성도">
-          {network
-            ? networkTopologySpecs.map(node => (
-                <button
-                  type="button"
-                  key={node.id}
-                  className={target === node.id ? 'selected-node' : ''}
-                  aria-pressed={target === node.id}
-                  onClick={() => {
-                    setTarget(node.id)
-                    persist({ target: node.id })
-                  }}
-                >
-                  <span>
-                    {node.id} <small>({node.role})</small>
-                  </span>
-                  <small>{node.ip}</small>
-                  <small>{node.detail}</small>
-                </button>
-              ))
-            : s.nodes.map(([name, info]) => (
-                <div key={name}>
-                  <span>{name}</span>
-                  <small>{info}</small>
-                </div>
-              ))}
-        </div>
+        {network ? (
+          <PacketTracerTopology
+            target={target}
+            routeFixed={!!data.student.routeFixed}
+            extended={extended}
+            extensionFixed={extensionFixed}
+            onSelect={nextId => {
+              setTarget(nextId)
+              persist({ target: nextId })
+            }}
+          />
+        ) : (
+          <div className="network-topology" aria-label="프로젝트 구성도">
+            {s.nodes.map(([name, info]) => (
+              <div key={name}>
+                <span>{name}</span>
+                <small>{info}</small>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="fusion-prototype">
           <div>
             <h3>검증 조건</h3>
