@@ -1,6 +1,6 @@
 import {test,expect,type Page} from '@playwright/test'
-import {scenarios} from '../src/scenarios'
-import {supportFor,deliverSupport} from '../src/learningLoop'
+import {scenarios} from '../src/domain/scenarios'
+import {supportFor,deliverSupport} from '../src/domain/learningLoop'
 async function nav(p:Page,name:string){const b=p.getByRole('button',{name:'수업 메뉴 열기',exact:true});if(await b.isVisible()&&!await p.locator('.sidebar.open').count())await b.click();await p.locator('.sidebar nav').getByRole('button',{name,exact:true}).click()}
 async function role(p:Page,student:boolean){const b=p.getByRole('button',{name:'수업 메뉴 열기',exact:true});if(await b.isVisible()&&!await p.locator('.sidebar.open').count())await b.click();await p.getByRole('button',{name:'프로필 전환',exact:true}).click();await p.getByRole('button',{name:student?/유송민 학생/:/강병준 교수자/}).click()}
 test('팀 가이던스는 협업·프로젝트 주제와 시나리오를 반영하고 승인 없이 원래 채널에 전달된다',()=>{

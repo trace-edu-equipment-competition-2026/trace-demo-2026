@@ -1,14 +1,14 @@
 import { UsersRound, Activity } from 'lucide-react'
-import {SectionTitle} from './SectionTitle'
-import {TeacherSupportQueue,SituationPanel,AlternativeReview} from './LearningCycle'
-import { useWorkspace } from './WorkspaceContext'
-import { scenarioEvidence, workspaceKey } from './scenarios'
+import {SectionTitle} from '@/components/layout/SectionTitle'
+import {TeacherSupportQueue,SituationPanel,AlternativeReview} from '@/components/layout/LearningCycle'
+import { useWorkspace } from '@/components/layout/WorkspaceContext'
+import { scenarioEvidence, workspaceKey } from '@/domain/scenarios'
 import { useRef, useState, type Dispatch, type SetStateAction } from 'react'
-import { type Assignment, demoStudents } from './assignment'
-import './teaching.css'
-import type { TeachingTarget } from './course'
+import { type Assignment, demoStudents } from '@/domain/assignment'
+import '@/styles/teaching.css'
+import type { TeachingTarget } from '@/domain/course'
 import { EvidenceReview } from './EvidenceReview'
-import { snapshotMinutes, formatTime } from './evidence'
+import { snapshotMinutes, formatTime } from '@/domain/evidence'
 import { MonitoringMap, StageDistribution } from './MonitoringMap'
 import { ProgressRing } from './TeachingCharts'
 
@@ -60,6 +60,55 @@ export function TeachingWorkspace({ view, assignment, onNavigate, initialTarget 
     <p className="teaching-demo">시연용 학생·수행 기록 · AI 요약은 교수자의 확인을 위한 참고 정보입니다.</p>
     {notice && <div role="status" className="teaching-notice">{notice}<button type="button" aria-label="처리 알림 닫기" onClick={() => setNotice('')}>닫기</button></div>}
     {view === 'monitoring' ? <>
+      <section className="panel individual-observation-panel" aria-label="학생별 진행 상태와 개입 신호">
+        <div className="section-heading">
+          <SectionTitle icon={Activity} tone="mint">학생별 진행 상태와 개입 신호 (1인 실습 관찰)</SectionTitle>
+          <span className="count-label">대표 관찰 대상 4명 · 전체 24명</span>
+        </div>
+        <div className="table-scroll">
+          <table className="reference-table">
+            <thead>
+              <tr>
+                <th>학생</th>
+                <th>현재 상태</th>
+                <th>AI 지원</th>
+                <th>교수자 판단</th>
+                <th>이동</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">학생 A · 유송민</th>
+                <td>{data.experiment ? '검증 완료' : '진단·수정 진행'}</td>
+                <td>확인 질문 {Math.max(1, data.student.privateMessages.filter(m => m.author === 'AI').length)}회</td>
+                <td><Badge value="정상" /> 정상 진행</td>
+                <td><button type="button" className="text-button" onClick={() => showStudent('유송민')}>학습 증거 확인 →</button></td>
+              </tr>
+              <tr>
+                <th scope="row">학생 B · 김민준</th>
+                <td>원인 탐색 중</td>
+                <td>탐색 범위 안내</td>
+                <td><Badge value="진행 중" /> 관찰 유지</td>
+                <td><button type="button" className="text-button" onClick={() => showStudent('김민준')}>학습 증거 확인 →</button></td>
+              </tr>
+              <tr>
+                <th scope="row">학생 C · 윤서준</th>
+                <td>설정 수정 중</td>
+                <td>AI 힌트 이용 후 수행</td>
+                <td><Badge value="확인 필요" /> 설명 확인 필요</td>
+                <td><button type="button" className="text-button" onClick={() => showStudent('윤서준')}>학습 증거 확인 →</button></td>
+              </tr>
+              <tr>
+                <th scope="row">학생 D · 이서연</th>
+                <td>수정 후 검증 누락</td>
+                <td>반복 질문</td>
+                <td><Badge value="지연" /> 교수자 개입 권장</td>
+                <td><button type="button" className="text-button" onClick={() => showStudent('이서연')}>학습 증거 확인 →</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
       <div className="monitor-metrics">{[['전체 팀', displayedTeams.length, 'mint'], ['정상 진행', displayedTeams.filter(t => t.status === '정상').length, 'mint'], ['확인 필요', displayedTeams.filter(t => ['확인 필요','지연'].includes(t.status)).length, 'yellow'], ['승인 대기', displayedTeams.filter(t => t.status === '승인 대기').length, 'lavender']].map(([label, count, color]) => <div className="panel metric" key={label}><span>{label}</span><strong>{count}<small>팀</small></strong><span className={`metric-swatch ${color}`} aria-hidden="true">{label === '전체 팀' ? <span className="icon icon-users" /> : label === '정상 진행' ? <span className="icon icon-check" /> : label === '확인 필요' ? '?' : <span className="icon icon-list" />}</span><div className="metric-segments" aria-hidden="true">{displayedTeams.map((t,i)=><i key={t.id} className={i < Number(count) ? String(color) : ''} />)}</div></div>)}</div>
       <div className="monitor-layout"><section className="panel team-list-panel"><div className="section-heading"><SectionTitle icon={Activity}>팀 진행 현황</SectionTitle><span className="average-progress"><ProgressRing value={averageProgress} label="평균 팀 진행률" /><span>평균 진행률</span></span></div><div className="monitor-filters" aria-label="팀 상태 필터">{['전체','확인 필요','지연','승인 대기'].map(value => <button type="button" key={value} aria-pressed={filter === value} onClick={() => setFilter(value)}>{value}</button>)}</div><MonitoringMap teams={displayedTeams.filter(t => filter === '전체' || t.status === filter)} selected={teamId} onSelect={setTeamId} /><StageDistribution teams={displayedTeams} />{!displayedTeams.some(t => filter === '전체' || t.status === filter) && <p className="teaching-empty">해당 상태의 팀이 없습니다.</p>}<div className="monitor-list-note"><strong>지금 살펴볼 팀</strong><p>2팀의 검증 결과 미수집과 4팀의 진단 이후 활동 지연을 확인해 주세요. 상태 표시는 평가 점수가 아닙니다.</p></div></section>
       <section className="panel team-detail" aria-label="선택 팀 상세"><div className="section-heading"><SectionTitle icon={UsersRound}>{teamId}팀</SectionTitle><Badge value={selected.status} /></div><div className="team-progress-overview"><ProgressRing value={selected.progress} label="선택 팀 진행률" tone={tone(selected.status)} /><div><strong>{selected.stage}</strong><p>과제 진행률</p><small>최근 활동 {selected.recent}</small></div></div>

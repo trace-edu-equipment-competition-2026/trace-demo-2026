@@ -1,5 +1,5 @@
 import {test,expect,type Page} from '@playwright/test'
-import {scenarios} from '../src/scenarios'
+import {scenarios} from '../src/domain/scenarios'
 
 async function menu(page:Page){const opener=page.getByRole('button',{name:'수업 메뉴 열기',exact:true});if(await opener.isVisible()&&!await page.locator('.sidebar.open').count())await opener.click()}
 async function nav(page:Page,name:string){await menu(page);await page.locator('.sidebar nav').getByRole('button',{name,exact:true}).click()}

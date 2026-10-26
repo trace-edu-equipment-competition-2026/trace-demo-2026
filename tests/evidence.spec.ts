@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { criterionEstimate, formatTime, snapshotMinutes, studentEvidence, teachingTeams } from '../src/evidence'
+import { criterionEstimate, formatTime, snapshotMinutes, studentEvidence, teachingTeams } from '../src/domain/evidence'
 
 test('팀·학생 시나리오의 시간과 결과 및 지원 이후 행동이 일치한다', () => {
   for (const team of teachingTeams) {

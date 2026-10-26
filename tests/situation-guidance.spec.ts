@@ -1,6 +1,6 @@
 import {test,expect,type Page} from '@playwright/test'
-import {scenarios,readProject,scenarioEvidence} from '../src/scenarios'
-import {supportFor,nextSituation,applySituation,assessSituation} from '../src/learningLoop'
+import {scenarios,readProject,scenarioEvidence} from '../src/domain/scenarios'
+import {supportFor,nextSituation,applySituation,assessSituation} from '../src/domain/learningLoop'
 async function role(p:Page,student:boolean){await p.getByRole('button',{name:'프로필 전환',exact:true}).click();await p.getByRole('button',{name:student?/유송민 학생/:/강병준 교수자/}).click()}
 async function nav(p:Page,name:string){const b=p.getByRole('button',{name:'수업 메뉴 열기',exact:true});if(await b.isVisible()&&!await p.locator('.sidebar.open').count())await b.click();await p.locator('.sidebar nav').getByRole('button',{name,exact:true}).click()}
 test('승인은 추가 선행·심화 상황에만 필요하고 기존 근거를 보존한다',()=>{

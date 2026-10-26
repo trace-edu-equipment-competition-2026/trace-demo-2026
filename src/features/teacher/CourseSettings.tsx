@@ -1,8 +1,8 @@
-import { useWorkspace,useWorkspaceUi } from './WorkspaceContext'
-import { workspaceKey } from './scenarios'
+import { useWorkspace,useWorkspaceUi } from '@/components/layout/WorkspaceContext'
+import { workspaceKey } from '@/domain/scenarios'
 import { useRef, useState } from 'react'
-import { guidanceOptions, modes } from './assignment'
-import { type Course } from './course'
+import { guidanceOptions, modes } from '@/domain/assignment'
+import { type Course } from '@/domain/course'
 type ImportRow = { key:'basic'|'goals'|'standards'|'ncs'|'criteria'|'curriculum'; label:string; value:string; original:string; selected:boolean }
 const categories=['과목 기본 정보','교육과정 · 학습 목표','평가 운영 기준','AI 운영 기본 정책','수업 일정','기준 문서 관리']
 const multiline=(s:string)=>s.split('\n').map(v=>v.trim()).filter(Boolean)

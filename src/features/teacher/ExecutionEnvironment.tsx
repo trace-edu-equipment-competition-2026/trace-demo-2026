@@ -1,6 +1,6 @@
-import { useWorkspace } from './WorkspaceContext'
+import { useWorkspace } from '@/components/layout/WorkspaceContext'
 import { useRef } from 'react'
-import type { Assignment } from './assignment'
+import type { Assignment } from '@/domain/assignment'
 type Environment = Assignment['environment']
 const environmentNames = { workspace:'프로젝트 작업공간', network:'연결된 실습 모듈', external:'외부 도구 · 현장 실습' }
 export function ExecutionEnvironment({ value, onChange }: { value:Environment; onChange:(value:Environment)=>void }) {

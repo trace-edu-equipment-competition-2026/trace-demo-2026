@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { demoStudents, getTeamGroups, type Assignment } from './assignment'
+import { demoStudents, getTeamGroups, type Assignment } from '@/domain/assignment'
 
 export function TeamBuilder({ assignment: a, onChange }: { assignment: Assignment; onChange: (value: Record<string, number>) => void }) {
   const groups = getTeamGroups(a)

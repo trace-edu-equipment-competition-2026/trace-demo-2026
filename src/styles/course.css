@@ -1,4 +1,34 @@
 .course-dashboard,.course-settings { padding-bottom:40px; }
+.lesson-overview-panel { margin-bottom:24px; border-left:4px solid #2b6f60; }
+.lesson-overview-head { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; flex-wrap:wrap; margin-bottom:18px; }
+.lesson-badges { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.lesson-main-title { font-size:20px!important; margin:0 0 6px!important; color:#243b34; }
+.lesson-context { font-size:13px; color:#525d50; margin:0; font-weight:600; }
+.lesson-metrics-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
+.lesson-metrics-grid>div { background:#f2f3ee; border-radius:12px; padding:14px 16px; display:grid; gap:4px; }
+.lesson-metrics-grid span { font-size:11px; color:#667065; }
+.lesson-metrics-grid strong { font-size:20px; color:#2b6f60; }
+.lesson-metrics-grid small { font-size:11px; color:#667065; }
+.lesson-sequence-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:16px; margin-bottom:12px; }
+.lesson-goals-box { background:#f8faf7; border:1px solid #e1e5df; border-radius:12px; padding:14px 16px; display:grid; gap:10px; }
+.lesson-goals-box strong { display:block; font-size:11px; color:#2b6f60; margin-bottom:4px; }
+.lesson-goals-box p { margin:0; font-size:12px; line-height:1.6; color:#3b3d3b; }
+.lesson-flow-table { margin:0; background:#f8faf7; border:1px solid #e1e5df; border-radius:12px; padding:12px 16px; display:grid; gap:8px; }
+.lesson-flow-table>div { display:grid; grid-template-columns:72px minmax(0,1fr); gap:10px; align-items:center; font-size:12px; padding:4px 0; }
+.lesson-flow-table dt { color:#667065; font-size:11px; font-weight:600; }
+.lesson-flow-table dd { margin:0; color:#3b3d3b; }
+.lesson-flow-table .current-session-row { background:#cfefea; border-radius:8px; padding:6px 10px; margin:0 -6px; font-weight:600; }
+.lesson-flow-table .current-session-row dt,.lesson-flow-table .current-session-row dd { color:#183e35; }
+.design-triptych-panel { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:20px; padding:20px; }
+.triptych-card { background:#f8faf7; border:1px solid #e1e5df; border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:10px; min-width:0; }
+.triptych-card h3 { font-size:14px; margin:0; color:#243b34; }
+.triptych-card p { font-size:12px; line-height:1.65; color:#3b3d3b; margin:0; }
+.triptych-list { margin:0; padding-left:16px; display:grid; gap:6px; font-size:12px; line-height:1.6; color:#3b3d3b; }
+.ncs-optional-toggle { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#2b6f60; margin-top:4px; }
+.ncs-optional-toggle input { width:16px; height:16px; accent-color:#2b6f60; }
+.proposal-card { background:#f3faf7; border-color:#b7d9cf; }
+.proposal-card-actions { margin-top:auto; padding-top:6px; display:flex; justify-content:flex-end; }
+@media(max-width:900px) { .lesson-metrics-grid,.lesson-sequence-grid,.design-triptych-panel { grid-template-columns:1fr; } }
 .course-dashboard h2,.course-settings h2 { font-size:18px; margin:0; }.course-dashboard h3,.course-settings h3 { font-size:13px; margin:0 0 14px; }.course-demo-note { color:#667065; font-size:11px; line-height:1.8; margin:14px 0 22px; }.course-dashboard .panel,.course-settings .panel { padding:24px; min-width:0; }
 .dashboard-top,.settings-intro { display:flex; justify-content:space-between; align-items:center; gap:22px; margin-bottom:20px; }.dashboard-top h2 { font-size:22px; }.dashboard-top p,.settings-intro p { color:#667065; font-size:12px; margin:8px 0 0; }.dashboard-filters { display:flex; gap:12px; }.dashboard-filters label { font-size:11px; min-width:130px; display:grid; gap:7px; }.dashboard-filters select { max-width:220px; font-size:12px; }
 .dashboard-stats { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin-bottom:22px; }.dashboard-stat>span { color:#667065; font-size:12px; }.dashboard-stat>div { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:20px; }.dashboard-stat strong { font-size:32px; }.dashboard-stat strong small { margin-left:6px; font-size:12px; color:#667065; font-weight:400; }.stat-square { width:40px; height:40px; border-radius:12px; display:grid; place-items:center; flex-shrink:0; }.stat-square .icon { width:19px; height:19px; }.average-stat { display:flex; align-items:center; justify-content:space-between; gap:10px; }.average-stat .progress-ring { width:80px; height:80px; }.average-stat .progress-ring>strong { font-size:20px; }

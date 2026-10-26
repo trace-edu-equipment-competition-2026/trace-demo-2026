@@ -1,5 +1,5 @@
 import { test,expect,type Page } from '@playwright/test'
-import {initialAssignment} from '../src/assignment'
+import {initialAssignment} from '../src/domain/assignment'
 async function automatic(page:Page){await page.goto('/');await page.evaluate(assignment=>{const key='trace-project-network-v2',p=JSON.parse(localStorage.getItem(key)!);p.assignment=assignment;localStorage.setItem(key,JSON.stringify(p))},{...initialAssignment,mode:'AI 자동',guidance:{...initialAssignment.guidance,'AI 자동':['확인 질문','탐색 방향 안내','개념 힌트','도구 활용 힌트']}})}
 async function student(page:Page){await page.goto('/');await page.getByRole('button',{name:'프로필 전환',exact:true}).click();await page.getByRole('button',{name:/유송민 학생/}).click()}
 async function nav(page:Page,name:string){if(await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).isVisible())await page.getByRole('button',{name:'수업 메뉴 열기',exact:true}).click();await page.getByRole('button',{name,exact:true}).click()}

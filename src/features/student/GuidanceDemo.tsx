@@ -1,7 +1,7 @@
 import {useState} from 'react'
-import { demoSources } from './demoSources'
-import type {WorkspaceId} from './scenarios'
-import './guidance-demo.css'
+import { demoSources } from '@/domain/demoSources'
+import type {WorkspaceId} from '@/domain/scenarios'
+import '@/styles/guidance-demo.css'
 
 // 지원 변화 시연용 고정 예시. 실제 모델 추론 아님.
 const guidanceScenes = {
@@ -11,8 +11,8 @@ const guidanceScenes = {
   {title:'지원 축소',support:'판단 근거 확인',reason:'학생의 검증 계획 구체화에 따른 직접적 안내 축소',student:'고정 응답으로 출처 유무를 비교했고, 출처가 없을 때 보류 안내가 표시됩니다. 다음에는 빈 질문과 서버 오류도 확인하고 결과를 기록하겠습니다.',ai:'그 검증 조건을 선택한 이유는 무엇인가요? 예상 결과와 실제 결과를 비교해 기록하고, 차이가 있으면 수정할 부분을 스스로 정리해 보세요.'},
  ],
  network: [
-  {title:'확인 질문',support:'확인 질문',reason:'실패 현상에 대한 관찰 사실과 탐색 범위 확인',student:'본사에서 지사로 ping이 실패합니다. 아직 어느 구간의 문제인지 모르겠습니다.',ai:'어느 장비까지 응답이 오나요? 확인한 구간과 확인하지 않은 구간을 나누고, 각 결과를 먼저 기록해 보세요.'},
-  {title:'지원 구체화',support:'개념·도구 활용 힌트',reason:'인접 구간 확인 이후 반환 경로 검증의 어려움에 따른 안내 구체화',student:'인접 라우터까지는 응답이 옵니다. 지사에서는 응답이 없는데, 돌아오는 경로는 어떤 명령으로 확인하나요?',ai:'통신에는 요청과 응답의 두 경로가 필요합니다. 두 라우터에서 show ip route로 목적지 경로와 다음 홉을 확인하고, 다음 홉이 인접 장비의 주소인지 비교해 보세요.'},
+  {title:'확인 질문',support:'확인 질문',reason:'정답 요청 대신 학습목표에 따라 관찰 사실과 게이트웨이 구간부터 확인 유도',student:'통신이 안 되는데 정답이 뭔가요? 설정 명령어 알려주세요.',ai:'이번 실습은 장애의 원인을 직접 진단하는 것이 목표입니다. 우선 PC-A에서 기본 게이트웨이(192.168.10.1)까지 통신이 가능한지 확인해 보세요.'},
+  {title:'지원 구체화',support:'개념·도구 활용 힌트',reason:'게이트웨이 응답 확인 이후 R1·R2 라우팅 테이블 탐색 범위 안내',student:'PC-A에서 R1까지 Ping은 성공하지만 PC-B까지는 실패합니다. R1과 R2 중 어느 장비의 라우팅 테이블을 먼저 확인하는 것이 좋을까요?',ai:'통신에는 요청과 응답의 두 경로가 필요합니다. 두 라우터에서 show ip route로 목적지 경로와 다음 홉을 확인하고, 다음 홉이 인접 장비의 주소인지 비교해 보세요.'},
   {title:'지원 축소',support:'판단 근거 확인',reason:'원인 가설과 재검증 계획 수립에 따른 직접적 안내 축소',student:'R2의 다음 홉이 인접 장비 주소와 다릅니다. 이 설정을 수정하고, 같은 조건에서 양방향 ping 결과를 비교하겠습니다.',ai:'그 설정을 원인으로 판단한 근거는 무엇인가요? 수정 전후와 양방향 결과를 기록하고, 예상과 다르면 다음 확인 대상을 스스로 정해 보세요.'},
  ],
 }

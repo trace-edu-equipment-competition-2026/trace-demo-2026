@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import {ArrowRight,Check,ClipboardPen} from 'lucide-react'
-import {useWorkspace} from './WorkspaceContext'
-import {makeEvidence,stamp} from './learningLoop'
-import type {StudentMessage} from './student'
+import {useWorkspace} from '@/components/layout/WorkspaceContext'
+import {makeEvidence,stamp} from '@/domain/learningLoop'
+import type {StudentMessage} from '@/domain/student'
 
 // 대화 단계별 고정 폼과 입력 예시. 실제 AI 폼 생성 아님.
 const recordForms = [

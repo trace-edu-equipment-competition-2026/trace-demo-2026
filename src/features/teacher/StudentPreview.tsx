@@ -1,5 +1,5 @@
-import { useWorkspace } from './WorkspaceContext'
-import { getTeamGroups, type Assignment } from './assignment'
+import { useWorkspace } from '@/components/layout/WorkspaceContext'
+import { getTeamGroups, type Assignment } from '@/domain/assignment'
 import { EnvironmentPreview } from './ExecutionEnvironment'
 const examples: Record<string, { student: string; question: string; next: string }> = {
   '최소': { student: '무엇부터 확인해야 할지 모르겠어요.', question: '지금까지 직접 확인한 사실은 무엇인가요? 다음에 확인할 항목 하나를 스스로 골라보세요.', next: '현재 상태 정리 → 다음 행동 직접 선택' },

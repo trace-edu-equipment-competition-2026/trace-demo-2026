@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { FileText, Paperclip, Search, Download, Send, X, Pencil, Plus, FolderOpen } from 'lucide-react'
-import type { StudentState, TeamResource } from './student'
+import type { StudentState, TeamResource } from '@/domain/student'
 export function TeamDocuments({data,onUpdate,openIndex,onClose,onOpen,onShare,full}:{data:StudentState;onUpdate:(d:StudentState)=>void;openIndex:number|null;onClose:()=>void;onOpen:(i:number)=>void;onShare:(i:number)=>void;full:boolean}) {
   const [search,setSearch]=useState(''),[filter,setFilter]=useState('전체'),[editing,setEditing]=useState(false),[creating,setCreating]=useState(false),[title,setTitle]=useState(''),[body,setBody]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false)
   const dialog=useRef<HTMLDialogElement>(null),upload=useRef<HTMLInputElement>(null)

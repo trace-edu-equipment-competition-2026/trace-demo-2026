@@ -1,11 +1,11 @@
 import {useEffect,useRef,useState} from 'react'
 import {Bot,ClipboardPen,Files,MessageCircle,RotateCcw,UsersRound} from 'lucide-react'
-import {useWorkspace} from './WorkspaceContext'
-import {deliverSupport,policyFor,stamp,supportFor} from './learningLoop'
-import {SectionTitle} from './SectionTitle'
+import {useWorkspace} from '@/components/layout/WorkspaceContext'
+import {deliverSupport,policyFor,stamp,supportFor} from '@/domain/learningLoop'
+import {SectionTitle} from '@/components/layout/SectionTitle'
 import {GuidanceDemo} from './GuidanceDemo'
 import {ChatRecord} from './ChatRecord'
-import './guidance-demo.css'
+import '@/styles/guidance-demo.css'
 
 export function StudentChat({view,task,onTask,onNavigate,onRecords,onResource}:{view:'ai'|'chat';task:string;onTask:(id:string)=>void;onNavigate:(view:string)=>void;onRecords:()=>void;onResource:(index:number)=>void}){
  const {scenario:s,data,setData}=useWorkspace()

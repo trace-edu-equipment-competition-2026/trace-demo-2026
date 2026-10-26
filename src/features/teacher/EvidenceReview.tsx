@@ -1,10 +1,10 @@
-import { useWorkspace } from './WorkspaceContext'
-import { scenarioEvidence, workspaceKey } from './scenarios'
+import { useWorkspace } from '@/components/layout/WorkspaceContext'
+import { scenarioEvidence, workspaceKey } from '@/domain/scenarios'
 import { useRef, useState } from 'react'
-import { criterionEstimate, evidenceStages, guidanceLevels, evidenceKinds, evidenceKind, isPerformedEvidence } from './evidence'
-import type { Assignment } from './assignment'
+import { criterionEstimate, evidenceStages, guidanceLevels, evidenceKinds, evidenceKind, isPerformedEvidence } from '@/domain/evidence'
+import type { Assignment } from '@/domain/assignment'
 import { ClipboardCheck, Files, MessageCircle, Activity, CheckCircle2, CircleHelp, ArrowRight } from 'lucide-react'
-import { SectionTitle } from './SectionTitle'
+import { SectionTitle } from '@/components/layout/SectionTitle'
 
 type Review = { judgments: Record<string, string>; feedback: string }
 type Check = { status: string; note: string }
@@ -84,10 +84,10 @@ export function EvidenceReview({ name, role, team, progress, task, title, criter
       <div className="monitor-filters" aria-label="증거 단계 필터"><button aria-pressed={stage===null} onClick={() => selectStage(null)}>전체 {data.evidence.length}</button>{evidenceStages.map((label,i) => <button key={label} aria-pressed={stage===i} onClick={() => selectStage(i)}>{label} {stageCounts[i]}</button>)}<button aria-pressed={stage==='supplement'} onClick={()=>selectStage('supplement')}>계획·자기 설명 {data.evidence.filter(e=>!isPerformedEvidence(e)).length}</button></div><p className="evidence-caption">단계별 건수는 수행 기록만 집계합니다. 계획·자기 설명은 별도로 검토합니다.</p>
       <div className="evidence-browser"><div className="evidence-list" aria-label="학습 증거 목록">{filtered.map(e => <button key={e.id} aria-pressed={evidence?.id===e.id} onClick={() => selectEvidence(e.id)}><span><b>{e.id}</b><time>{e.time}</time></span><strong>{e.title}</strong><small>{e.source}</small><span className="evidence-kind">{evidenceKinds[evidenceKind(e)]}</span><span className={`evidence-review-state ${checks[`${task}-${name}-${e.id}`]?.status === '확인 완료' ? 'mint' : ''}`}>{checks[`${task}-${name}-${e.id}`]?.status || '미확인'}</span></button>)}{!filtered.length && <div className="missing-evidence"><strong>{stage==='supplement'?'계획·자기 설명이 아직 없습니다':stage===2 ? '수정 기록이 아직 없습니다' : '검증 결과가 아직 없습니다'}</strong><p>{data.hasModification ? '변경 수행은 확인되지만 실행 결과는 미수집 상태입니다.' : '진단 계획 이후 수정·검증 자료가 아직 없습니다.'}</p><button className="text-button" onClick={() => openEvidence('E05')}>{data.hasModification ? '학생의 다음 검증 계획 보기' : '학생의 다음 진단 계획 보기'}</button></div>}</div>
         {evidence && <article className="evidence-detail"><div className="section-heading"><h3 id="evidence-detail-title" tabIndex={-1}>{evidence.id} · {evidence.title}</h3><span className="count-label">{evidenceStages[evidence.stage]} · {evidenceKinds[evidenceKind(evidence)]}</span></div><p className="evidence-goal">학습 목표 · {evidence.goal}</p>
-          <section className="source-layer"><div className="layer-heading"><strong><Files size={16}/> 원자료</strong><small>{evidence.shared ? `${team}팀 공유 자료` : name} · {evidence.time}</small></div><pre>{evidence.raw}</pre><small>{evidence.source} · 시연용 기록</small></section>
-          <section className="student-layer"><div className="layer-heading"><strong><MessageCircle size={16}/> 학생 설명</strong><small>{name} 작성</small></div><p>{evidence.explanation}</p></section>
-          <section className="interpretation-layer"><div className="layer-heading"><strong><Activity size={16}/> AI 해석</strong><span className={`teach-badge ${check.status==='확인 완료'?'mint':'lavender'}`}>{check.status==='미확인'?'교수자 확인 전':check.status}</span></div><p>{evidence.interpretation}</p><small>{evidence.limitation}</small></section>
-          <section className="teacher-layer"><div className="layer-heading"><strong><ClipboardCheck size={16}/> 교수자 확인</strong><select aria-label="증거 확인 상태" value={check.status} onChange={e => {setChecks(prev=>({...prev,[checkKey]:{...check,status:e.target.value}}));setCheckNotice('')}}>{['미확인','확인 완료','추가 확인','해석 수정 필요'].map(s=><option key={s}>{s}</option>)}</select></div><label htmlFor="evidence-note">확인 메모</label><textarea id="evidence-note" rows={2} placeholder="자료와 학생 설명을 대조한 판단을 기록하세요." value={check.note} onChange={e => {setChecks(prev=>({...prev,[checkKey]:{...check,note:e.target.value}}));setCheckNotice('')}} /><div className="check-save"><small role="status">{checkNotice}</small><button className="button secondary" onClick={saveCheck}>확인 저장</button></div></section>
+          <section className="source-layer"><div className="layer-heading"><strong><Files size={16}/> 1. 실제 실행 기록 · 원자료</strong><small>{evidence.shared ? `${team}팀 공유 자료` : name} · {evidence.time} · 명령어·설정 변경·전후 통신 결과</small></div><pre>{evidence.raw}</pre><small>{evidence.source} · 시연용 기록</small></section>
+          <section className="student-layer"><div className="layer-heading"><strong><MessageCircle size={16}/> 2. 학생의 판단 기록 · 학생 설명</strong><small>{name} 작성 · 원인 가설과 수정 이유 설명</small></div><p>{evidence.explanation}</p></section>
+          <section className="interpretation-layer"><div className="layer-heading"><strong><Activity size={16}/> 3. AI 지원 정보 및 해석</strong><span className={`teach-badge ${check.status==='확인 완료'?'mint':'lavender'}`}>{check.status==='미확인'?'교수자 확인 전':check.status}</span></div><p>{evidence.interpretation}</p><small>AI 지원 총 {data.guidance.length}회 (최고 안내 수준 L{Math.max(1,...data.guidance.map(g=>g.level))}) · {evidence.limitation}</small></section>
+          <section className="teacher-layer"><div className="layer-heading"><strong><ClipboardCheck size={16}/> 4. 교수자의 확인 · 수행 인정 및 지도 메모</strong><select aria-label="증거 확인 상태" value={check.status} onChange={e => {setChecks(prev=>({...prev,[checkKey]:{...check,status:e.target.value}}));setCheckNotice('')}}>{['미확인','확인 완료','추가 확인','해석 수정 필요'].map(s=><option key={s}>{s}</option>)}</select></div><label htmlFor="evidence-note">확인 메모</label><textarea id="evidence-note" rows={2} placeholder="자료와 학생 설명을 대조한 판단을 기록하세요." value={check.note} onChange={e => {setChecks(prev=>({...prev,[checkKey]:{...check,note:e.target.value}}));setCheckNotice('')}} /><div className="check-save"><small role="status">{checkNotice}</small><button className="button secondary" onClick={saveCheck}>확인 저장</button></div></section>
         </article>}
       </div>
     </section>
@@ -99,6 +99,31 @@ export function EvidenceReview({ name, role, team, progress, task, title, criter
       <p className="evidence-caption">사건 순서대로 표시 · 간격은 실제 경과 시간과 다름</p></details>
       <p className="evidence-caption">개인 AI 채팅 원문은 공개하지 않습니다. 지원 유형과 후속 행동만 요약합니다.</p>
     </section>
-    </div></div><section className="panel assessment-feedback"><div className="section-heading"><SectionTitle icon={ClipboardCheck}>교수자 피드백</SectionTitle></div><div className="review-feedback-area"><div className="field feedback-field"><label htmlFor="instructor-feedback">잘한 점과 다음에 확인할 내용을 남겨 주세요.</label><textarea aria-label="교수자 피드백" id="instructor-feedback" rows={3} placeholder="잘한 점을 근거와 함께 설명하고 다음 확인 질문을 남겨 주세요." value={review.feedback} onChange={e=>onReview({feedback:e.target.value})} /></div><div className="review-save"><span>학생별로 이 브라우저에 저장됩니다.</span><button className="button primary" onClick={onSave}>평가 저장</button></div></div></section>
+    </div></div><section className="panel assessment-feedback"><div className="section-heading"><SectionTitle icon={ClipboardCheck}>교수자 피드백 및 다음 지도 노트 확정</SectionTitle><span className="teach-badge mint">교수자 최종 판단</span></div>
+      <div className="ai-guidance-note-proposal">
+        <div>
+          <strong>AI 추천 지도 노트 초안 (참고용)</strong>
+          <p>
+            {s.id === 'network'
+              ? '“라우팅 테이블을 활용한 오류 진단과 경로 수정 과정이 확인되었습니다. 다음 실습에서는 반환 경로를 포함한 양방향 통신 검증을 독립적으로 수행하도록 지도합니다.”'
+              : '“출처 유무에 따른 답변 보류 분기와 모의 검증 기록이 확인되었습니다. 다음 실습에서는 빈 입력과 서버 오류 등 예외 조건까지 독립적으로 검증하도록 지도합니다.”'}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="button secondary"
+          onClick={() =>
+            onReview({
+              feedback:
+                s.id === 'network'
+                  ? '라우팅 테이블을 활용한 오류 진단과 경로 수정 과정이 확인되었습니다. 다음 실습에서는 반환 경로를 포함한 양방향 통신 검증을 독립적으로 수행하도록 지도합니다.'
+                  : '출처 유무에 따른 답변 보류 분기와 모의 검증 기록이 확인되었습니다. 다음 실습에서는 빈 입력과 서버 오류 등 예외 조건까지 독립적으로 검증하도록 지도합니다.',
+            })
+          }
+        >
+          AI 추천 지도 노트 적용
+        </button>
+      </div>
+      <div className="review-feedback-area"><div className="field feedback-field"><label htmlFor="instructor-feedback">잘한 점과 다음에 확인할 내용을 남겨 주세요.</label><textarea aria-label="교수자 피드백" id="instructor-feedback" rows={3} placeholder="잘한 점을 근거와 함께 설명하고 다음 확인 질문을 남겨 주세요." value={review.feedback} onChange={e=>onReview({feedback:e.target.value})} /></div><div className="review-save"><span>학생별로 이 브라우저에 저장됩니다.</span><button className="button primary" onClick={onSave}>평가 저장</button></div></div></section>
   </>
 }

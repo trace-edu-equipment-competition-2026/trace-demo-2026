@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test'
-import {studentEvidence,criterionEstimate,isPerformedEvidence} from '../src/evidence'
-import {summarizeObservation} from '../src/observations'
+import {studentEvidence,criterionEstimate,isPerformedEvidence} from '../src/domain/evidence'
+import {summarizeObservation} from '../src/domain/observations'
 
 test('계획과 자기 설명은 실제 수정·검증 집계 및 추정 점수와 구분한다',()=>{
  const pending=studentEvidence('이서연','네트워크 설정·검증',2,false).evidence

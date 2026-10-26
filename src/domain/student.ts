@@ -24,6 +24,8 @@ export function guidanceReply(level:number,verified:boolean){return verified?'�
 // ponytail: 고정 규칙 기반 데모 분류. 서비스 전환 시 맥락 기반 AI 정책 판단으로 교체.
 export function selectGuidanceLevel(question:string,verified:boolean):number {
   if(verified)return 1
+  if(/정답|답이 뭔가요|답 알려/i.test(question))return 1
+  if(/어느 장비|라우팅 테이블/.test(question))return 2
   if(/명령|도구|어떻게 실행|ping|show ip/i.test(question))return 4
   if(/왜|개념|의미|원리|무슨|이해/.test(question))return 3
   if(/어디|어느|범위|비교|막|모르/.test(question))return 2

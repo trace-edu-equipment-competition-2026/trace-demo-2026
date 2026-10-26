@@ -1,16 +1,17 @@
-import {ChartColumn, TrendingUp, MessageCircle, Target, CircleHelp, Clock3} from 'lucide-react'
-import {scenarioEvidence} from './scenarios'
-import {summarizeObservation} from './observations'
-import {SectionTitle} from './SectionTitle'
-import { useWorkspace } from './WorkspaceContext'
+import {ChartColumn, TrendingUp, MessageCircle, Target, CircleHelp, Clock3, BookOpen, ArrowRight} from 'lucide-react'
+import {scenarioEvidence} from '@/domain/scenarios'
+import {summarizeObservation} from '@/domain/observations'
+import {SectionTitle} from '@/components/layout/SectionTitle'
+import { useWorkspace } from '@/components/layout/WorkspaceContext'
 import { useState } from 'react'
-import type { Assignment } from './assignment'
-import { demoStudents, guidanceOptions } from './assignment'
+import type { Assignment } from '@/domain/assignment'
+import { demoStudents, guidanceOptions } from '@/domain/assignment'
 import { ProgressRing } from './TeachingCharts'
-import { dashboardProjects, type Course, type TeachingTarget } from './course'
+import { dashboardProjects, demoLessonOverview, type Course, type TeachingTarget } from '@/domain/course'
 import type { TeachingView } from './TeachingWorkspace'
-export function CourseDashboard({course,assignment,decisions,onOpen}:{course:Course;assignment:Assignment;decisions:Record<string,string>;onOpen:(view:TeachingView,target:TeachingTarget)=>void}) {
+export function CourseDashboard({course,assignment,decisions,onOpen,onDesignAssignment}:{course:Course;assignment:Assignment;decisions:Record<string,string>;onOpen:(view:TeachingView,target:TeachingTarget)=>void;onDesignAssignment?:()=>void}) {
   const {scenario:s,data:workspaceData}=useWorkspace()
+  const lesson=demoLessonOverview[s.id]
   const teachingTeams=s.teams
   const [project,setProject]=useState('all'),[period,setPeriod]=useState('semester'),[scope,setScope]=useState('전체'),[subject,setSubject]=useState('1')
   const projects=dashboardProjects(assignment.title).map((p,i)=>({...p,short:i===0?assignment.title:s.projectNames[i]})), selected=projects.filter(p=>project==='all'||p.id===project)
@@ -33,6 +34,69 @@ export function CourseDashboard({course,assignment,decisions,onOpen}:{course:Cou
   const observation=observations[activeCompetence] || observations[0]
   const points=(values:number[])=>weeks.map((w,i)=>`${45+i*495/(weeks.length-1)},${190-values[w]*1.6}`).join(' ')
   return <div className="course-dashboard">
+    <section className="panel lesson-overview-panel" aria-label="담당 수업 및 이번 차시 현황">
+      <div className="lesson-overview-head">
+        <div>
+          <div className="lesson-badges">
+            <span className="teach-badge mint">{lesson.badge}</span>
+            <span className="teach-badge lavender">{lesson.gradeLabel}</span>
+          </div>
+          <h2 className="lesson-main-title">{lesson.lessonTitle}</h2>
+          <p className="lesson-context">{lesson.classContext}</p>
+        </div>
+        {onDesignAssignment && (
+          <button type="button" className="button primary" onClick={onDesignAssignment}>
+            <BookOpen size={17} />
+            이번 차시 과제 설계
+            <ArrowRight size={17} />
+          </button>
+        )}
+      </div>
+      <div className="lesson-metrics-grid">
+        <div>
+          <span>학습 진도</span>
+          <strong>{lesson.progressWeek}</strong>
+          <small>{lesson.progressDetail}</small>
+        </div>
+        <div>
+          <span>이수 차시</span>
+          <strong>{lesson.completedSessions}</strong>
+          <small>국가 교육과정 기준 시수</small>
+        </div>
+        <div>
+          <span>과제 방식</span>
+          <strong>{lesson.taskMode}</strong>
+          <small>교수자 설정에 따라 전환 가능</small>
+        </div>
+      </div>
+      <div className="lesson-sequence-grid">
+        <div className="lesson-goals-box">
+          <div>
+            <strong>선수학습</strong>
+            <p>{lesson.prerequisite}</p>
+          </div>
+          <div>
+            <strong>이번 목표</strong>
+            <p>{lesson.objective}</p>
+          </div>
+        </div>
+        <dl className="lesson-flow-table" aria-label="차시 연결 흐름">
+          <div>
+            <dt>이전 수업</dt>
+            <dd>{lesson.previousLesson}</dd>
+          </div>
+          <div className="current-session-row">
+            <dt>이번 수업</dt>
+            <dd>{lesson.currentLesson}</dd>
+          </div>
+          <div>
+            <dt>다음 수업</dt>
+            <dd>{lesson.nextLesson}</dd>
+          </div>
+        </dl>
+      </div>
+      <p className="micro-note">{lesson.disclaimer} ({lesson.curriculumBasis})</p>
+    </section>
     <div className="dashboard-top"><div><h2>{course.name}</h2><p>{course.semester} · 학생 24명 · 6팀</p></div><div className="dashboard-filters"><label>프로젝트<select aria-label="프로젝트" value={project} onChange={e=>setProject(e.target.value)}><option value="all">전체 프로젝트</option>{projects.map(p=><option key={p.id} value={p.id}>{p.short}</option>)}</select></label><label>기간<select aria-label="기간" value={period} onChange={e=>setPeriod(e.target.value)}><option value="semester">학기 전체</option><option value="recent">최근 4주</option></select></label></div></div>
     <p className="course-demo-note">가상 수업 데이터 · 현재 7주차 · 기간 필터는 추이와 AI 지원 통계에 적용됩니다.</p>
     <div className="dashboard-stats">{[['진행 중 과제',selected.length,'개','mint'],['전체 학생',24,'명','lavender'],['확인 필요',2,'팀','yellow'],['문제 상황 승인 대기',pending+livePending,'건','rose']].map(([label,value,unit,color])=><div className="panel dashboard-stat" key={label}><span>{label}</span><div><strong>{value}<small>{unit}</small></strong><span className={`stat-square ${color}`}><span className={`icon icon-${label==='전체 학생'?'users':label==='진행 중 과제'?'edit':'list'}`} /></span></div></div>)}<div className="panel dashboard-stat average-stat"><span>평균 과제 진행률</span><ProgressRing value={average} label="전체 과제 평균 진행률" /></div></div>
