@@ -1,160 +1,185 @@
-# TRACE 3분 학술발표 PPT 시연 구성 가이드 (생생한 GIF 애니메이션 · 확대 컷 · 발표 대본)
+# TRACE 7분 발표 및 3분 시연(HOW) PPT 슬라이드·GIF·대본 가이드
 
 > [!IMPORTANT]
-> **PPT 삽입용 고해상도 GIF 5종 및 AI 실시간 스트리밍 효과 적용 안내**
-> 1. **AI 답변 준비(1초 그라데이션 시머 + 점 애니메이션) 및 글자 스트리밍(`▍` 커서 타이핑) 적용**:
->    - 학생이 질문하면 즉시 답이 뜨는 대신, **약 1초간 `● ● ● 학습 맥락과 실습 상태를 확인하여 답변 준비 중...` 그라데이션 시머 애니메이션**이 표시된 뒤 **답변 글자가 한 글자씩 쭈르륵 스트리밍**되도록 구현했습니다 ([`StreamingAiText.tsx`](../src/features/student/StreamingAiText.tsx)).
-> 2. **PPT 자동 재생용 고해상도 GIF 5종 추가 ([`docs/screenshots/demo/`](./screenshots/demo/))**:
->    - PPT 슬라이드에 넣기만 하면 클릭 없이도 화면 전환·AI 타이핑·CLI 복구 과정이 생생하게 재생되는 **GIF 5종(`gif-01` ~ `gif-04`, `gif-02a`)**과 정지 확대 컷(**PNG 17종**)을 함께 수록했습니다.
-> 3. **왜 3분 시연에서 이 3단계 핵심 루프에 집중하는 것이 최적인가?**:
->    - 학술발표 PPT의 문제의식(`Ⅰ. WHY: 교수자의 3가지 어려움`)과 해결책(`Ⅱ. WHAT: ① 수업 맥락 연결 → ② 단계적 코칭 → ③ 학습 증거 재구성`)을 3분 안에 증명하려면, 부가 메뉴(문서함·팀 채팅·설정 등)를 나열하기보다 **① 교수자 설계·정책 설정 → ② 학생 실습·1:1 AI 단계적 코칭·CLI 복구 → ③ 교수자 4층위 학습 증거 확정**의 완결된 한 사이클을 선명하게 보여주는 것이 심사위원·청중 설득에 가장 효과적입니다.
-
-```mermaid
-flowchart LR
-  H1["슬라이드 A (0:00–0:45)\nHOW ① 교수자 수업·과제 설계\ngif-01-teacher-design.gif"] --> H2["슬라이드 B (0:45–1:30)\nHOW ② 학생 실습 + 1:1 AI 스트리밍\ngif-02 / gif-02a (클로즈업)"]
-  H2 --> H3["슬라이드 C (1:30–2:10)\nHOW ③ CLI 진단·복구·양방향 검증\ngif-03-student-cli-recovery.gif"]
-  H3 --> H4["슬라이드 D (2:10–2:55)\nHOW ④ 교수자 관찰·학습 증거 확정\ngif-04-teacher-evidence-review.gif"]
-```
+> **검토 피드백 반영 완료 (`dev` 브랜치)**
+> - **수정 1 (P0 수용 — 교수자 정답·학생 안내 분리)**: [`AssignmentProposalPanel.tsx`](../src/features/teacher/AssignmentProposalPanel.tsx)에서 학생에게 공개되는 과제 설명(`description` → 학생 `brief`)에는 증상과 수행 목표만 남기고, 잘못된 Next Hop(`10.0.0.9`)과 복구 정답(`10.0.0.1`)은 **`교수자 전용 주입 장애·정답 기준 (학생 비공개)`** 박스로 완전 분리했습니다.
+> - **수정 2 (P0 수용 — 물리 Link Up과 논리 End-to-End 상태 분리)**: [`PacketTracerTopology.tsx`](../src/features/student/PacketTracerTopology.tsx)에서 R1–R2 WAN 구간 물리 링크와 포트 LED는 **정상 연결(초록/청록 Link Up)** 으로 표시하고, 중앙 상단에 **`⚠ End-to-End 통신 실패 (논리 경로 점검)` → `✓ 통신 검증 성공 (양방향 정적 경로 정상)`** 논리 상태 배지를 분리했습니다.
+> - **수정 3 (P0 수용 — Cisco IOS 표준 복구 절차 통일)**: CLI 진단·복구 캡처([`04a-cli-diagnosis-crop.png`](./screenshots/demo/04a-cli-diagnosis-crop.png), [`gif-03-student-cli-recovery.gif`](./screenshots/demo/gif-03-student-cli-recovery.gif))에 `show running-config` → `show ip route` → `no ip route 192.168.10.0 255.255.255.0 10.0.0.9` → `ip route 192.168.10.0 255.255.255.0 10.0.0.1` → `show ip route` → 양방향 `ping` 순서를 모두 반영했습니다.
+> - **수정 4 (P1 수용 — 4단 학습 증거 2분할 및 팝오버 상단 잘림 제거)**: 세로로 긴 4단 학습 증거 카드를 16:9 슬라이드에 맞게 **학생 수행 기록([`06a1-evidence-student-crop.png`](./screenshots/demo/06a1-evidence-student-crop.png))** 과 **AI 요약·교수자 확인([`06a2-evidence-teacher-crop.png`](./screenshots/demo/06a2-evidence-teacher-crop.png))** 2장으로 분할하고, [`LabAiAssistant.tsx`](../src/features/student/LabAiAssistant.tsx) 팝오버 상단의 이전 대화 잘림 현상을 제거했습니다.
+> - **수정 5 (P0 부분 수용/조정 — 개인 실습 일관성 유지 및 투 트랙 E2E 보존)**: 네트워크 트랙 과제 제안 배지의 `팀 프로젝트` 표기를 **`개인 실습`** 으로 수정했습니다([`02a-triptych-crop.png`](./screenshots/demo/02a-triptych-crop.png)). 단, 논문 투 트랙 구조와 기존 E2E 회귀 테스트 호환을 위해 공통 네비게이션 명칭은 유지하되, PPT 시연에서는 **개인 실습 관찰 테이블([`05a-student-table-crop.png`](./screenshots/demo/05a-student-table-crop.png))** 만 확대 사용합니다.
+> - **수정 6 (P1 수용 — 7분 전체 발표 구조·매체 혼합·예상 Q&A 보강)**: 본 문서에 7분 전체 발표 타임라인, PNG 기본 + 핵심 GIF 2종 운용 전략, 교육과정–학습증거 대응표, 심사위원 예상 Q&A를 통합했습니다.
 
 ---
 
-## 슬라이드 A (`HOW ①`) — 교수자 수업 맥락 확인과 AI 과제·운영 정책 설계 (`0:00–0:45` · 45초)
+## 1. 7분 전체 발표 권장 구성 및 매체 운용 원칙
 
-### 1. PPT 삽입용 애니메이션 GIF (`gif-01-teacher-design.gif`)
-> 수업 대시보드 확인 → `이번 차시 과제 설계` 진입 → `NCS 네트워크구축 직무 능력단위` 체크 토글(실시간 제안 변경) → `AI 제안 과제 적용` → `AI 운영 방식(교수자 승인형)` 설정까지의 연속 동작입니다.
+### 1-1. 7분 발표 타임라인 (4분 연구 배경·모델 + 3분 HOW 시연)
 
-![HOW 1 교수자 과제 설계 및 AI 정책 설정 GIF](./screenshots/demo/gif-01-teacher-design.gif)
+| 순서 | 시간 | 발표 구간 | 핵심 메시지 | 권장 시각 자료 |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | `0:00–0:45` (45초) | **문제제기 (WHY)** | 학생은 AI에게 정답을 바로 요구하고, 교수자는 결과물만 보고 학생의 실제 이해 과정을 확인하기 어려움 | 기존 PPT 문제제기 슬라이드 |
+| **2** | `0:45–1:25` (40초) | **적용 맥락** | 2022 개정 교육과정(2026학년도 고2 적용) 직업계고 정보통신과 「컴퓨터 네트워크」 정적 라우팅 실습 | [`01a-lesson-card-crop.png`](./screenshots/demo/01a-lesson-card-crop.png) |
+| **3** | `1:25–2:10` (45초) | **TRACE 핵심 구조 (WHAT)** | ① 교육과정 기반 과제·정책 설계 → ② 정답 유보형 AI 코칭 → ③ CLI·토폴로지 실습 검증 → ④ 4단 학습 증거 평가 | TRACE 4단계 개념도 |
+| **4** | `2:10–2:50` (40초) | **시연 1 (`HOW ①`)** | **학습자 직면 문제**: 정답 요구 유혹 → 1초 생각 애니메이션 후 정답 대신 게이트웨이·라우팅 점검 순서 안내 | **[`gif-02a-ai-popover-closeup.gif`](./screenshots/demo/gif-02a-ai-popover-closeup.gif)** + [`03b`](./screenshots/demo/03b-ai-popover-q1-crop.png), [`03c`](./screenshots/demo/03c-ai-popover-q2-crop.png) |
+| **5** | `2:50–3:40` (50초) | **시연 2 (`HOW ②`)** | **학생 스스로 진단·복구**: `show running-config`·`show ip route` 비교 → `no ip route` 제거 → `10.0.0.1` 복구 → 양방향 Ping | **[`gif-03-student-cli-recovery.gif`](./screenshots/demo/gif-03-student-cli-recovery.gif)** + [`04a`](./screenshots/demo/04a-cli-diagnosis-crop.png), [`04b`](./screenshots/demo/04b-topology-fixed-crop.png) |
+| **6** | `3:40–4:25` (45초) | **시연 3 (`HOW ③`)** | **교수자 과제·AI 정책 설계**: 교육과정+NCS 연계 과제 생성(학생 안내와 교수자 정답 분리) 및 4단계 지원 정책 | [`02a-triptych-crop.png`](./screenshots/demo/02a-triptych-crop.png) + [`02b-ai-policy-crop.png`](./screenshots/demo/02b-ai-policy-crop.png) |
+| **7** | `4:25–5:05` (40초) | **시연 4 (`HOW ④`)** | **학습 증거 기반 평가**: 학생 수행 원자료·판단 근거(`①·②`)와 AI 지원 요약·교수자 확인(`③·④`)을 대조해 평가 완료 | [`06a1-evidence-student-crop.png`](./screenshots/demo/06a1-evidence-student-crop.png) + [`06a2-evidence-teacher-crop.png`](./screenshots/demo/06a2-evidence-teacher-crop.png) |
+| **8** | `5:05–6:00` (55초) | **차별성 요약** | 일반 생성형 AI(정답 즉시 제시) vs 일반 LMS(결과 파일 제출) vs **TRACE(교수자 정책 + AI 코칭 + 수행 증거 통합)** | 교육과정–학습증거 대응표 (3장 참고) |
+| **9** | `6:00–7:00` (60초) | **구현 범위·확장성** | 규칙 기반 프로토타입의 검증 범위와 실제 LLM·실습 장비 로그·타 실습 교과 확장 방향 | 결론 슬라이드 |
 
-### 2. PPT 클릭 애니메이션용 정지 확대 컷 (`클릭 ① → ② → ③`)
+### 1-2. PPT 매체 혼합 원칙 (PNG 기본 + 핵심 GIF 2종)
 
-#### [클릭 ①] 가상 수업 맥락과 차시 학습목표 (`01a-lesson-card-crop.png`)
-![차시 개요 및 학습목표 확대](./screenshots/demo/01a-lesson-card-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **수업 맥락**: 직업계고 정보통신과 2학년 · `컴퓨터 네트워크` · **8주차(15/24차시) · 개인 실습**
-  - **차시 연계**: 이전 수업(`라우터의 역할과 정적 라우팅`) → **이번 수업(`라우팅 장애 진단과 복구`)** → 다음 수업(`장애 원인 설명과 재발 방지`)
-
-#### [클릭 ②] 교육과정·선택적 NCS 연계 및 AI 과제 제안 3단 구조 (`02a-triptych-crop.png`)
-![교육과정·NCS·AI 과제 제안 3단 카드 확대](./screenshots/demo/02a-triptych-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **① 교육적 요구사항**: 학생이 직접 수행할 4단계 행동(`장비 상태 확인 → 라우팅 테이블 비교 → 설정 수정 → 양방향 검증 및 이유 기록`) 명시
-  - **② 근거자료 연결**: **2022 개정 교육과정 성취기준**을 기본으로 하고, **NCS 네트워크구축 직무 능력단위는 체크박스로 선택적 연계**
-  - **③ AI의 과제 제안**: 조건에 맞춰 생성된 **‘본사–지사 네트워크 통신 장애 복구’** 시나리오를 교수자가 검토 후 적용
-
-#### [클릭 ③] 교수자 승인형 AI 운영 정책과 가이던스 범위 (`02b-ai-policy-crop.png`)
-![AI 운영 방식 및 가이던스 정책 확대](./screenshots/demo/02b-ai-policy-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **AI 운영 방식(`교수자 승인형 · 개입 보통`)**: 학생이 정답이나 명령어를 바로 요구할 때 정답 직접 제공을 제한하고 **`확인 질문` → `탐색 방향 안내` → `개념 힌트`** 순으로 유도하도록 제어
-
-### 3. 발표 대본 (`0:00–0:45`)
-> “먼저 **HOW ① 교수자 수업 및 과제 설계** 단계입니다.  
-> *(클릭 ①)* 시연 수업은 직업계고 정보통신과 2학년 컴퓨터 네트워크 과목의 8주차, 15차시 개인 실습인 **‘정적 라우팅 장애의 원인 분석과 복구’**입니다. 직전 차시에서 배운 정적 라우팅 개념을 바탕으로, 학생이 직접 통신 장애 증거를 수집하고 라우팅 테이블을 분석해 복구·검증하는 차시입니다.  
-> *(클릭 ②)* 과제 설계 화면에서는 2022 개정 교육과정 성취기준과 교수자 교안을 기본 근거로 연결하고, **NCS 네트워크구축 능력단위는 수업 성격에 따라 선택적으로 연계**할 수 있습니다. 우측에서 AI가 이 조건들을 반영해 ‘본사–지사 통신 장애 복구’ 과제를 제안하면 교수자가 검토 후 적용합니다.  
-> *(클릭 ③)* 이어서 AI 운영 방식을 **‘교수자 승인형’**으로 설정하여, AI가 정답 명령어를 바로 알려주지 않고 확인 질문과 탐색 범위 중심으로 지원하도록 기준을 확정합니다.”
+> [!TIP]
+> **발표 시선 분산을 막는 매체 조합**
+> - 모든 슬라이드에 GIF를 넣으면 심사위원이 작은 글씨를 읽지 못합니다.
+> - **기본 설명용은 고해상도 부분 확대 PNG**를 사용하고, **시간에 따른 상호작용이 핵심인 2개 장면(`HOW ①` AI 코칭 전환, `HOW ②` CLI 복구·검증)** 에만 GIF를 배치하는 구성이 가장 효과적입니다.
 
 ---
 
-## 슬라이드 B (`HOW ②`) — 학생 실습 토폴로지와 1:1 AI 단계적 지원 (`0:45–1:30` · 45초)
+## 2. 3분 시연 구간 (`HOW ① ~ ④`) 슬라이드별 구성 및 대본
 
-### 1. PPT 삽입용 애니메이션 GIF (전체 화면 + 1:1 AI 팝오버 클로즈업)
-> 학생이 질문할 때 **약 1초간 `학습 맥락과 실습 상태를 확인하여 답변 준비 중...` 그라데이션 시머 및 점(`...`) 애니메이션**이 동작한 뒤, **답변이 한 글자씩 쭈르륵 스트리밍(`▍`)**되는 장면이 담겨 있습니다.
+### 슬라이드 1 (`HOW ①` · 40초): 학습자 직면 문제 — 정답 요구를 스스로 탐색으로 전환
 
-| ① 실습 작업실 + 우측 하단 1:1 AI 전체 (`gif-02-student-ai-coaching.gif`) | ② 우측 하단 1:1 AI 팝오버 단독 클로즈업 (`gif-02a-ai-popover-closeup.gif`) |
-| :---: | :---: |
-| ![학생 실습 및 1:1 AI 전체 GIF](./screenshots/demo/gif-02-student-ai-coaching.gif) | ![1:1 AI 팝오버 단독 클로즈업 GIF](./screenshots/demo/gif-02a-ai-popover-closeup.gif) |
+#### ① 권장 배치 (핵심 GIF 1종 + 정적 확대 컷 3종)
+````carousel
+![실습 화면 우측 하단 1:1 개인 AI 지원 클로즈업 GIF](./screenshots/demo/gif-02a-ai-popover-closeup.gif)
+<!-- slide -->
+![AI 답변 준비 중 상태 (1초 생각 애니메이션)](./screenshots/demo/03b0-ai-thinking-crop.png)
+<!-- slide -->
+![1차 질문: 정답 대신 게이트웨이·라우팅 점검 순서 안내](./screenshots/demo/03b-ai-popover-q1-crop.png)
+<!-- slide -->
+![2차 질문: R2 반환 경로와 Next Hop 도달 가능성 확인 질문](./screenshots/demo/03c-ai-popover-q2-crop.png)
+````
 
-### 2. PPT 클릭 애니메이션용 정지 확대 컷 (`클릭 ① → ② → ③`)
+#### ② 보조 이미지 (물리 Link Up vs 논리 End-to-End 통신 실패 토폴로지)
+![물리 링크 정상 · 논리 End-to-End 통신 실패 토폴로지](./screenshots/demo/03a-topology-fault-crop.png)
 
-#### [클릭 ①] Cisco Packet Tracer 스타일 본사–지사 장애 토폴로지 (`03a-topology-fault-crop.png`)
-![초기 장애 상태 Packet Tracer 토폴로지 확대](./screenshots/demo/03a-topology-fault-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **실습 환경**: 본사(`PC-A` · `SW1` · `R1`, `192.168.10.0/24`)와 지사(`R2` · `SW2` · `PC-B`, `192.168.20.0/24`)가 WAN 직렬 구간(`10.0.0.0/30`)으로 연결된 구조
-  - **초기 상태**: 정답 경로를 미리 노출하지 않고, 지사 라우터(`R2`) WAN 인터페이스의 주황색 경고 표시만으로 장애 상황을 제시
-
-#### [클릭 ②] 1:1 AI 질문 1 — 답변 준비 애니메이션 후 정답 대신 ‘확인 질문’ 제시 (`03b0-ai-thinking-crop.png` → `03b-ai-popover-q1-crop.png`)
-| 답변 준비 중 그라데이션 시머 (`03b0-ai-thinking-crop.png`) | 확인 질문 스트리밍 완료 (`03b-ai-popover-q1-crop.png`) |
-| :---: | :---: |
-| ![AI 답변 준비 중 그라데이션 시머](./screenshots/demo/03b0-ai-thinking-crop.png) | ![1:1 AI 지원 질문 1 정답 요청 제어 확대](./screenshots/demo/03b-ai-popover-q1-crop.png) |
-
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **학생 질문**: *“통신이 안 되는데 정답과 설정 명령어 알려주세요.”*
-  - **TRACE AI 응답 (정답 제한 · 확인 질문)**: 교수자 정책에 따라 정답 명령어를 주는 대신, **PC-A에서 기본 게이트웨이(`192.168.10.1`)까지 통신이 되는지 먼저 확인**하도록 유도
-
-#### [클릭 ③] 1:1 AI 질문 2 — 진단 결과 확인 후 ‘탐색 범위’ 안내 (`03c-ai-popover-q2-crop.png`)
-![1:1 AI 지원 질문 2 탐색 범위 안내 확대](./screenshots/demo/03c-ai-popover-q2-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **학생 질문**: 게이트웨이 Ping 성공 및 지사 단말 Ping 실패를 직접 확인한 뒤, *“R1과 R2 중 어느 장비의 라우팅 테이블을 먼저 확인할까요?”*로 질문이 구체화됨
-  - **TRACE AI 응답 (탐색 범위 안내)**: 왕복 통신을 위해 **R1의 전달 경로(`192.168.20.0/24`)와 R2의 반환 경로(`192.168.10.0/24`) 및 Next Hop이 실제 WAN 대역(`10.0.0.0/30`)과 일치하는지 비교**하도록 안내
-
-### 3. 발표 대본 (`0:45–1:30`)
-> “다음은 **HOW ② 학생 실습과 1:1 AI 단계적 지원**입니다.  
-> *(클릭 ①)* 학생의 실습 화면 상단에는 Cisco Packet Tracer 형태의 본사–지사 네트워크 토폴로지가 제시되며, 초기에는 오류 원인을 숨긴 채 통신 장애 상황만 부여합니다.  
-> *(클릭 ②)* 학생이 화면 우측 하단의 **1:1 개인 AI 지원 창**을 열어 **‘정답과 설정 명령어를 알려달라’**고 요청하더라도, AI는 현재 학습 맥락과 실습 상태를 확인한 뒤 정답을 바로 주지 않고 기본 게이트웨이까지 응답이 오는지 먼저 확인하도록 질문합니다.  
-> *(클릭 ③)* 학생이 게이트웨이 응답을 직접 확인한 뒤 **‘어느 라우터의 라우팅 테이블을 먼저 볼지’** 다시 질문하면, AI는 왕복 통신의 요청 경로와 반환 경로를 비교하도록 탐색 범위를 좁혀 줍니다.”
+#### ③ 발표 대본 (40초)
+> "먼저 학생이 실습 중 마주하는 장면입니다. 본사 `PC-A`에서 지사 `PC-B`로 통신이 되지 않자, 학생은 우측 하단 **1:1 개인 AI 지원** 창을 열어 *'통신이 안 되는데 정답 명령어를 바로 알려달라'* 고 요청합니다.
+> 일반 생성형 AI라면 즉시 `ip route` 정답을 출력하겠지만, TRACE의 AI는 잠시 학습 맥락을 확인한 뒤 **정답 명령어를 유보**하고 기본 게이트웨이 Ping과 라우팅 테이블 중 무엇부터 확인해야 할지 탐색 순서를 먼저 질문합니다.
+> 이어서 학생이 게이트웨이까지는 응답이 오지만 지사 PC가 실패한다고 답하면, AI는 **반대 방향인 R2의 반환 경로와 Next Hop 도달 가능성**을 스스로 점검하도록 유도합니다."
 
 ---
 
-## 슬라이드 C (`HOW ③`) — CLI 원인 진단 · 정적 경로 복구 · 양방향 검증 및 판단 기록 (`1:30–2:10` · 40초)
+### 슬라이드 2 (`HOW ②` · 50초): 학생의 판단·복구·검증 — CLI 원자료와 논리 통신 복구
 
-### 1. PPT 삽입용 애니메이션 GIF (`gif-03-student-cli-recovery.gif`)
-> `R2` 선택 → `show ip route`로 `10.0.0.9 [RIB 미설치]` 원인 확인 → `ip route 192.168.10.0 255.255.255.0 10.0.0.1` 타이핑·실행 → **상단 토폴로지의 R2 WAN 포트가 녹색(정상)으로 전환** → `PC-A`·`PC-B` 양방향 Ping 검증 및 판단 근거 공유까지의 연속 과정입니다.
+#### ① 권장 배치 (핵심 GIF 1종 + 정적 확대 컷 3종)
+````carousel
+![학생 CLI 진단 → no ip route 제거 → 10.0.0.1 복구 → 양방향 Ping 검증 GIF](./screenshots/demo/gif-03-student-cli-recovery.gif)
+<!-- slide -->
+![CLI 진단·제거(no ip route)·복구·양방향 Ping 로그 확대](./screenshots/demo/04a-cli-diagnosis-crop.png)
+<!-- slide -->
+![복구 완료 후 논리 End-to-End 통신 검증 성공 토폴로지](./screenshots/demo/04b-topology-fixed-crop.png)
+<!-- slide -->
+![학생의 판단 근거 서술 및 학습 증거 기록](./screenshots/demo/04c-student-reflection-crop.png)
+````
 
-![HOW 3 학생 CLI 진단 및 정적 경로 복구 GIF](./screenshots/demo/gif-03-student-cli-recovery.gif)
-
-### 2. PPT 클릭 애니메이션용 정지 확대 컷 (`클릭 ① → ② → ③`)
-
-#### [클릭 ①] R2 라우팅 테이블(RIB) 미설치 원인 확인 및 정적 경로 수정·양방향 Ping (`04a-cli-diagnosis-crop.png`)
-![CLI 진단 및 정적 경로 수정 로그 확대](./screenshots/demo/04a-cli-diagnosis-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **원인 진단 (`R2> show ip route`)**: `running-config`의 정적 경로 Next Hop이 `10.0.0.0/30` 대역 밖인 **`10.0.0.9`(도달 불가 주소)로 잘못 설정되어 실제 라우팅 테이블(RIB)에 미설치**된 상태임을 확인
-  - **경로 복구 및 검증**: `ip route 192.168.10.0 255.255.255.0 10.0.0.1` 명령으로 올바른 Next Hop(`R1`의 `10.0.0.1`)을 설정하고, `PC-A → PC-B` 및 `PC-B → PC-A` 양방향 Ping(`4/4 · 0% loss`)을 모두 실행
-
-#### [클릭 ②] 토폴로지 경로 복구 완료 상태 (`04b-topology-fixed-crop.png`)
-![경로 복구 완료 후 토폴로지 확대](./screenshots/demo/04b-topology-fixed-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **시각적 피드백**: R2의 정적 경로가 정상 설치되면 토폴로지의 R2 WAN 포트 표시등이 **녹색(정상)**으로 전환되고, 하단 검증 배지 3개(`수정 전 실패 비교`, `반대 방향 확인`, `양방향 통신 복구`)가 모두 완료 처리됨
-
-#### [클릭 ③] 학생의 판단 근거와 수정 이유 직접 기록 (`04c-student-reflection-crop.png`)
-![학생 수행자료 및 판단 근거 기록 확대](./screenshots/demo/04c-student-reflection-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **과정 증거 생성**: 단순 명령어 실행에 그치지 않고, **“왜 10.0.0.9가 오류였으며 어떻게 복구·검증했는지”** 학생이 자신의 언어로 서술해 제출함으로써 **실행 원자료 + 학생 설명**이 함께 보존됨
-
-### 3. 발표 대본 (`1:30–2:10`)
-> “이어서 **HOW ③ 학생의 CLI 진단과 복구, 판단 근거 기록** 과정입니다.  
-> *(클릭 ①)* 학생은 지사 라우터 R2에서 `show ip route`를 실행해, 본사 대역으로 돌아가는 정적 경로의 Next Hop이 도달 불가능한 `10.0.0.9`로 설정되어 실제 라우팅 테이블(RIB)에 설치되지 않은 원인을 찾아냅니다. 이를 R1의 직렬 인터페이스 주소인 `10.0.0.1`로 수정한 뒤 PC-A와 PC-B 양방향 Ping을 모두 검증합니다.  
-> *(클릭 ②)* 경로가 복구되면 상단 토폴로지의 모든 링크가 녹색 정상 상태로 전환됩니다.  
-> *(클릭 ③)* 마지막으로 학생은 하단 기록란에 자신이 어떤 근거로 원인을 진단하고 수정했는지 직접 작성해 제출합니다.”
+#### ② 발표 대본 (50초)
+> "AI의 안내에 따라 학생은 스스로 CLI 진단을 수행합니다.
+> `R2`에서 `show running-config`와 `show ip route`를 비교해 본 결과, 물리적인 WAN 링크는 정상이지만 정적 경로의 Next Hop이 `10.0.0.0/30` 대역 밖인 `10.0.0.9`로 잘못 설정되어 활성 라우팅 테이블(RIB)에 설치되지 않은 원인을 찾아냅니다.
+> 학생은 실제 Cisco IOS 절차에 따라 `no ip route 192.168.10.0 255.255.255.0 10.0.0.9`로 잘못된 경로를 제거하고, `10.0.0.1`로 정적 경로를 다시 설정한 뒤 `show ip route`와 `PC-A`, `PC-B` 양방향 Ping 성공을 검증합니다.
+> 마지막으로 왜 그렇게 판단했는지 자신의 언어로 기록하면, 실행 로그와 판단 근거가 하나의 학습 증거로 저장됩니다."
 
 ---
 
-## 슬라이드 D (`HOW ④`) — 교수자 진행 관찰과 4층위 학습 증거(Learning Evidence) 확정 (`2:10–2:55` · 45초)
+### 슬라이드 3 (`HOW ③` · 45초): 교수자의 과제·AI 정책 설계 — 왜 AI가 정답을 멈추었는가
 
-### 1. PPT 삽입용 애니메이션 GIF (`gif-04-teacher-evidence-review.gif`)
-> `팀별 모니터링`에서 학생별 개입 신호 확인 → 학생 A `학습 증거 확인 →` 진입 → `양방향 복구 검증` 선택 후 **4층위 학습 증거(CLI 원자료·학생 설명·AI 해석·교수자 `확인 완료` 저장)** → `AI 추천 지도 노트 적용` 및 `평가 저장`까지의 연속 과정입니다.
+#### ① 권장 배치 (정적 확대 컷 3종 — 슬라이드 기본 / 보조 GIF 1종)
+````carousel
+![2026학년도 2학기 고2 컴퓨터 네트워크 8주차 수업 카드](./screenshots/demo/01a-lesson-card-crop.png)
+<!-- slide -->
+![교육과정 + NCS 연계 AI 과제 제안 (학생 안내와 교수자 전용 정답 분리 · 개인 실습)](./screenshots/demo/02a-triptych-crop.png)
+<!-- slide -->
+![교수자 AI 운영 방식 및 4단계 지원 수준(확인 질문~도구 활용 힌트) 설정](./screenshots/demo/02b-ai-policy-crop.png)
+````
 
-![HOW 4 교수자 모니터링 및 4층위 학습 증거 확정 GIF](./screenshots/demo/gif-04-teacher-evidence-review.gif)
+#### ② 발표 대본 (45초)
+> "그렇다면 앞선 장면에서 AI는 왜 정답을 바로 주지 않았을까요? 교수자가 수업을 시작할 때 설계한 **과제 구조와 AI 운영 정책** 때문입니다.
+> 본 시연은 2022 개정 교육과정이 적용되는 고등학교 2학년 「컴퓨터 네트워크」 8주차 개인 실습 수업으로 설정했습니다.
+> 교수자가 교육과정 성취기준과 NCS 직무 요소를 선택하면 AI가 실습 과제를 제안하는데, 이때 **학생에게 공개되는 과제 안내문**에는 장애 증상과 검증 목표만 제시되고, 주입한 오류(`10.0.0.9`)와 복구 정답(`10.0.0.1`)은 **교수자 전용 기준**으로 분리됩니다.
+> 또한 교수자가 AI 지원 범위를 확인 질문과 탐색 힌트 중심으로 설정했기 때문에, 학생 화면의 AI가 정답 제시를 멈추고 코칭을 수행한 것입니다."
 
-### 2. PPT 클릭 애니메이션용 정지 확대 컷 (`클릭 ① → ② → ③`)
+---
 
-#### [클릭 ①] 학생별 진행 상태와 교수자 개입 신호 표 (`05a-student-table-crop.png`)
-![학생별 진행 상태와 개입 신호 표 확대](./screenshots/demo/05a-student-table-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **실시간 수업 관찰**: 1인 실습 중인 학생들의 상태를 **`검증 완료(정상)`**, **`원인 탐색 중(진행 중)`**, **`AI 힌트 이용 후 수행(확인 필요)`**, **`수정 후 검증 누락(교수자 개입 권장)`**으로 구분하여 누구에게 개입이 필요한지 즉시 파악
+### 슬라이드 4 (`HOW ④` · 40초): 학습 증거 기반 평가 — 4단 학습 증거 2분할 확인
 
-#### [클릭 ②] 4층위 학습 증거(원자료 · 학생 설명 · AI 해석 · 교수자 확인) 분리 검토 (`06a-evidence-4layers-crop.png`)
-![4층위 학습 증거 상세 패널 확대](./screenshots/demo/06a-evidence-4layers-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **1. 실제 실행 기록(원자료)**: 학생이 콘솔에서 실행한 Ping·`show ip route`·`ip route` 로그 원문과 검증 통과 여부
-  - **2. 학생의 판단 기록**: 학생이 직접 작성한 원인 가설과 수정 이유
-  - **3. AI 지원 정보 및 해석**: AI 지원 횟수·수준 요약 (자기 보고만으로 이해도를 확정하지 않도록 분리 표시)
-  - **4. 교수자의 확인**: 교수자가 직접 **`확인 완료`**를 선택하고 확인 메모를 기록
+#### ① 권장 배치 (16:9 가독성을 위해 분할한 정적 확대 컷 3종)
+````carousel
+![1인 실습 관찰 테이블: 학생별 진행 상태·AI 개입 신호 요약](./screenshots/demo/05a-student-table-crop.png)
+<!-- slide -->
+![학습 증거 상단 (① 실제 실행 기록 원자료 + ② 학생의 판단 기록)](./screenshots/demo/06a1-evidence-student-crop.png)
+<!-- slide -->
+![학습 증거 하단 (③ AI 지원 정보 요약 + ④ 교수자 수행 인정·지도 메모)](./screenshots/demo/06a2-evidence-teacher-crop.png)
+````
 
-#### [클릭 ③] AI 추천 지도 노트 검토 및 교수자 최종 평가 확정 (`06b-guidance-note-crop.png`)
-![교수자 피드백 및 다음 지도 노트 확정 확대](./screenshots/demo/06b-guidance-note-crop.png)
-- **무엇을 보여주는 영역인가 (PPT 콜아웃 문구)**:
-  - **교수자 중심 평가 완결**: AI가 일방적으로 점수를 매기는 대신 **‘AI 추천 지도 노트 초안’**을 제안하고, 교수자가 이를 검토·반영해 **다음 차시 지도 계획으로 최종 저장**
+#### ② 발표 대본 (40초)
+> "마지막으로 교수자의 학습 증거 평가 화면입니다.
+> 교수자는 개별 학생 관찰 표에서 각 학생이 어느 단계에 머물러 있는지와 AI 지원 요약 신호를 한눈에 파악합니다.
+> 유송민 학생의 학습 증거를 열면, 상단에는 **① 학생이 실제로 실행한 CLI 명령·출력 원자료**와 **② 학생 자신이 작성한 판단 근거**가 제시되고, 하단에는 **③ AI가 어떤 힌트 수준으로 개입했는지 요약 정보**와 **④ 교수자의 최종 수행 인정 및 지도 메모**가 나란히 놓입니다.
+> 즉, 교수자는 단순 결과 파일이 아니라 *'학생이 어떤 AI 지원을 받아 스스로 문제를 해결했는가'* 를 검증하여 평가를 마무리합니다."
 
-### 3. 발표 대본 (`2:10–2:55`)
-> “마지막으로 **HOW ④ 교수자의 진행 관찰과 학습 증거 확정** 단계입니다.  
-> *(클릭 ①)* 교수자는 모니터링 화면에서 검증을 완료한 학생부터, AI 힌트 후 설명 확인이 필요한 학생, 수정 후 양방향 검증이 누락되어 교수자 개입이 필요한 학생까지 실시간 신호로 파악합니다.  
-> *(클릭 ②)* 학생의 학습 증거 화면으로 이동하면, **① 실제 CLI 실행 원자료**, **② 학생의 판단 설명**, **③ AI 지원 이력**이 명확히 분리되어 제시되며, 교수자가 이를 대조해 **④ 확인 완료 여부**를 직접 결정합니다.  
-> *(클릭 ③)* 끝으로 하단에서 AI가 제안한 지도 노트 초안을 검토하여 다음 차시 지도로 확정합니다. 이처럼 TRACE는 교수자의 수업 설계 의도가 AI 코칭과 학생 수행을 거쳐 다시 교수자의 증거 기반 평가로 연결되는 전 과정을 지원합니다.”
+---
+
+## 3. 교육과정 목표 ↔ 학생 수행 증거 ↔ 교수자 확인 대응표
+
+PPT의 시연 요약 슬라이드나 발표 후반부(차별성 정리)에 바로 넣을 수 있는 대응표입니다.
+
+| 교육과정·수업 설계 목표 (교수자 설정) | 학생 수행 증거 (원자료 + 판단 기록) | AI 지원·해석 요약 | 교수자 최종 확인 기준 |
+| :--- | :--- | :--- | :--- |
+| **장애 구간 분리**<br>End-to-End 통신 실패 시 LAN 구간과 원격 구간을 구분 | `PC-A> ping 192.168.10.1` (성공)<br>`PC-A> ping 192.168.20.10` (100% loss) | **확인 질문 / 탐색 방향 안내**<br>정답 명령어 유보, 게이트웨이·라우팅 테이블 점검 순서 유도 | 기본 게이트웨이 정상 여부를 먼저 확인해 장애 범위를 좁혔는가 |
+| **라우팅 설정과 RIB 비교 분석**<br>설정된 정적 경로와 실제 활성 경로의 차이 파악 | `R2> show running-config`<br>`R2> show ip route` (`10.0.0.9` 도달 불가로 RIB 미설치 확인) | **개념 힌트**<br>왕복 통신 조건 및 R2 반환 경로의 Next Hop 도달 가능성 질문 | `running-config`의 오설정 경로가 왜 `show ip route`(RIB)에 올라오지 않는지 설명했는가 |
+| **정적 경로 수정 및 양방향 검증**<br>오류 경로 제거 후 올바른 Next Hop 설정·검증 | `R2> no ip route ... 10.0.0.9`<br>`R2> ip route ... 10.0.0.1`<br>`PC-A`·`PC-B` 양방향 `ping` (0% loss) | **도구 활용 힌트**<br>수정 전후 명령 비교 및 양방향 검증 체크리스트 연동 | `no ip route` 제거 후 `10.0.0.1` 복구 및 양방향 Ping 성공을 모두 입증했는가 |
+
+---
+
+## 4. 프로토타입 구현 범위 및 심사위원 예상 Q&A
+
+### 4-1. 정직한 구현 범위 안내 (발표 시 권장 표현)
+- 본 데모는 **교수자의 AI 정책 설정 → 학생 맞춤형 코칭 → CLI 실습 검증 → 4단 학습 증거 수집·평가**로 이어지는 교육모델의 작동 구조를 검증하기 위해 제작한 **규칙 기반(Rule-based) 인터랙티브 프로토타입**입니다.
+- 시연 중 제시되는 AI 응답과 CLI 출력은 직업계고 네트워크 실습 시나리오에 맞춰 구조화된 시뮬레이션 응답이며, 향후 실제 LLM API 및 실습 장비(Packet Tracer / GNS3 등) 로그 수집 파이프라인으로 확장할 수 있도록 도메인 계층(`src/domain/`)을 분리해 설계했습니다.
+
+### 4-2. 심사위원 예상 질문 및 답변 가이드
+
+| 예상 질문 | 핵심 답변 요약 |
+| :--- | :--- |
+| **Q1. 일반 ChatGPT를 쓰는 것과 무엇이 다른가요?** | 일반 챗봇은 학생이 물으면 정답 명령어(`ip route ...`)를 바로 출력해 실습 목적을 무너뜨립니다. TRACE는 **교수자가 설정한 차시 목표와 지원 단계 정책**에 따라 정답을 유보하고, 학생의 현재 CLI 실습 상태에 맞춘 확인 질문과 탐색 힌트를 제공합니다. |
+| **Q2. 교수자가 학생의 AI 대화 전문을 일일이 다 읽어야 하나요?** | 아닙니다. 학생에게는 평가 부담을 주지 않도록 지원 단계 라벨(`L1~L4`)을 숨기되, 교수자에게는 대화 원문 전체 대신 **지원 수준 분포와 핵심 개입 요약**을 실행 로그·학생 설명과 함께 4단 카드로 압축해 보여줍니다. |
+| **Q3. 왜 물리 링크는 초록색인데 통신 실패라고 표시되나요?** | 실제 라우팅 장애 교육에서 가장 중요한 구분이 **물리 계층(Link Up)과 네트워크 계층(라우팅 테이블 미설치)의 분리**이기 때문입니다. 케이블과 인터페이스는 정상(초록 LED)이지만 잘못된 Next Hop(`10.0.0.9`) 때문에 논리 경로가 끊긴 상황을 정확히 표현했습니다. |
+| **Q4. 네트워크 외에 다른 교과에도 적용 가능한가요?** | 네. 코드 구조상 교과 데이터·시뮬레이션(`src/domain/`)과 학습 워크스페이스·증거 구조(`src/features/`)를 분리했습니다. 동일한 4단 학습 증거 구조(실행 원자료 + 학생 판단 + AI 지원 요약 + 교수자 확인)를 프로그래밍, 과학 실험, IoT 융합 실습에 그대로 적용할 수 있습니다. |
+
+---
+
+## 5. 전체 이미지(PNG) 및 애니메이션(GIF) 파일 목록
+
+모든 파일은 [`docs/screenshots/demo/`](./screenshots/demo/)에 저장되어 있습니다.
+
+### 5-1. 애니메이션 GIF (5종 — 핵심 2종 권장)
+| 구분 | 파일 경로 | 설명 |
+| :--- | :--- | :--- |
+| **핵심 권장 1** | [`./screenshots/demo/gif-02a-ai-popover-closeup.gif`](./screenshots/demo/gif-02a-ai-popover-closeup.gif) | 우측 하단 1:1 AI 팝오버 클로즈업 (`답변 준비 중...` 1초 애니메이션 + 스트리밍 코칭) |
+| **핵심 권장 2** | [`./screenshots/demo/gif-03-student-cli-recovery.gif`](./screenshots/demo/gif-03-student-cli-recovery.gif) | `show running-config` → `show ip route` → `no ip route` → `ip route` → 양방향 Ping 복구 |
+| 보조 | [`./screenshots/demo/gif-02-student-ai-coaching.gif`](./screenshots/demo/gif-02-student-ai-coaching.gif) | 학생 실습 전체 화면에서 1:1 AI 팝오버 열기 및 코칭 상호작용 |
+| 보조 | [`./screenshots/demo/gif-01-teacher-setup.gif`](./screenshots/demo/gif-01-teacher-setup.gif) | 교수자 대시보드 → 과제 설계 및 AI 운영 정책 설정 흐름 |
+| 보조 | [`./screenshots/demo/gif-04-teacher-evidence-review.gif`](./screenshots/demo/gif-04-teacher-evidence-review.gif) | 교수자 관찰 테이블 → 4단 학습 증거 확인 및 지도 노트 작성 |
+
+### 5-2. 고해상도 정적 PNG (18종)
+| 구간 | 파일 경로 | 설명 |
+| :--- | :--- | :--- |
+| **`HOW ①`** | [`./screenshots/demo/03a-topology-fault-crop.png`](./screenshots/demo/03a-topology-fault-crop.png) | 물리 Link Up + 논리 `⚠ End-to-End 통신 실패` 배지가 분리된 초기 토폴로지 |
+| **`HOW ①`** | [`./screenshots/demo/03b0-ai-thinking-crop.png`](./screenshots/demo/03b0-ai-thinking-crop.png) | AI `답변 준비 중...` 생각 애니메이션 캡처 |
+| **`HOW ①`** | [`./screenshots/demo/03b-ai-popover-q1-crop.png`](./screenshots/demo/03b-ai-popover-q1-crop.png) | 1차 질문 응답 (상단 잘림 없음 · 정답 유보 및 탐색 순서 안내) |
+| **`HOW ①`** | [`./screenshots/demo/03c-ai-popover-q2-crop.png`](./screenshots/demo/03c-ai-popover-q2-crop.png) | 2차 질문 응답 (상단 잘림 없음 · R2 반환 경로 점검 유도) |
+| **`HOW ①`** | [`./screenshots/demo/03-student-lab-full.png`](./screenshots/demo/03-student-lab-full.png) | 학생 실습실 + 우측 하단 1:1 AI 팝오버 전체 화면 |
+| **`HOW ②`** | [`./screenshots/demo/04a-cli-diagnosis-crop.png`](./screenshots/demo/04a-cli-diagnosis-crop.png) | `no ip route 10.0.0.9` 제거 → `10.0.0.1` 추가 → `show ip route` → 양방향 Ping CLI 로그 |
+| **`HOW ②`** | [`./screenshots/demo/04b-topology-fixed-crop.png`](./screenshots/demo/04b-topology-fixed-crop.png) | 복구 후 `✓ 통신 검증 성공 (양방향 정적 경로 정상)` 토폴로지 |
+| **`HOW ②`** | [`./screenshots/demo/04c-student-reflection-crop.png`](./screenshots/demo/04c-student-reflection-crop.png) | 학생 판단 근거 기록 카드 |
+| **`HOW ③`** | [`./screenshots/demo/01a-lesson-card-crop.png`](./screenshots/demo/01a-lesson-card-crop.png) | 2026학년도 2학기 고2 컴퓨터 네트워크 8주차 수업 배너 |
+| **`HOW ③`** | [`./screenshots/demo/02a-triptych-crop.png`](./screenshots/demo/02a-triptych-crop.png) | 교육과정+NCS 과제 제안 (학생 공개 설명과 교수자 전용 정답 분리 · `개인 실습` 배지) |
+| **`HOW ③`** | [`./screenshots/demo/02b-ai-policy-crop.png`](./screenshots/demo/02b-ai-policy-crop.png) | 교수자 AI 운영 방식 및 4단계 지원 수준 설정 |
+| **`HOW ③`** | [`./screenshots/demo/01-dashboard-full.png`](./screenshots/demo/01-dashboard-full.png) | 교수자 수업 대시보드 전체 화면 |
+| **`HOW ③`** | [`./screenshots/demo/02-assignment-full.png`](./screenshots/demo/02-assignment-full.png) | 교수자 차시 과제 설계 전체 화면 |
+| **`HOW ④`** | [`./screenshots/demo/05a-student-table-crop.png`](./screenshots/demo/05a-student-table-crop.png) | 학생별 진행 상태와 개입 신호 (1인 실습 관찰 표) |
+| **`HOW ④`** | [`./screenshots/demo/06a1-evidence-student-crop.png`](./screenshots/demo/06a1-evidence-student-crop.png) | **분할 상단**: ① 실제 실행 기록(원자료) + ② 학생의 판단 기록 |
+| **`HOW ④`** | [`./screenshots/demo/06a2-evidence-teacher-crop.png`](./screenshots/demo/06a2-evidence-teacher-crop.png) | **분할 하단**: ③ AI 지원 정보 요약 + ④ 교수자 수행 인정·지도 메모 |
+| **`HOW ④`** | [`./screenshots/demo/06a-evidence-4layers-crop.png`](./screenshots/demo/06a-evidence-4layers-crop.png) | 4단 학습 증거 통합본 (문서 참고용) |
+| **`HOW ④`** | [`./screenshots/demo/06b-guidance-note-crop.png`](./screenshots/demo/06b-guidance-note-crop.png) | AI 추천 지도 노트 및 교수자 평가 피드백 |

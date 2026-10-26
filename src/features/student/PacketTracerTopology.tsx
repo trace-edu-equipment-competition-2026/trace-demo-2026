@@ -144,17 +144,51 @@ export function PacketTracerTopology({
             지사 네트워크 (R2)
           </text>
 
-          {/* Red Serial WAN Lightning Link between R1 and R2 */}
+          {/* Physical WAN Link between R1 and R2 (Physical Link Up: Green/Teal) */}
           <polyline
-            points="195,96 418,44 434,76 665,96"
+            points="195,96 418,54 434,82 665,96"
             fill="none"
-            stroke="#e60000"
-            strokeWidth="3.5"
+            stroke="#2b6f60"
+            strokeWidth="3.2"
             strokeLinejoin="round"
           />
-          <text x="430" y="28" textAnchor="middle" fill="#8c1d18" fontSize="12" fontWeight="700">
-            WAN 직렬 구간 · 10.0.0.0/30
+          <text x="430" y="26" textAnchor="middle" fill="#183e35" fontSize="12" fontWeight="700">
+            WAN 연결 구간 · 10.0.0.0/30 (물리 Link Up)
           </text>
+
+          {/* Logical End-to-End Communication Status Badge */}
+          <g transform="translate(430, 128)">
+            <rect
+              x="-142"
+              y="-22"
+              width="284"
+              height="44"
+              rx="8"
+              fill={routeFixed ? '#ecfdf5' : '#fffbeb'}
+              stroke={routeFixed ? '#10b981' : '#d97706'}
+              strokeWidth="1.5"
+            />
+            <text
+              x="0"
+              y="-4"
+              textAnchor="middle"
+              fill={routeFixed ? '#065f46' : '#92400e'}
+              fontSize="12"
+              fontWeight="700"
+            >
+              {routeFixed ? '✓ 통신 검증 성공 (양방향 정적 경로 정상)' : '⚠ End-to-End 통신 실패 (논리 경로 점검)'}
+            </text>
+            <text
+              x="0"
+              y="13"
+              textAnchor="middle"
+              fill={routeFixed ? '#047857' : '#b45309'}
+              fontSize="10.5"
+              fontWeight="600"
+            >
+              {routeFixed ? '본사(192.168.10.0/24) ↔ 지사(192.168.20.0/24) 복구됨' : '물리 링크 정상 · 라우팅 테이블(RIB) 확인 필요'}
+            </text>
+          </g>
 
           {/* Black Straight-Through Ethernet Links (HQ) */}
           <line x1="195" y1="108" x2="195" y2="174" stroke="#111111" strokeWidth="3" />
@@ -195,14 +229,14 @@ export function PacketTracerTopology({
             </g>
           )}
 
-          {/* Link Status LEDs (Packet Tracer Green Circles) */}
+          {/* Link Status LEDs (Packet Tracer Green Circles: Physical Link Up) */}
           {/* WAN Serial Link LEDs */}
-          <circle cx="242" cy="85" r="6.5" fill="#00d400" stroke="#ffffff" strokeWidth="1.5" />
+          <circle cx="242" cy="87" r="6.5" fill="#00d400" stroke="#ffffff" strokeWidth="1.5" />
           <circle
             cx="618"
-            cy="88"
+            cy="90"
             r="6.5"
-            fill={routeFixed ? '#00d400' : '#f59e0b'}
+            fill="#00d400"
             stroke="#ffffff"
             strokeWidth="1.5"
           />

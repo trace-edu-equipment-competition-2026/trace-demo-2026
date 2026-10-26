@@ -20,33 +20,40 @@ export function AssignmentProposalPanel({
   const ncsLinked = a.ncsLinked !== false
   const isNetwork = scenarioId === 'network'
 
+  const taskModeLabel = isNetwork ? lessonOverview.taskMode : a.projectType
+
   const dynamicProposal = isNetwork
     ? ncsLinked
       ? {
           title: '본사–지사 네트워크 통신 장애 복구',
           description:
-            '학생은 정상 동작해야 할 네트워크를 분석하고, running-config의 불능 정적 경로(10.0.0.9)를 제거한 뒤 올바른 Next Hop(10.0.0.1) 경로를 설정하여 통신을 복구해야 합니다. 변경 전후의 RIB 상태와 양방향 결과를 기록합니다.',
+            '학생은 본사(192.168.10.0/24)와 지사(192.168.20.0/24) 구간의 통신 장애 원인을 진단하고, 장비 설정(running-config)과 라우팅 테이블(RIB)을 비교·수정하여 양방향 통신을 복구합니다. 변경 전후의 검증 결과와 판단 근거를 기록합니다.',
+          teacherOnlyNote:
+            '교수자 전용 주입 장애·정답 기준 (학생 비공개): R2 반환 경로 Next Hop 오설정(10.0.0.9 → RIB 미설치) / 복구 목표: no ip route 제거 후 10.0.0.1 재설정',
           requirements: [
             'show running-config와 show ip route를 비교해 미설치 정적 경로 원인을 설명한다.',
             'no ip route로 잘못된 정적 경로를 제거하고 올바른 Next Hop 경로를 설정한다.',
             '복구 전·후 양방향 Ping 및 경로 추적 결과를 비교하여 검증한다.',
           ],
-          conditionBadge: `교육과정 성취기준 + NCS 직무 연계 · ${a.projectType} · 난이도 ${a.difficulty}`,
+          conditionBadge: `교육과정 성취기준 + NCS 직무 연계 · ${taskModeLabel} · 난이도 ${a.difficulty}`,
         }
       : {
           title: '정적 라우팅 경로 분석과 양방향 통신 복구',
           description:
             '학생은 본사와 지사 구간의 요청·반환 경로를 구분하여 통신 실패 원인을 진단하고, 정적 라우팅 수정 전후의 양방향 통신 결과를 비교·설명합니다.',
+          teacherOnlyNote:
+            '교수자 전용 주입 장애·정답 기준 (학생 비공개): 지사 라우터(R2) 반환 경로 오설정으로 인한 왕복 통신 실패 사례',
           requirements: [
             'IP 설정과 라우팅 경로를 확인하고 장애 원인을 설명한다.',
             '복구 전·후 양방향 연결 상태를 비교하여 결과를 검증한다.',
             '판단 근거와 문제 해결 과정을 기록한다.',
           ],
-          conditionBadge: `2022 개정 교육과정 성취기준 단독 적용 · ${a.projectType} · 난이도 ${a.difficulty}`,
+          conditionBadge: `2022 개정 교육과정 성취기준 단독 적용 · ${taskModeLabel} · 난이도 ${a.difficulty}`,
         }
     : {
         title: lessonOverview.proposalTitle,
         description: lessonOverview.proposalSummary,
+        teacherOnlyNote: lessonOverview.briefingSummary,
         requirements: a.requirements,
         conditionBadge: `${ncsLinked ? '교과 성취기준 + 직무 능력단위 연계' : '교과 성취기준 단독 적용'} · ${a.projectType}`,
       }
@@ -101,7 +108,7 @@ export function AssignmentProposalPanel({
         <h3>과제 제안: {dynamicProposal.title}</h3>
         <small className="proposal-condition-tag">{dynamicProposal.conditionBadge}</small>
         <p>{dynamicProposal.description}</p>
-        <small className="micro-note">{lessonOverview.briefingSummary}</small>
+        <small className="micro-note">{dynamicProposal.teacherOnlyNote}</small>
         <div className="proposal-card-actions">
           <button
             type="button"

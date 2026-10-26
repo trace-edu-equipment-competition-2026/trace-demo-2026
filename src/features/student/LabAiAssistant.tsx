@@ -10,11 +10,15 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
   const [open, setOpen] = useState(false)
   const [question, setQuestion] = useState('')
   const [animatedIds, setAnimatedIds] = useState<number[]>([])
+  const [sessionStart, setSessionStart] = useState<number | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const allMessages = data.student.privateMessages
-  const start = Math.min(data.student.privateConversationStart ?? 0, allMessages.length)
+  const start =
+    sessionStart !== null
+      ? Math.min(sessionStart, allMessages.length)
+      : Math.min(data.student.privateConversationStart ?? 0, allMessages.length)
   const messages = allMessages.slice(start)
 
   function scrollToBottom() {
@@ -32,6 +36,9 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
   function askAi(customText?: string) {
     const q = (customText ?? question).trim()
     if (!q) return
+    if (sessionStart === null) {
+      setSessionStart(data.student.privateMessages.length)
+    }
     const p = supportFor(q, data, s, 'private')
     const aiMsgIndex = data.student.privateMessages.length + 1
     const next = {
@@ -55,6 +62,7 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
   }
 
   function resetChat() {
+    setSessionStart(null)
     setData(prev => ({
       ...prev,
       student: {
@@ -83,32 +91,34 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
           </header>
 
           <div className="floating-ai-body" ref={listRef} aria-label="실습 중 개인 AI 대화">
-            <div className="floating-ai-welcome-card">
-              <div className="floating-ai-welcome-head">
-                <span className="floating-ai-avatar">
-                  <Bot size={16} aria-hidden="true" />
-                </span>
-                <div>
-                  <strong>TRACE AI 코치</strong>
-                  <p>
-                    안녕하세요, 유송민 학생!
-                    <br />
-                    막힌 구간이나 확인할 장비를 선택해 주시면 학습목표에 맞춰 빠르게 안내해 드릴게요.
-                  </p>
+            {sessionStart === null && (
+              <div className="floating-ai-welcome-card">
+                <div className="floating-ai-welcome-head">
+                  <span className="floating-ai-avatar">
+                    <Bot size={16} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <strong>TRACE AI 코치</strong>
+                    <p>
+                      안녕하세요, 유송민 학생!
+                      <br />
+                      막힌 구간이나 확인할 장비를 선택해 주시면 학습목표에 맞춰 빠르게 안내해 드릴게요.
+                    </p>
+                  </div>
                 </div>
+                <ul className="floating-ai-rules">
+                  <li>🎯 이번 목표 : 장애 증거 수집 · 라우팅 테이블 비교 · 양방향 검증</li>
+                  <li>🤖 지원 방식 : 완성된 정답 명령어 대신 진단 순서와 확인 범위 안내</li>
+                </ul>
+                <button
+                  type="button"
+                  className="floating-ai-cta"
+                  onClick={() => inputRef.current?.focus()}
+                >
+                  질문하기 <Send size={13} aria-hidden="true" />
+                </button>
               </div>
-              <ul className="floating-ai-rules">
-                <li>🎯 이번 목표 : 장애 증거 수집 · 라우팅 테이블 비교 · 양방향 검증</li>
-                <li>🤖 지원 방식 : 완성된 정답 명령어 대신 진단 순서와 확인 범위 안내</li>
-              </ul>
-              <button
-                type="button"
-                className="floating-ai-cta"
-                onClick={() => inputRef.current?.focus()}
-              >
-                질문하기 <Send size={13} aria-hidden="true" />
-              </button>
-            </div>
+            )}
 
             {messages.map((m, idx) => {
               const isAi = m.author === 'AI' || m.author === '교수자 설정 안내'
