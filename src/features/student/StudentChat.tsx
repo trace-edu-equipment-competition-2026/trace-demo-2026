@@ -5,27 +5,31 @@ import {deliverSupport,policyFor,stamp,supportFor} from '@/domain/learningLoop'
 import {SectionTitle} from '@/components/layout/SectionTitle'
 import {GuidanceDemo} from './GuidanceDemo'
 import {ChatRecord} from './ChatRecord'
+import {StreamingAiText} from './StreamingAiText'
 import '@/styles/guidance-demo.css'
 
 export function StudentChat({view,task,onTask,onNavigate,onRecords,onResource}:{view:'ai'|'chat';task:string;onTask:(id:string)=>void;onNavigate:(view:string)=>void;onRecords:()=>void;onResource:(index:number)=>void}){
  const {scenario:s,data,setData}=useWorkspace()
  const personal=view==='ai',policy=policyFor(data,s)
- const [text,setText]=useState(''),[teamAi,setTeamAi]=useState(false),[request,setRequest]=useState(data.request),[notice,setNotice]=useState(''),[recordTarget,setRecordTarget]=useState<string|null>(null)
+ const [text,setText]=useState(''),[teamAi,setTeamAi]=useState(false),[request,setRequest]=useState(data.request),[notice,setNotice]=useState(''),[recordTarget,setRecordTarget]=useState<string|null>(null),[animatedIds,setAnimatedIds]=useState<number[]>([])
  const log=useRef<HTMLDivElement>(null),composer=useRef<HTMLTextAreaElement>(null)
  const allMessages=personal?data.student.privateMessages:data.student.teamMessages
  const start=personal?Math.min(data.student.privateConversationStart??0,allMessages.length):0
  const messages=allMessages.slice(start)
- useEffect(()=>{if(log.current)log.current.scrollTop=log.current.scrollHeight},[allMessages.length])
+ const scrollBottom=()=>{if(log.current)log.current.scrollTop=log.current.scrollHeight}
+ useEffect(()=>{scrollBottom()},[allMessages.length])
  const teamPrompts=[s.id==='network'?'프로젝트 해결 방향과 검증 방법을 상의하고 싶어요':'API와 화면 중 어디에서 출처를 검사할지 상의하고 싶어요','역할 분담을 함께 정하고 싶어요','업무가 한 사람에게 몰렸어요','의견이 달라 갈등을 조율하고 싶어요']
  function send(){
   if(!text.trim())return
   const channel=personal?'private':'team',key=personal?'privateMessages':'teamMessages'
   const asksAi=personal||teamAi,p=asksAi?supportFor(text,data,s,channel):null
+  const aiMsgIndex=data.student[key].length+1
   const next={...data,student:{...data.student,[key]:[...data.student[key],{author:'유송민',text:text.trim(),time:stamp(),supportId:p?.id}]}}
   if(!asksAi){setData(next);setNotice('')}
   else if(!p){setData(next);setNotice('허용된 시연 가이던스가 없습니다. 교수자에게 지도를 요청해 주세요.')}
   else{
    const queued={...next,supports:[...(data.supports??[]),p]}
+   setAnimatedIds(prev=>[...prev,aiMsgIndex])
    setData(p.status==='approved'?deliverSupport(queued,p):queued)
    setNotice(personal?'답변 아래에서 수행과 판단을 기록할 수 있습니다.':'팀원 모두가 함께 볼 수 있는 가이던스를 남겼습니다.')
   }
@@ -55,7 +59,7 @@ export function StudentChat({view,task,onTask,onNavigate,onRecords,onResource}:{
       const supportId=m.supportId??(answer?allMessages[start+i-1]?.supportId:undefined)
       const key=supportId??`message-${start+i}`
       return <div key={`${key}:${start+i}`} className={`chat-turn ${m.author==='유송민'?'mine':''}`}>
-       <div className={`student-message ${m.author==='유송민'?'mine':answer?'ai-guidance':''}`}><div><strong>{answer&&<Bot size={16} aria-hidden="true"/>}{m.author==='AI'?'TRACE AI':m.author}</strong>{!personal&&answer&&<span className="chat-guidance-tag">팀 가이던스</span>}<time>{m.time}</time></div><p>{m.text}</p>
+       <div className={`student-message ${m.author==='유송민'?'mine':answer?'ai-guidance':''}`}><div><strong>{answer&&<Bot size={16} aria-hidden="true"/>}{m.author==='AI'?'TRACE AI':m.author}</strong>{!personal&&answer&&<span className="chat-guidance-tag">팀 가이던스</span>}<time>{m.time}</time></div>{answer?<StreamingAiText text={m.text} animate={animatedIds.includes(start+i)} onTick={scrollBottom}/>:<p>{m.text}</p>}
         {!personal&&m.author==='유송민'&&m.supportId&&<small className="chat-guidance-state">AI 가이던스 요청 · {{pending:'이전 지원 요청 · 다시 질문해 주세요',approved:'답변 전달됨',rejected:'제공 보류 · 교수자에게 확인해 주세요'}[(data.supports??[]).find(p=>p.id===m.supportId)?.status??'pending']}</small>}
         {!personal&&m.resourceIndex!==undefined&&data.student.resources[m.resourceIndex]&&<button className="chat-document-link" onClick={()=>onResource(m.resourceIndex!)}><Files size={18}/>{data.student.resources[m.resourceIndex].name}</button>}
        </div>

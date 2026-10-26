@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Bot, Headphones, Home, Maximize2, MessageCircle, RotateCcw, Send, X } from 'lucide-react'
 import { useWorkspace } from '@/components/layout/WorkspaceContext'
 import { deliverSupport, policyFor, stamp, supportFor } from '@/domain/learningLoop'
+import { StreamingAiText } from './StreamingAiText'
 
 export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) {
   const { scenario: s, data, setData } = useWorkspace()
   const policy = policyFor(data, s)
   const [open, setOpen] = useState(false)
   const [question, setQuestion] = useState('')
+  const [animatedIds, setAnimatedIds] = useState<number[]>([])
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -15,9 +17,15 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
   const start = Math.min(data.student.privateConversationStart ?? 0, allMessages.length)
   const messages = allMessages.slice(start)
 
-  useEffect(() => {
-    if (open && listRef.current) {
+  function scrollToBottom() {
+    if (listRef.current) {
       listRef.current.scrollTop = listRef.current.scrollHeight
+    }
+  }
+
+  useEffect(() => {
+    if (open) {
+      scrollToBottom()
     }
   }, [open, allMessages.length])
 
@@ -25,6 +33,7 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
     const q = (customText ?? question).trim()
     if (!q) return
     const p = supportFor(q, data, s, 'private')
+    const aiMsgIndex = data.student.privateMessages.length + 1
     const next = {
       ...data,
       student: {
@@ -39,6 +48,7 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
       setData(next)
     } else {
       const queued = { ...next, supports: [...(data.supports ?? []), p] }
+      setAnimatedIds(prev => [...prev, aiMsgIndex])
       setData(p.status === 'approved' ? deliverSupport(queued, p) : queued)
     }
     if (!customText) setQuestion('')
@@ -102,6 +112,7 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
 
             {messages.map((m, idx) => {
               const isAi = m.author === 'AI' || m.author === '교수자 설정 안내'
+              const globalIdx = start + idx
               return (
                 <div key={`${m.time}-${idx}`} className={`lab-ai-bubble ${isAi ? 'ai' : 'mine'}`}>
                   <div className="lab-ai-meta">
@@ -111,7 +122,15 @@ export function LabAiAssistant({ onOpenFullAi }: { onOpenFullAi?: () => void }) 
                     </strong>
                     <time>{m.time}</time>
                   </div>
-                  <p>{m.text}</p>
+                  {isAi ? (
+                    <StreamingAiText
+                      text={m.text}
+                      animate={animatedIds.includes(globalIdx)}
+                      onTick={scrollToBottom}
+                    />
+                  ) : (
+                    <p>{m.text}</p>
+                  )}
                 </div>
               )
             })}
