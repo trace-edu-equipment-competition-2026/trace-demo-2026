@@ -61,17 +61,17 @@ export function AssignmentProposalPanel({
   return (
     <section className="panel design-triptych-panel" aria-label="차시 과제 설계 3단 요약">
       <div className="triptych-card">
-        <span className="teach-badge mint">① 교육적 요구사항</span>
-        <h3>차시 목표와 필수 수행 행동</h3>
+        <span className="teach-badge mint">① 과제 유형 · 수행 목표</span>
+        <h3>상황 주입형 실습 및 일반 과제 설계</h3>
         <ul className="triptych-list">
+          <li>
+            <strong>과제 유형:</strong> 상황 주입형 실습 과제 (문제 상황 주입) · 일반 과제 선택 가능
+          </li>
           <li>
             <strong>이번 목표:</strong> {lessonOverview.objective}
           </li>
           <li>
-            <strong>선수학습:</strong> {lessonOverview.prerequisite}
-          </li>
-          <li>
-            <strong>직접 수행 행동:</strong> 장비 상태 확인 → 라우팅 테이블 비교 → 설정 수정 → 양방향 검증 및 이유 기록
+            <strong>필수 수행:</strong> 상태 확인 → 원인 비교 → 수정 실행 → 결과 검증 및 판단 이유 기록
           </li>
           <li>
             <strong>AI 활용·평가:</strong> {a.mode} (개입 {a.intervention}) · 평가 기준 {a.criteria.length}개 항목
@@ -79,9 +79,12 @@ export function AssignmentProposalPanel({
         </ul>
       </div>
       <div className="triptych-card">
-        <span className="teach-badge lavender">② 근거자료 연결</span>
-        <h3>교육과정 · 교안 · 선택적 NCS</h3>
+        <span className="teach-badge lavender">② 사전 설계 양식 · 시나리오 투입</span>
+        <h3>과제 양식 · 수업 시나리오 · 교육과정</h3>
         <ul className="triptych-list">
+          <li>
+            <strong>투입 양식·시나리오:</strong> 사전 설계된 과제 양식 및 장애 시나리오 (교수자 검토 필수)
+          </li>
           <li>
             <strong>국가 교육과정:</strong> {lessonOverview.curriculumBasis}
           </li>
@@ -100,12 +103,12 @@ export function AssignmentProposalPanel({
         <small className="micro-note">
           {ncsLinked
             ? `적용 중: ${course.ncs.join(' · ')} (과제 요구사항·학생 안내에 반영)`
-            : '미적용: 국가 교육과정 성취기준만 기본 근거로 사용합니다.'}
+            : '미적용: 국가 교육과정 성취기준과 교수자 과제 양식을 기본 근거로 사용합니다.'}
         </small>
       </div>
       <div className="triptych-card proposal-card">
-        <span className="teach-badge yellow">③ AI의 과제 제안</span>
-        <h3>과제 제안: {dynamicProposal.title}</h3>
+        <span className="teach-badge yellow">③ AI 과제 구조화 · 교수자 검토</span>
+        <h3>구조화된 과제: {dynamicProposal.title}</h3>
         <small className="proposal-condition-tag">{dynamicProposal.conditionBadge}</small>
         <p>{dynamicProposal.description}</p>
         <small className="micro-note">{dynamicProposal.teacherOnlyNote}</small>
